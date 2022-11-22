@@ -207,6 +207,13 @@ export const whoAmI = async (req, res) => {
 };
 
 export const deleteUsers = async (req, res) => {
+  if (req.user.role == "buyer") {
+    res.status(401).json({
+      status: "Unauthorized",
+      message: "You are not authorized to delete users",
+    });
+    return;
+  }
   const user = await Users.findAll();
   const { id } = req.params;
   const dataBefore = await Users.findOne({
@@ -245,16 +252,42 @@ export const updateUsers = async (req, res) => {
     });
   }
 
-  const { name, email, password, role } = req.body;
+  const {
+    email,
+    firstname,
+    lastname,
+    nohp,
+    birthday,
+    country,
+    province,
+    city,
+    address,
+    postalcode,
+    pictures,
+    password,
+    confPassword,
+  } = req.body;
+  if (password !== confPassword)
+    return res
+      .status(400)
+      .json({ msg: "Password dan Confirm Password tidak cocok" });
   const salt = await bcrypt.genSalt();
   const hashPassword = await bcrypt.hash(password, salt);
   try {
     await Users.update(
       {
-        name,
         email,
+        firstname,
+        lastname,
+        nohp,
+        birthday,
+        country,
+        province,
+        city,
+        address,
+        postalcode,
+        pictures,
         password: hashPassword,
-        role,
       },
       {
         where: { id: id },
