@@ -16,7 +16,7 @@ module.exports = {
           departure_terminal: "Surabaya",
           arrival_terminal: "Soekarno Hatta",
           price: "200000",
-          class: "bussines",
+          type_class: "bussines",
           plane_name: "Garuda Indonesia",
           oneway: true,
           createdAt: new Date(),

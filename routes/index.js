@@ -10,7 +10,12 @@ import {
   updateUsers,
   getUsersById,
 } from "../controllers/HandlerUsers.js";
-import { getTicket } from "../controllers/HandlerTicket.js";
+import {
+  getTicket,
+  createTicket,
+  deleteTicket,
+  updateTicket,
+} from "../controllers/HandlerTicket.js";
 import { verifyToken } from "../middleware/VerifyToken.js";
 import { refreshToken } from "../controllers/RefreshToken.js";
 // import { getCars, getCarsById, createCars, updateCars, deleteCars, softDeleteCars } from "../controllers/HandlerCars.js"
@@ -41,6 +46,9 @@ router.post(prefix + "login", Login);
 
 //ROUTES FOR TICKETS
 router.get(prefix + "tickets", getTicket);
+router.post(prefix + "tickets", createTicket);
+router.delete(prefix + "tickets/delete/:id", deleteTicket);
+router.put(prefix + "tickets/edit/:id", updateTicket);
 
 // router.get(prefix + "token", refreshToken);
 router.get(prefix + "whoami", verifyToken, whoAmI);
