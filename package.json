@@ -1,0 +1,43 @@
+{
+  "name": "finalbe",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon ./index.js",
+    "db:create": "npx sequelize db:create",
+    "make-seed-users": "npx sequelize-cli seed:generate --name demo-user",
+    "make-seed-airport": "npx sequelize-cli seed:generate --name demo-airport",
+    "make-seed-ticket": "npx sequelize-cli seed:generate --name demo-ticket",
+    "model-users": "npx sequelize-cli model:generate --name Users --attributes firstname:string,lastname:string,birthday:date,email:string,password:string,nohp:string,country:string,province:string,city:string,address:string,postalcode:integer,pictures:string,role:string,access_token:text,refresh_token:text",
+    "model-airport": "npx sequelize-cli model:generate --name Airport --attributes name_airport:string,code_airport:string,address:string,price:float,city_airport:string,country_airport:string,terminal:string,status:boolean",
+    "model-ticket": "npx sequelize-cli model:generate --name Ticket --attributes id_airport:string,arrival_id:integer,departure_date:date,departure_time:time,arrival_time:time,passenger:string,departure_terminal:string,arrival_terminal:string,price:float,class:string,plane_name:string,oneway:boolean",
+    "model-booking": "npx sequelize-cli model:generate --name Booking --attributes id_ticket:integer,id_users:integer,id_airport:integer",
+    "model-dummy": "npx sequelize-cli model:generate --name Dummy --attributes firstname:string,dummy:string",
+    "seed": "npx sequelize-cli db:seed:all",
+    "migrate": "npx sequelize-cli db:migrate",
+    "db:undo": "npx sequelize-cli db:migrate:undo:all"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "js-yaml": "^4.1.0",
+    "jsonwebtoken": "^8.5.1",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.3.3",
+    "sequelize": "^6.25.7",
+    "swagger-jsdoc": "^6.2.5",
+    "swagger-ui-express": "^4.6.0"
+  },
+  "devDependencies": {
+    "jest": "^29.3.1",
+    "nodemon": "^2.0.20"
+  }
+}
