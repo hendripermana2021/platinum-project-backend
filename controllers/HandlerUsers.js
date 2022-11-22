@@ -5,7 +5,7 @@ import { refreshToken } from "./RefreshToken.js";
 import dummy from "../models/dummy.js";
 
 const Users = db.Users;
-const Dummy = db.Dummy;
+const Dummy = db.dummy;
 
 export const getUsers = async (req, res) => {
   try {
@@ -29,7 +29,7 @@ export const getUsers = async (req, res) => {
       include: [
         {
           model: Dummy,
-          attributes: ["id", "firstname", "dummy"],
+          attributes: ["firstname", "dummy"],
         },
       ],
     });

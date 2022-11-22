@@ -10,6 +10,7 @@ import {
   updateUsers,
   getUsersById,
 } from "../controllers/HandlerUsers.js";
+import { getTicket } from "../controllers/HandlerTicket.js";
 import { verifyToken } from "../middleware/VerifyToken.js";
 import { refreshToken } from "../controllers/RefreshToken.js";
 // import { getCars, getCarsById, createCars, updateCars, deleteCars, softDeleteCars } from "../controllers/HandlerCars.js"
@@ -27,7 +28,7 @@ import yaml from "js-yaml";
 //   swaggerUI.serve,
 //   swaggerUI.setup(swaggerDocument)
 // );
-
+//ROUTES FOR USERS
 router.get(prefix + "users", getUsers);
 router.get(prefix + "users/:id", getUsersById);
 router.post(prefix + "register", Register);
@@ -37,6 +38,9 @@ router.post(prefix + "login", Login);
 // router.delete(prefix + "logout", verifyToken, Logout);
 // router.delete(prefix + "users/delete/:id", verifyToken, deleteUsers);
 // router.put(prefix + "users/edit/:id", verifyToken, updateUsers);
+
+//ROUTES FOR TICKETS
+router.get(prefix + "tickets", getTicket);
 
 // router.get(prefix + "token", refreshToken);
 router.get(prefix + "whoami", verifyToken, whoAmI);
