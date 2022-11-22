@@ -301,29 +301,3 @@ export const updateUsers = async (req, res) => {
     console.log(error);
   }
 };
-
-export const RegisterAdmin = async (req, res) => {
-  if (req.user.role != "superadmin") {
-    res.status(401).json({
-      message:
-        "You are not authorized to register an admin, please use Superadmin account",
-    });
-    return;
-  }
-  const { name, email, password, confPassword, role } = req.body;
-  if (password !== confPassword)
-    return res.status(400).json({ msg: "Password and confirm not match" });
-  const salt = await bcrypt.genSalt();
-  const hashPassword = await bcrypt.hash(password, salt);
-  try {
-    await Users.create({
-      name,
-      email,
-      password: hashPassword,
-      role: "admin",
-    });
-    res.json({ msg: "Register Berhasil" });
-  } catch (error) {
-    console.log(error);
-  }
-};
