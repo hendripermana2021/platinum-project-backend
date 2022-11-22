@@ -1,6 +1,7 @@
-"use strict";
-const { Model } = require("sequelize");
-// const { FOREIGNKEYS } = require("sequelize/types/query-types");
+'use strict';
+const {
+  Model
+} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Booking extends Model {
     /**
@@ -12,21 +13,13 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  Booking.init(
-    {
-      id_ticket: DataTypes.INTEGER,
-      id_users: DataTypes.INTEGER,
-      id_airport: DataTypes.INTEGER,
-    },
-    {
-      sequelize,
-      modelName: "Booking",
-    }
-  );
-  // Booking.hasOne(Users, {foreignKey:'id_ticket'})
-  // Booking.belongsTo (Users, {foreignKey:'id_ticket'})
-
-  // Booking.removeAttribute('id')
-
+  Booking.init({
+    id_ticket: DataTypes.INTEGER,
+    id_users: DataTypes.INTEGER,
+    id_airport: DataTypes.INTEGER
+  }, {
+    sequelize,
+    modelName: 'Booking',
+  });
   return Booking;
 };

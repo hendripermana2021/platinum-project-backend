@@ -2,10 +2,8 @@ import db from "../models/index.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { refreshToken } from "./RefreshToken.js";
-import dummy from "../models/dummy.js";
 
 const Users = db.Users;
-const Dummy = db.dummy;
 
 export const getUsers = async (req, res) => {
   try {
@@ -26,12 +24,12 @@ export const getUsers = async (req, res) => {
         "postalcode",
         "pictures",
       ],
-      include: [
-        {
-          model: Dummy,
-          attributes: ["firstname", "dummy"],
-        },
-      ],
+      // include: [
+      //   {
+      //     model: Dummy,
+      //     attributes: ["firstname", "dummy"],
+      //   },
+      // ],
     });
     res.json(users);
   } catch (error) {
@@ -52,6 +50,7 @@ export const getUsersById = async (req, res) => {
 
 export const Register = async (req, res) => {
   const {
+    id,
     email,
     firstname,
     lastname,
@@ -75,6 +74,7 @@ export const Register = async (req, res) => {
   const hashPassword = await bcrypt.hash(password, salt);
   try {
     await Users.create({
+      id,
       email,
       firstname,
       lastname,

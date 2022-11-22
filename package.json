@@ -16,9 +16,12 @@
     "model-ticket": "npx sequelize-cli model:generate --name Ticket --attributes id_airport:string,arrival_id:integer,departure_date:date,departure_time:time,arrival_time:time,passenger:string,departure_terminal:string,arrival_terminal:string,price:float,class:string,plane_name:string,oneway:boolean",
     "model-booking": "npx sequelize-cli model:generate --name Booking --attributes id_ticket:integer,id_users:integer,id_airport:integer",
     "model-dummy": "npx sequelize-cli model:generate --name Dummy --attributes firstname:string,dummy:string",
+    "model-wishlist": "npx sequelize-cli model:generate --name wishlist --attributes id_wishlist:integer,id_ticket:integer,id_users:integer",
+    "model-test": "npx sequelize-cli model:generate --name test --attributes id_test:Auto_Increment,name:string",
     "seed": "npx sequelize-cli db:seed:all",
     "migrate": "npx sequelize-cli db:migrate",
-    "db:undo": "npx sequelize-cli db:migrate:undo:all"
+    "db:undo": "npx sequelize-cli db:migrate:undo:all",
+    "drop": "npx sequelize-cli db:drop"
   },
   "author": "",
   "license": "ISC",
