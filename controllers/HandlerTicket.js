@@ -2,7 +2,7 @@ import db from "../models/index.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-const Ticket = db.ticket;
+const Ticket = db.Ticket;
 export const getTicket = async (req, res) => {
   try {
     const ticket = await Ticket.findAll({

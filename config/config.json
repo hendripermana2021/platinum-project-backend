@@ -14,10 +14,11 @@
     "dialect": "mysql"
   },
   "production": {
-    "username": "root",
-    "password": "dBMapj78ChpmemOVqV4c",
-    "database": "railway",
-    "host": "containers-us-west-67.railway.app",
+    "MYSQLUSER": "root",
+    "MYSQLPASSWORD": "dBMapj78ChpmemOVqV4c",
+    "MYSQLDATABASE": "railway",
+    "MYSQLHOST": "containers-us-west-67.railway.app",
+    "MYSQL_URL": "mysql://${{ MYSQLUSER }}:${{ MYSQLPASSWORD }}@${{ MYSQLHOST }}:${{ MYSQLPORT }}/${{ MYSQLDATABASE }}",
     "dialect": "mysql"
   }
 }
