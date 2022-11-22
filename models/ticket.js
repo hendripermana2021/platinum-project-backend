@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     departure_terminal: DataTypes.STRING,
     arrival_terminal: DataTypes.STRING,
     price: DataTypes.FLOAT,
-    class: DataTypes.STRING,
+    type_class: DataTypes.STRING,
     plane_name: DataTypes.STRING,
     oneway: DataTypes.BOOLEAN
   }, {

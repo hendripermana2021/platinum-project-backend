@@ -13,7 +13,7 @@
     "make-seed-ticket": "npx sequelize-cli seed:generate --name demo-ticket",
     "model-users": "npx sequelize-cli model:generate --name Users --attributes firstname:string,lastname:string,birthday:date,email:string,password:string,nohp:string,country:string,province:string,city:string,address:string,postalcode:integer,pictures:string,role:string,access_token:text,refresh_token:text",
     "model-airport": "npx sequelize-cli model:generate --name Airport --attributes name_airport:string,code_airport:string,address:string,price:float,city_airport:string,country_airport:string,terminal:string,status:boolean",
-    "model-ticket": "npx sequelize-cli model:generate --name Ticket --attributes id_airport:string,arrival_id:integer,departure_date:date,departure_time:time,arrival_time:time,passenger:string,departure_terminal:string,arrival_terminal:string,price:float,class:string,plane_name:string,oneway:boolean",
+    "model-ticket": "npx sequelize-cli model:generate --name Ticket --attributes id_airport:string,arrival_id:integer,departure_date:date,departure_time:time,arrival_time:time,passenger:string,departure_terminal:string,arrival_terminal:string,price:float,type_class:string,plane_name:string,oneway:boolean",
     "model-booking": "npx sequelize-cli model:generate --name Booking --attributes id_ticket:integer,id_users:integer,id_airport:integer",
     "model-dummy": "npx sequelize-cli model:generate --name Dummy --attributes firstname:string,dummy:string",
     "model-wishlist": "npx sequelize-cli model:generate --name wishlist --attributes id_wishlist:integer,id_ticket:integer,id_users:integer",

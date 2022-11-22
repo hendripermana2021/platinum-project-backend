@@ -1,5 +1,4 @@
 import { Sequelize } from "sequelize";
-import { development } from "./config.json";
 
 const db = new Sequelize("railway", "root", "dBMapj78ChpmemOVqV4c", {
   host: "containers-us-west-67.railway.app",

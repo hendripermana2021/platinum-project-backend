@@ -7,14 +7,15 @@ import router from "./routes/index.js";
 dotenv.config();
 const app = express();
 import bodyParser from "body-parser";
+// import config from "./config/config.json" assert { type: "json" };
 
- 
 app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
 app.use(router);
 app.use(bodyParser.urlencoded({ extended: true }));
+// export default defineConfig({
+//   plugins: [crx({ config })],
+// });
 
-
- 
-app.listen(8000, ()=> console.log('Server running at port 8000'));
+app.listen(8000, () => console.log("Server running at port 8000"));

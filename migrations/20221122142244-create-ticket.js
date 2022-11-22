@@ -36,7 +36,7 @@ module.exports = {
       price: {
         type: Sequelize.FLOAT
       },
-      class: {
+      type_class: {
         type: Sequelize.STRING
       },
       plane_name: {

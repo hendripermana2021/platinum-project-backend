@@ -29,7 +29,7 @@ module.exports = {
           firstname: "buyer",
           lastname: "buyersaja",
           nohp: "08981234345",
-          birthday: "12312412",
+          birthday: new Date(),
           country: "Delitua",
           province: "Sumatera Utara",
           city: "Medan",
