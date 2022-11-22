@@ -5,6 +5,13 @@ import { refreshToken } from "./RefreshToken.js";
 
 const Users = db.Users;
 
+export const handleGetRoot = async (req, res) => {
+  res.status(200).json({
+    status: "OK",
+    message: "Management API For Order Ticketing is Ready",
+  });
+};
+
 export const getUsers = async (req, res) => {
   try {
     const users = await Users.findAll({

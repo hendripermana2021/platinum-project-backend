@@ -1,6 +1,4 @@
 import db from "../models/index.js";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 
 const Ticket = db.Ticket;
 export const getTicket = async (req, res) => {
@@ -23,6 +21,17 @@ export const getTicket = async (req, res) => {
       ],
     });
     res.json(ticket);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getTicketById = async (req, res) => {
+  try {
+    const ticket = await Ticket.findOne({
+      where: { id: req.params.id },
+    });
+    res.status(200).json(ticket);
   } catch (error) {
     console.log(error);
   }

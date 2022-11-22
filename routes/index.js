@@ -4,17 +4,18 @@ import {
   Register,
   Login,
   Logout,
-  RegisterAdmin,
   whoAmI,
   deleteUsers,
   updateUsers,
   getUsersById,
+  handleGetRoot,
 } from "../controllers/HandlerUsers.js";
 import {
   getTicket,
   createTicket,
   deleteTicket,
   updateTicket,
+  getTicketById,
 } from "../controllers/HandlerTicket.js";
 import { verifyToken } from "../middleware/VerifyToken.js";
 import { refreshToken } from "../controllers/RefreshToken.js";
@@ -23,6 +24,7 @@ const router = express.Router();
 const prefix = "/v1/api/";
 import fs from "fs";
 import yaml from "js-yaml";
+import { getAirport } from "../controllers/HandleAirport.js";
 // const swaggerDocument = yaml.load(
 //   fs.readFileSync("OpenAPICars-Users.yaml", "utf8")
 // );
@@ -34,13 +36,14 @@ import yaml from "js-yaml";
 //   swaggerUI.setup(swaggerDocument)
 // );
 //ROUTES FOR USERS
+router.get(prefix, handleGetRoot);
 router.get(prefix + "users", getUsers);
 router.get(prefix + "users/:id", getUsersById);
 router.post(prefix + "register", Register);
 router.post(prefix + "login", Login);
 // router.post(prefix + "admin/login", isAdmin);
 // router.post(prefix + "superadmin/login", isSuperAdmin);
-// router.delete(prefix + "logout", verifyToken, Logout);
+router.delete(prefix + "logout", verifyToken, Logout);
 // router.delete(prefix + "users/delete/:id", verifyToken, deleteUsers);
 // router.put(prefix + "users/edit/:id", verifyToken, updateUsers);
 
@@ -49,6 +52,10 @@ router.get(prefix + "tickets", getTicket);
 router.post(prefix + "tickets", createTicket);
 router.delete(prefix + "tickets/delete/:id", deleteTicket);
 router.put(prefix + "tickets/edit/:id", updateTicket);
+router.get(prefix + "tickets/:id", getTicketById);
+
+//ROUTES FOR AIRPORT
+router.get(prefix + "airports", getAirport);
 
 // router.get(prefix + "token", refreshToken);
 router.get(prefix + "whoami", verifyToken, whoAmI);
