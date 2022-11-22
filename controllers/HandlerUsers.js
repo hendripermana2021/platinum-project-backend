@@ -7,7 +7,6 @@ import dummy from "../models/dummy.js";
 const Users = db.Users;
 const Dummy = db.Dummy;
 
-
 export const getUsers = async (req, res) => {
   try {
     const users = await Users.findAll({
@@ -27,9 +26,12 @@ export const getUsers = async (req, res) => {
         "postalcode",
         "pictures",
       ],
-      include: [{ 
-        model: Dummy, 
-        attributes: [ "id", "firstname", "dummy"], }]
+      include: [
+        {
+          model: Dummy,
+          attributes: ["id", "firstname", "dummy"],
+        },
+      ],
     });
     res.json(users);
   } catch (error) {
@@ -95,25 +97,60 @@ export const Register = async (req, res) => {
 export const Login = async (req, res) => {
   try {
     const user = await Users.findAll({
-      where : {
-        email: req.body.email
+      where: {
+        email: req.body.email,
       },
     });
     const match = await bcrypt.compare(req.body.password, user[0].password);
     if (!match) return res.status(400).json({ msg: "Wrong Password" });
     const userId = user[0].id;
     const firstname = user[0].firstname;
+    const lastname = user[0].lastname;
+    const nohp = user[0].nohp;
+    const birthday = user[0].birthday;
+    const country = user[0].country;
+    const province = user[0].province;
+    const city = user[0].city;
+    const address = user[0].address;
+    const postalcode = user[0].postalcode;
+    const pictures = user[0].pictures;
     const email = user[0].email;
     const accessToken = jwt.sign(
-      { userId, firstname, email },
+      {
+        userId,
+        firstname,
+        email,
+        lastname,
+        nohp,
+        birthday,
+        country,
+        province,
+        city,
+        address,
+        postalcode,
+        pictures,
+      },
       process.env.ACCESS_TOKEN_SECRET,
       {
-        expiresIn: "20s",
+        expiresIn: "1d",
       }
     );
-    
+
     const refreshToken = jwt.sign(
-      { userId, firstname, email },
+      {
+        userId,
+        firstname,
+        email,
+        lastname,
+        nohp,
+        birthday,
+        country,
+        province,
+        city,
+        address,
+        postalcode,
+        pictures,
+      },
       process.env.REFRESH_TOKEN_SECRET,
       {
         expiresIn: "1d",
@@ -132,8 +169,7 @@ export const Login = async (req, res) => {
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
     });
-    res.json({ accessToken,
-     });
+    res.json({ accessToken });
   } catch (error) {
     res.status(404).json({ msg: "Email tidak ditemukan" });
   }

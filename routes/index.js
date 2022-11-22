@@ -39,7 +39,7 @@ router.post(prefix + "login", Login);
 // router.put(prefix + "users/edit/:id", verifyToken, updateUsers);
 
 // router.get(prefix + "token", refreshToken);
-// router.get(prefix + "whoami", verifyToken, whoAmI);
+router.get(prefix + "whoami", verifyToken, whoAmI);
 
 // // endpoint untuk tambah admin yang bisa hanya superadmin
 // router.post(prefix + "registrasi-admin", verifyToken, RegisterAdmin);
