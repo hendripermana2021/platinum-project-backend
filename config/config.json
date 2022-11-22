@@ -18,7 +18,7 @@
     "MYSQLPASSWORD": "dBMapj78ChpmemOVqV4c",
     "MYSQLDATABASE": "railway",
     "MYSQLHOST": "containers-us-west-67.railway.app",
-    "MYSQL_URL": "mysql://${{ MYSQLUSER }}:${{ MYSQLPASSWORD }}@${{ MYSQLHOST }}:${{ MYSQLPORT }}/${{ MYSQLDATABASE }}",
+    "MYSQL_URL": "mysql://root:dBMapj78ChpmemOVqV4c@containers-us-west-67.railway.app:6993/railway",
     "dialect": "mysql"
   }
 }
