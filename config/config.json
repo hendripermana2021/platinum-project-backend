@@ -14,11 +14,12 @@
     "dialect": "mysql"
   },
   "production": {
-    "MYSQLUSER": "root",
-    "MYSQLPASSWORD": "dBMapj78ChpmemOVqV4c",
-    "MYSQLDATABASE": "railway",
-    "MYSQLHOST": "containers-us-west-67.railway.app",
-    "MYSQL_URL": "mysql://root:dBMapj78ChpmemOVqV4c@containers-us-west-67.railway.app:6993/railway",
+    "username": "root",
+    "password": "dBMapj78ChpmemOVqV4c",
+    "database": "railway",
+    "port": "6993",
+    "host": "containers-us-west-67.railway.app",
+    "url": "mysql://root:dBMapj78ChpmemOVqV4c@containers-us-west-67.railway.app:6993/railway",
     "dialect": "mysql"
   }
 }
