@@ -44,8 +44,8 @@ router.post(prefix + "login", Login);
 // router.post(prefix + "admin/login", isAdmin);
 // router.post(prefix + "superadmin/login", isSuperAdmin);
 router.delete(prefix + "logout", verifyToken, Logout);
-// router.delete(prefix + "users/delete/:id", verifyToken, deleteUsers);
-// router.put(prefix + "users/edit/:id", verifyToken, updateUsers);
+router.delete(prefix + "users/delete/:id", verifyToken, deleteUsers);
+router.put(prefix + "users/edit/:id", verifyToken, updateUsers);
 
 //ROUTES FOR TICKETS
 router.get(prefix + "tickets", getTicket);
