@@ -18,13 +18,14 @@ import {
   getTicketById,
 } from "../controllers/HandlerTicket.js";
 import { verifyToken } from "../middleware/VerifyToken.js";
+import { getAirport } from "../controllers/HandleAirport.js";
 import { refreshToken } from "../controllers/RefreshToken.js";
 // import { getCars, getCarsById, createCars, updateCars, deleteCars, softDeleteCars } from "../controllers/HandlerCars.js"
 const router = express.Router();
 const prefix = "/v1/api/";
-import fs from "fs";
-import yaml from "js-yaml";
-import { getAirport } from "../controllers/HandleAirport.js";
+// import fs from "fs";
+// import yaml from "js-yaml";
+
 // const swaggerDocument = yaml.load(
 //   fs.readFileSync("OpenAPICars-Users.yaml", "utf8")
 // );
