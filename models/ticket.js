@@ -25,7 +25,8 @@ module.exports = (sequelize, DataTypes) => {
     price: DataTypes.FLOAT,
     type_class: DataTypes.STRING,
     plane_name: DataTypes.STRING,
-    oneway: DataTypes.BOOLEAN
+    isOneway: DataTypes.BOOLEAN,
+    isTwoway: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'Ticket',

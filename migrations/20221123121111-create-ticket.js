@@ -2,57 +2,51 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Users', {
+    await queryInterface.createTable('Tickets', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      firstname: {
+      id_airport: {
         type: Sequelize.STRING
       },
-      lastname: {
-        type: Sequelize.STRING
-      },
-      birthday: {
-        type: Sequelize.DATE
-      },
-      email: {
-        type: Sequelize.STRING
-      },
-      password: {
-        type: Sequelize.STRING
-      },
-      nohp: {
-        type: Sequelize.STRING
-      },
-      country: {
-        type: Sequelize.STRING
-      },
-      province: {
-        type: Sequelize.STRING
-      },
-      city: {
-        type: Sequelize.STRING
-      },
-      address: {
-        type: Sequelize.STRING
-      },
-      postalcode: {
+      arrival_id: {
         type: Sequelize.INTEGER
       },
-      pictures: {
+      departure_date: {
+        type: Sequelize.DATE
+      },
+      departure_time: {
+        type: Sequelize.TIME
+      },
+      arrival_time: {
+        type: Sequelize.TIME
+      },
+      passenger: {
         type: Sequelize.STRING
       },
-      role: {
+      departure_terminal: {
         type: Sequelize.STRING
       },
-      access_token: {
-        type: Sequelize.TEXT
+      arrival_terminal: {
+        type: Sequelize.STRING
       },
-      refresh_token: {
-        type: Sequelize.TEXT
+      price: {
+        type: Sequelize.FLOAT
+      },
+      type_class: {
+        type: Sequelize.STRING
+      },
+      plane_name: {
+        type: Sequelize.STRING
+      },
+      isOneway: {
+        type: Sequelize.BOOLEAN
+      },
+      isTwoway: {
+        type: Sequelize.BOOLEAN
       },
       createdAt: {
         allowNull: false,
@@ -65,6 +59,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Users');
+    await queryInterface.dropTable('Tickets');
   }
 };
