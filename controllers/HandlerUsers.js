@@ -19,11 +19,12 @@ export const getUsers = async (req, res) => {
         "id",
         "firstname",
         "lastname",
+        "gender",
         "email",
         "password",
         "role",
         "nohp",
-        "birthday",
+        "birthdate",
         "country",
         "province",
         "city",
@@ -61,8 +62,9 @@ export const Register = async (req, res) => {
     email,
     firstname,
     lastname,
+    gender,
     nohp,
-    birthday,
+    birthdate,
     country,
     province,
     city,
@@ -85,8 +87,9 @@ export const Register = async (req, res) => {
       email,
       firstname,
       lastname,
+      gender,
       nohp,
-      birthday,
+      birthdate,
       country,
       province,
       city,
@@ -113,8 +116,9 @@ export const Login = async (req, res) => {
     const userId = user[0].id;
     const firstname = user[0].firstname;
     const lastname = user[0].lastname;
+    const gender = user[0].gender;
     const nohp = user[0].nohp;
-    const birthday = user[0].birthday;
+    const birthdate = user[0].birthdate;
     const country = user[0].country;
     const province = user[0].province;
     const city = user[0].city;
@@ -126,10 +130,11 @@ export const Login = async (req, res) => {
       {
         userId,
         firstname,
-        email,
         lastname,
+        gender,
+        email,
         nohp,
-        birthday,
+        birthdate,
         country,
         province,
         city,
@@ -148,9 +153,10 @@ export const Login = async (req, res) => {
         userId,
         firstname,
         email,
+        gender,
         lastname,
         nohp,
-        birthday,
+        birthdate,
         country,
         province,
         city,
@@ -214,13 +220,6 @@ export const whoAmI = async (req, res) => {
 };
 
 export const deleteUsers = async (req, res) => {
-  if (req.user.role == "buyer") {
-    res.status(401).json({
-      status: "Unauthorized",
-      message: "You are not authorized to delete users",
-    });
-    return;
-  }
   const user = await Users.findAll();
   const { id } = req.params;
   const dataBefore = await Users.findOne({
@@ -263,8 +262,9 @@ export const updateUsers = async (req, res) => {
     email,
     firstname,
     lastname,
+    gender,
     nohp,
-    birthday,
+    birthdate,
     country,
     province,
     city,
@@ -286,8 +286,9 @@ export const updateUsers = async (req, res) => {
         email,
         firstname,
         lastname,
+        gender,
         nohp,
-        birthday,
+        birthdate,
         country,
         province,
         city,

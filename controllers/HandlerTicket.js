@@ -40,6 +40,7 @@ export const getTicketById = async (req, res) => {
 export const createTicket = async (req, res) => {
   const {
     id_airport,
+    id_plane,
     arrival_id,
     departure_date,
     departure_time,
@@ -50,11 +51,13 @@ export const createTicket = async (req, res) => {
     price,
     type_class,
     plane_name,
-    oneway,
+    isOneway,
+    isTwoway,
   } = req.body;
   try {
     await Ticket.create({
       id_airport,
+      id_plane,
       arrival_id,
       departure_date,
       departure_time,
@@ -65,7 +68,8 @@ export const createTicket = async (req, res) => {
       price,
       type_class,
       plane_name,
-      oneway,
+      isOneway,
+      isTwoway,
     });
     res.json({ msg: "Added Ticket Successfully" });
   } catch (error) {
@@ -114,6 +118,7 @@ export const updateTicket = async (req, res) => {
 
   const {
     id_airport,
+    id_plane,
     arrival_id,
     departure_date,
     departure_time,
@@ -124,13 +129,15 @@ export const updateTicket = async (req, res) => {
     price,
     type_class,
     plane_name,
-    oneway,
+    isOneway,
+    isTwoway,
   } = req.body;
 
   try {
     await Ticket.update(
       {
         id_airport,
+        id_plane,
         arrival_id,
         departure_date,
         departure_time,
@@ -141,7 +148,8 @@ export const updateTicket = async (req, res) => {
         price,
         type_class,
         plane_name,
-        oneway,
+        isOneway,
+        isTwoway,
       },
       {
         where: { id: id },
