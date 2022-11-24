@@ -74,3 +74,56 @@ export const getBookingById = async (req, res) => {
     console.log(error);
   }
 };
+
+export const createBooking = async (req, res) => {
+  const {
+    id_ticket,
+    id_airplane,
+    id_users,
+    isWishlist
+  } = req.body;
+  try {
+    await Booking.create({
+      id_ticket,
+      id_airplane,  
+      id_users: req.user.userId,
+      isBooking: true
+    });
+    res.json({ msg: "Added Booking Successfully" });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export const softDeleteBooking = async(req, res) => {
+  const { id } = req.params;
+  const dataBeforeDelete = await Booking.findOne({
+  where: { id: id },
+  });
+
+  const parsedDataProfile = JSON.parse(JSON.stringify(dataBeforeDelete));
+
+  if (!parsedDataProfile) {
+      return res.status(400).json({
+          success: false,
+          message: "Booking doesn't exist or has been deleted!",
+      });
+  }
+  const {isBooking} = req.body;
+      try {
+          await Cars.update(
+              { 
+                  isBooking : false,
+              },
+              {
+              where: { id: id},
+              }
+          );
+          return res.status(200).json({
+              success: true,
+              message: "Booking Cancled",
+          });
+      } catch (error) {
+          console.log(error);
+      }
+}
