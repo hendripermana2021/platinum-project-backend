@@ -30,17 +30,17 @@ export const createAirport = async (req, res) => {
     city_airport,
     country_airport,
     terminal,
-    status
+    status,
   } = req.body;
   try {
     await Airport.create({
-    name_airport,
-    code_airport,
-    address,
-    city_airport,
-    country_airport,
-    terminal,
-    status
+      name_airport,
+      code_airport,
+      address,
+      city_airport,
+      country_airport,
+      terminal,
+      status,
     });
     res.json({ msg: "Added Airport Successfully" });
   } catch (error) {
@@ -105,18 +105,18 @@ export const updateUpdate = async (req, res) => {
     city_airport,
     country_airport,
     terminal,
-    status
+    status,
   } = req.body;
   try {
     await Airport.update(
       {
-    name_airport,
-    code_airport,
-    address,
-    city_airport,
-    country_airport,
-    terminal,
-    status
+        name_airport,
+        code_airport,
+        address,
+        city_airport,
+        country_airport,
+        terminal,
+        status,
       },
       {
         where: { id: id },
