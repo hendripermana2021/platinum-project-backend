@@ -1,7 +1,7 @@
 import airport from "../models/airport.js";
 import db from "../models/index.js";
 
-const Airport = db.Airport;
+const Airport = db.airport;
 export const getAirport = async (req, res) => {
   try {
     const airport = await Airport.findAll({
@@ -84,7 +84,7 @@ export const getAirportById = async (req, res) => {
   }
 };
 
-export const updateUpdate = async (req, res) => {
+export const updateAirport = async (req, res) => {
   const { id } = req.params;
   const dataBeforeDelete = await Users.findOne({
     where: { id: id },

@@ -47,7 +47,11 @@ db.Sequelize = Sequelize;
 db.users = require("../models/users.js")(sequelize, Sequelize);
 db.booking = require("../models/booking.js")(sequelize, Sequelize);
 db.airport = require("../models/airport.js")(sequelize, Sequelize);
+db.ticket = require("../models/ticket.js")(sequelize, Sequelize);
+db.wishlist = require("../models/wishlist.js")(sequelize, Sequelize);
+db.history = require("../models/history.js")(sequelize, Sequelize);
 
+//RELATION FOR BOOKING
 db.users.belongsTo(db.booking, {
   as: "bookings",
   foreignKey: "id",
@@ -56,6 +60,68 @@ db.users.belongsTo(db.booking, {
 db.booking.belongsTo(db.users, {
   as: "users",
   foreignKey: "id",
+});
+
+db.ticket.belongsTo(db.booking, {
+  as: "bookings",
+  foreignKey: "id_ticket",
+});
+
+db.booking.belongsTo(db.ticket, {
+  as: "tickets",
+  foreignKey: "id",
+});
+
+db.airport.belongsTo(db.booking, {
+  as: "bookings",
+  foreignKey: "id_airport",
+});
+
+db.booking.belongsTo(db.airport, {
+  as: "airports",
+  foreignKey: "id",
+});
+
+//RELATION FOR WISHLIST
+db.wishlist.belongsTo(db.ticket, {
+  as: "tickets",
+  foreignKey: "id",
+});
+
+db.ticket.belongsTo(db.wishlist, {
+  as: "wishlists",
+  foreignKey: "id_ticket",
+});
+
+db.wishlist.belongsTo(db.users, {
+  as: "users",
+  foreignKey: "id",
+});
+
+db.users.belongsTo(db.wishlist, {
+  as: "wishlists",
+  foreignKey: "id_users",
+});
+
+//RELATION FOR HISTORY
+db.history.belongsTo(db.ticket, {
+  as: "tickets",
+  foreignKey: "id",
+});
+
+db.ticket.belongsTo(db.history, {
+  as: "histories",
+  foreignKey: "id_ticket",
+});
+
+db.history.belongsTo(db.users, {
+  as: "users",
+  foreignKey: "id",
+});
+
+db.users.belongsTo(db.history, {
+  as: "histories",
+  foreignKey: "id_users",
 });
 
 module.exports = db;

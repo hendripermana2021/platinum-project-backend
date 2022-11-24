@@ -18,9 +18,17 @@ import {
   getTicketById,
 } from "../controllers/HandlerTicket.js";
 import { verifyToken } from "../middleware/VerifyToken.js";
-import { getAirport } from "../controllers/HandleAirport.js";
+import {
+  createAirport,
+  deleteAirport,
+  getAirport,
+  getAirportById,
+  updateAirport,
+} from "../controllers/HandleAirport.js";
 import { refreshToken } from "../controllers/RefreshToken.js";
-import { getBooking } from "../controllers/HandlerBooking.js";
+import { getBooking, getBookingById } from "../controllers/HandlerBooking.js";
+import { getWishlist } from "../controllers/HandlerWishlist.js";
+import { getHistory, getHistoryById } from "../controllers/HandlerHistory.js";
 // import { getCars, getCarsById, createCars, updateCars, deleteCars, softDeleteCars } from "../controllers/HandlerCars.js"
 const router = express.Router();
 const prefix = "/v1/api/";
@@ -48,6 +56,7 @@ router.post(prefix + "login", Login);
 router.delete(prefix + "logout", verifyToken, Logout);
 router.delete(prefix + "users/delete/:id", verifyToken, deleteUsers);
 router.put(prefix + "users/edit/:id", verifyToken, updateUsers);
+router.get(prefix + "whoami", verifyToken, whoAmI);
 
 //ROUTES FOR TICKETS
 router.get(prefix + "tickets", getTicket);
@@ -58,12 +67,23 @@ router.get(prefix + "tickets/:id", getTicketById);
 
 //ROUTES FOR AIRPORT
 router.get(prefix + "airports", getAirport);
+router.get(prefix + "airports/:id", getAirportById);
+router.put(prefix + "airports/edit/:id", updateAirport);
+router.delete(prefix + "airports/delete/:id", deleteAirport);
+router.post(prefix + "airports", createAirport);
 
 //ROUTES FOR BOOKING
 router.get(prefix + "bookings", getBooking);
+router.get(prefix + "bookings/:id", getBookingById);
+
+//ROUTES FOR WISHLIST
+router.get(prefix + "wishlists", getWishlist);
+
+//ROUTES FOR HISTORY_PAYMENT
+router.get(prefix + "history-payment", getHistory);
+router.get(prefix + "history-payment/:id", getHistoryById);
 
 // router.get(prefix + "token", refreshToken);
-router.get(prefix + "whoami", verifyToken, whoAmI);
 
 // // endpoint untuk tambah admin yang bisa hanya superadmin
 // router.post(prefix + "registrasi-admin", verifyToken, RegisterAdmin);
