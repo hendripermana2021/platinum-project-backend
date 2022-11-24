@@ -10,22 +10,21 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    associate = (models) => {
+    static associate(models) {
       Booking.hasMany(models.Users, {
         as: "data_users",
         foreignKey: "id",
       });
-
-      Ticket.hasMany(models.Tickets, {
-        as: "data_ticket",
-        foreignKey: "id",
-      });
-
-      Airport.hasMany(models.Airport, {
-        as: "data_airport",
-        foreignKey: "id",
-      });
-    };
+      // Booking.belongsTo(models.Users, {
+      //   as: "data_ticket",
+      //   foreignKey: "id",
+      // });
+      // Booking.hasMany(models.Ticket);
+      // Airport.hasMany(models.Airport, {
+      //   as: "data_airport",
+      //   foreignKey: "id",
+      // });
+    }
   }
   Booking.init(
     {

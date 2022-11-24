@@ -20,6 +20,7 @@ import {
 import { verifyToken } from "../middleware/VerifyToken.js";
 import { getAirport } from "../controllers/HandleAirport.js";
 import { refreshToken } from "../controllers/RefreshToken.js";
+import { getBooking } from "../controllers/HandlerBooking.js";
 // import { getCars, getCarsById, createCars, updateCars, deleteCars, softDeleteCars } from "../controllers/HandlerCars.js"
 const router = express.Router();
 const prefix = "/v1/api/";
@@ -57,6 +58,9 @@ router.get(prefix + "tickets/:id", getTicketById);
 
 //ROUTES FOR AIRPORT
 router.get(prefix + "airports", getAirport);
+
+//ROUTES FOR BOOKING
+router.get(prefix + "bookings", getBooking);
 
 // router.get(prefix + "token", refreshToken);
 router.get(prefix + "whoami", verifyToken, whoAmI);

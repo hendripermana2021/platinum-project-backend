@@ -41,20 +41,21 @@ Object.keys(db).forEach((modelName) => {
   }
 });
 
-// db.users = require("../models/users.js")(sequelize, Sequelize);
-// db.ticket = require("../models/ticket.js")(sequelize, Sequelize);
-// db.airport = require("../models/airport.js")(sequelize, Sequelize);
-// db.dummy = require("../models/dummy.js")(sequelize, Sequelize);
-
-// //Relations
-// db.users.belongsTo(db.ticket);
-// db.ticket.hasMany(db.users);
-// db.dummy.belongsTo(db.users);
-// db.users.hasMany(db.dummy);
-// db.airport.belongsTo(db.ticket);
-// db.ticket.hasMany(db.airport);
-
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
+
+db.users = require("../models/users.js")(sequelize, Sequelize);
+db.booking = require("../models/booking.js")(sequelize, Sequelize);
+db.airport = require("../models/airport.js")(sequelize, Sequelize);
+
+db.users.belongsTo(db.booking, {
+  as: "bookings",
+  foreignKey: "id",
+});
+
+db.booking.belongsTo(db.users, {
+  as: "users",
+  foreignKey: "id",
+});
 
 module.exports = db;
