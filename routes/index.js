@@ -27,7 +27,10 @@ import {
 } from "../controllers/HandleAirport.js";
 import { refreshToken } from "../controllers/RefreshToken.js";
 import { getBooking, getBookingById } from "../controllers/HandlerBooking.js";
-import { getWishlist } from "../controllers/HandlerWishlist.js";
+import {
+  getWishlist,
+  getWishlistbyid,
+} from "../controllers/HandlerWishlist.js";
 import { getHistory, getHistoryById } from "../controllers/HandlerHistory.js";
 // import { getCars, getCarsById, createCars, updateCars, deleteCars, softDeleteCars } from "../controllers/HandlerCars.js"
 const router = express.Router();
@@ -78,6 +81,7 @@ router.get(prefix + "bookings/:id", getBookingById);
 
 //ROUTES FOR WISHLIST
 router.get(prefix + "wishlists", getWishlist);
+router.get(prefix + "wishlists/:id", getWishlistbyid);
 
 //ROUTES FOR HISTORY_PAYMENT
 router.get(prefix + "history-payment", getHistory);
