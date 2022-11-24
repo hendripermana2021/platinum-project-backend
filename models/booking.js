@@ -11,20 +11,19 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Booking.hasMany(models.Users, {
-        as: "data_users",
-        foreignKey: "id",
-      });
-      // Booking.belongsTo(models.Users, {
-      //   as: "data_ticket",
+      // Booking.hasMany(models.Users, {
+      //   as: "data_users",
       //   foreignKey: "id",
-      // });
-      // Booking.hasMany(models.Ticket);
-      // Airport.hasMany(models.Airport, {
-      //   as: "data_airport",
-      //   foreignKey: "id",
-      // });
     }
+    // Booking.belongsTo(models.Users, {
+    //   as: "data_ticket",
+    //   foreignKey: "id",
+    // });
+    // Booking.hasMany(models.Ticket);
+    // Airport.hasMany(models.Airport, {
+    //   as: "data_airport",
+    //   foreignKey: "id",
+    // });
   }
   Booking.init(
     {

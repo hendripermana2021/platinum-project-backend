@@ -72,10 +72,10 @@ db.booking.belongsTo(db.ticket, {
   foreignKey: "id",
 });
 
-db.airport.belongsTo(db.booking, {
-  as: "bookings",
-  foreignKey: "id_airport",
-});
+// db.airport.belongsTo(db.booking, {
+//   as: "bookings",
+//   foreignKey: "id_airport",
+// });
 
 db.booking.belongsTo(db.airport, {
   as: "airports",

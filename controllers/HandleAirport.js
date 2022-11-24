@@ -86,7 +86,7 @@ export const getAirportById = async (req, res) => {
 
 export const updateAirport = async (req, res) => {
   const { id } = req.params;
-  const dataBeforeDelete = await Users.findOne({
+  const dataBeforeDelete = await Airport.findOne({
     where: { id: id },
   });
   const parsedDataProfile = JSON.parse(JSON.stringify(dataBeforeDelete));

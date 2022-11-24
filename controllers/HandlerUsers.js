@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { refreshToken } from "./RefreshToken.js";
 
-const Users = db.Users;
+const Users = db.users;
 
 export const handleGetRoot = async (req, res) => {
   res.status(200).json({

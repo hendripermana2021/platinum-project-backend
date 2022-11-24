@@ -32,7 +32,6 @@ import {
   getWishlistbyid,
 } from "../controllers/HandlerWishlist.js";
 import { getHistory, getHistoryById } from "../controllers/HandlerHistory.js";
-// import { getCars, getCarsById, createCars, updateCars, deleteCars, softDeleteCars } from "../controllers/HandlerCars.js"
 const router = express.Router();
 const prefix = "/v1/api/";
 // import fs from "fs";
@@ -54,8 +53,6 @@ router.get(prefix + "users", getUsers);
 router.get(prefix + "users/:id", getUsersById);
 router.post(prefix + "register", Register);
 router.post(prefix + "login", Login);
-// router.post(prefix + "admin/login", isAdmin);
-// router.post(prefix + "superadmin/login", isSuperAdmin);
 router.delete(prefix + "logout", verifyToken, Logout);
 router.delete(prefix + "users/delete/:id", verifyToken, deleteUsers);
 router.put(prefix + "users/edit/:id", verifyToken, updateUsers);
@@ -87,16 +84,10 @@ router.get(prefix + "wishlists/:id", getWishlistbyid);
 router.get(prefix + "history-payment", getHistory);
 router.get(prefix + "history-payment/:id", getHistoryById);
 
+// router.post(prefix + "admin/login", isAdmin);
+// router.post(prefix + "superadmin/login", isSuperAdmin);
 // router.get(prefix + "token", refreshToken);
-
-// // endpoint untuk tambah admin yang bisa hanya superadmin
+// // endpoint untuk tambah admin yang bisa hanya superadminc
 // router.post(prefix + "registrasi-admin", verifyToken, RegisterAdmin);
-
-// router.get(prefix + "cars", verifyToken, getCars);
-// router.get(prefix + "cars/:id", verifyToken, getCarsById);
-// router.post(prefix + "create/cars", verifyToken, createCars);
-// router.put(prefix + "cars/edit/:id", verifyToken, updateCars);
-// router.put(prefix + "cars/delete/:id", verifyToken, softDeleteCars);
-// router.delete(prefix + "cars/list-delete/:id", verifyToken, deleteCars);
 
 export default router;
