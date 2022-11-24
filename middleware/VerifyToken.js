@@ -9,6 +9,7 @@ export const verifyToken = (req, res, next) => {
       userId: decoded.userId,
       firstname: decoded.firstname,
       lastname: decoded.lastname,
+      gender: decoded.gender,
       email: decoded.email,
       role: decoded.role,
       nohp: decoded.nohp,
@@ -24,6 +25,7 @@ export const verifyToken = (req, res, next) => {
     req.role = decoded.role;
     req.firstname = decoded.firstname;
     req.lastname = decoded.lastname;
+    req.gender = decoded.gender;
     req.nohp = decoded.nohp;
     req.birthday = decoded.birthday;
     req.country = decoded.country;

@@ -7,6 +7,7 @@ export const getTicket = async (req, res) => {
       attributes: [
         "id",
         "id_airport",
+        "id_plane",
         "arrival_id",
         "departure_date",
         "departure_time",
@@ -17,7 +18,8 @@ export const getTicket = async (req, res) => {
         "price",
         "type_class",
         "plane_name",
-        "oneway",
+        "isOneway",
+        "isTwoway",
       ],
     });
     res.json(ticket);

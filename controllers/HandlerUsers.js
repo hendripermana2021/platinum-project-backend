@@ -271,15 +271,7 @@ export const updateUsers = async (req, res) => {
     address,
     postalcode,
     pictures,
-    password,
-    confPassword,
   } = req.body;
-  if (password !== confPassword)
-    return res
-      .status(400)
-      .json({ msg: "Password dan Confirm Password tidak cocok" });
-  const salt = await bcrypt.genSalt();
-  const hashPassword = await bcrypt.hash(password, salt);
   try {
     await Users.update(
       {
@@ -295,7 +287,6 @@ export const updateUsers = async (req, res) => {
         address,
         postalcode,
         pictures,
-        password: hashPassword,
       },
       {
         where: { id: id },
