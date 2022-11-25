@@ -6,7 +6,7 @@ const Ticket = db.ticket;
 export const getHistory = async (req, res) => {
   try {
     const history = await History.findAll({
-      attributes: ["id", "id_ticket", "id_users"],
+      attributes: ["id", "id_ticket", "id_users", "createdAt"],
       include: [
         {
           model: Users,
@@ -30,7 +30,7 @@ export const getHistoryById = async (req, res) => {
   try {
     const history = await History.findOne({
       where: { id: req.params.id },
-      attributes: ["id", "id_ticket", "id_users"],
+      attributes: ["id", "id_ticket", "id_users", "createdAt"],
       include: [
         {
           model: Users,

@@ -100,7 +100,7 @@ db.wishlist.belongsTo(db.users, {
 
 db.users.belongsTo(db.wishlist, {
   as: "wishlists",
-  foreignKey: "id_users",
+  foreignKey: "id",
 });
 
 //RELATION FOR HISTORY
@@ -121,7 +121,7 @@ db.history.belongsTo(db.users, {
 
 db.users.belongsTo(db.history, {
   as: "histories",
-  foreignKey: "id_users",
+  foreignKey: "id",
 });
 
 module.exports = db;
