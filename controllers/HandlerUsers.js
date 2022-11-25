@@ -2,9 +2,11 @@ import db from "../models/index.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { refreshToken } from "./RefreshToken.js";
+import role from "../models/role.js";
 
 const Users = db.users;
-
+const Role = db.role;
+const Address = db.address;
 export const handleGetRoot = async (req, res) => {
   res.status(200).json({
     status: "OK",
@@ -22,16 +24,20 @@ export const getUsers = async (req, res) => {
         "gender",
         "email",
         "password",
-        "role",
-        "nohp",
-        "birthdate",
-        "country",
-        "province",
-        "city",
-        "address",
-        "postalcode",
-        "pictures",
       ],
+      include: [
+        {
+          model: Role,
+          as: "roles",
+          attributes: ["roleName"],
+        },
+        {
+          model: Address,
+          as: "address",
+          attributes: ["homeAddress", "province", "city"],
+        },
+      ],
+
       // include: [
       //   {
       //     model: Dummy,
