@@ -1,25 +1,24 @@
 import db from "../models/index.js";
 
-const Ticket = db.Ticket;
+const Ticket = db.ticket;
+const Type = db.classtype;
 export const getTicket = async (req, res) => {
   try {
     const ticket = await Ticket.findAll({
       attributes: [
         "id",
-        "id_airport",
-        "id_plane",
-        "arrival_id",
-        "departure_date",
-        "departure_time",
-        "arrival_time",
-        "passenger",
-        "departure_terminal",
-        "arrival_terminal",
+        "flight_id",
+        "class_id",
         "price",
-        "type_class",
-        "plane_name",
-        "isOneway",
-        "isTwoway",
+        "country",
+        "passanger_ammount",
+      ],
+      include: [
+        {
+          model: Type,
+          as: "class",
+          attributes: ["type"],
+        },
       ],
     });
     res.json(ticket);
@@ -40,38 +39,16 @@ export const getTicketById = async (req, res) => {
 };
 
 export const createTicket = async (req, res) => {
-  const {
-    id_airport,
-    id_plane,
-    arrival_id,
-    departure_date,
-    departure_time,
-    arrival_time,
-    passenger,
-    departure_terminal,
-    arrival_terminal,
-    price,
-    type_class,
-    plane_name,
-    isOneway,
-    isTwoway,
-  } = req.body;
+  const { id, flight_id, class_id, price, country, passanger_ammount } =
+    req.body;
   try {
     await Ticket.create({
-      id_airport,
-      id_plane,
-      arrival_id,
-      departure_date,
-      departure_time,
-      arrival_time,
-      passenger,
-      departure_terminal,
-      arrival_terminal,
+      id,
+      flight_id,
+      class_id,
       price,
-      type_class,
-      plane_name,
-      isOneway,
-      isTwoway,
+      country,
+      passanger_ammount,
     });
     res.json({ msg: "Added Ticket Successfully" });
   } catch (error) {
@@ -118,40 +95,16 @@ export const updateTicket = async (req, res) => {
     });
   }
 
-  const {
-    id_airport,
-    id_plane,
-    arrival_id,
-    departure_date,
-    departure_time,
-    arrival_time,
-    passenger,
-    departure_terminal,
-    arrival_terminal,
-    price,
-    type_class,
-    plane_name,
-    isOneway,
-    isTwoway,
-  } = req.body;
+  const { flight_id, class_id, price, country, passanger_ammount } = req.body;
 
   try {
     await Ticket.update(
       {
-        id_airport,
-        id_plane,
-        arrival_id,
-        departure_date,
-        departure_time,
-        arrival_time,
-        passenger,
-        departure_terminal,
-        arrival_terminal,
+        flight_id,
+        class_id,
         price,
-        type_class,
-        plane_name,
-        isOneway,
-        isTwoway,
+        country,
+        passanger_ammount,
       },
       {
         where: { id: id },

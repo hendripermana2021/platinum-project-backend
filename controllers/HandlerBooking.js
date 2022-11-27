@@ -1,35 +1,25 @@
+import classtype from "../models/classtype.js";
 import db from "../models/index.js";
-import users from "../models/users.js";
-import { Sequelize } from "sequelize";
 
 const Booking = db.booking;
 const Users = db.users;
 const Ticket = db.ticket;
 const Airport = db.airport;
+const Type = db.classtype;
 export const getBooking = async (req, res) => {
   try {
     const booking = await Booking.findAll({
-      attributes: ["id", "id_ticket", "id_users", "id_airport", "isBooking"],
+      attributes: ["ticket_id", "passanger_id", "isBooking"],
       include: [
         {
-          model: Users,
-          as: "users",
-          attributes: ["id", "firstname", "lastname"],
-        },
-        {
           model: Ticket,
-          as: "tickets",
-          attributes: ["id", "arrival_id", "departure_date"],
-        },
-        {
-          model: Airport,
-          as: "airports",
+          as: "ticket",
           attributes: [
-            "id",
-            "name_airport",
-            "code_airport",
-            "address",
-            "city_airport",
+            "flight_id",
+            "class_id",
+            "price",
+            "country",
+            "passanger_ammount",
           ],
         },
       ],
@@ -44,27 +34,17 @@ export const getBookingById = async (req, res) => {
   try {
     const booking = await Booking.findOne({
       where: { id: req.params.id },
-      attributes: ["id", "id_ticket", "id_users", "id_airport", "isBooking"],
+      attributes: ["ticket_id", "passanger_id", "isBooking"],
       include: [
         {
-          model: Users,
-          as: "users",
-          attributes: ["id", "firstname", "lastname"],
-        },
-        {
           model: Ticket,
-          as: "tickets",
-          attributes: ["id", "arrival_id", "departure_date"],
-        },
-        {
-          model: Airport,
-          as: "airports",
+          as: "ticket",
           attributes: [
-            "id",
-            "name_airport",
-            "code_airport",
-            "address",
-            "city_airport",
+            "flight_id",
+            "class_id",
+            "price",
+            "country",
+            "passanger_ammount",
           ],
         },
       ],
@@ -76,54 +56,48 @@ export const getBookingById = async (req, res) => {
 };
 
 export const createBooking = async (req, res) => {
-  const {
-    id_ticket,
-    id_airplane,
-    id_users,
-    isWishlist
-  } = req.body;
+  const { passanger_id } = req.body;
   try {
     await Booking.create({
-      id_ticket,
-      id_airplane,  
-      id_users: req.user.userId,
-      isBooking: true
+      ticket_id: req.user.id,
+      passanger_id: req.passanger_id,
+      isBooking: true,
     });
     res.json({ msg: "Added Booking Successfully" });
   } catch (error) {
     console.log(error);
   }
-}
+};
 
-export const softDeleteBooking = async(req, res) => {
+export const softDeleteBooking = async (req, res) => {
   const { id } = req.params;
   const dataBeforeDelete = await Booking.findOne({
-  where: { id: id },
+    where: { id: id },
   });
 
   const parsedDataProfile = JSON.parse(JSON.stringify(dataBeforeDelete));
 
   if (!parsedDataProfile) {
-      return res.status(400).json({
-          success: false,
-          message: "Booking doesn't exist or has been deleted!",
-      });
+    return res.status(400).json({
+      success: false,
+      message: "Booking doesn't exist or has been deleted!",
+    });
   }
-  const {isBooking} = req.body;
-      try {
-          await Cars.update(
-              { 
-                  isBooking : false,
-              },
-              {
-              where: { id: id},
-              }
-          );
-          return res.status(200).json({
-              success: true,
-              message: "Booking Cancled",
-          });
-      } catch (error) {
-          console.log(error);
+  const { isBooking } = req.body;
+  try {
+    await Cars.update(
+      {
+        isBooking: false,
+      },
+      {
+        where: { id: id },
       }
-}
+    );
+    return res.status(200).json({
+      success: true,
+      message: "Booking Cancled",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};

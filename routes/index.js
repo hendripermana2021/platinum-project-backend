@@ -35,6 +35,7 @@ import {
   getWishlistbyid,
 } from "../controllers/HandlerWishlist.js";
 import { getHistory, getHistoryById } from "../controllers/HandlerHistory.js";
+import { getPassanger } from "../controllers/HandlerPassanger.js";
 const router = express.Router();
 const prefix = "/v1/api/";
 // import fs from "fs";
@@ -57,7 +58,12 @@ router.get(prefix + "users/:id", getUsersById);
 router.post(prefix + "register", Register, createAddress);
 router.post(prefix + "login", Login);
 router.delete(prefix + "logout", verifyToken, Logout);
-router.delete(prefix + "users/delete/:id", verifyToken, deleteUsers, deleteAddress);
+router.delete(
+  prefix + "users/delete/:id",
+  verifyToken,
+  deleteUsers,
+  deleteAddress
+);
 router.put(prefix + "users/edit/:id", verifyToken, updateUsers, updateAddress);
 router.get(prefix + "whoami", verifyToken, whoAmI);
 
@@ -78,6 +84,9 @@ router.post(prefix + "airports", createAirport);
 //ROUTES FOR BOOKING
 router.get(prefix + "bookings", getBooking);
 router.get(prefix + "bookings/:id", getBookingById);
+
+//ROUTER FOR PASSANGERS
+router.get(prefix + "passanger", getPassanger);
 
 //ROUTES FOR WISHLIST
 router.get(prefix + "wishlists", getWishlist);

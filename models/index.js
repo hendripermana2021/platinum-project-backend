@@ -78,6 +78,27 @@ db.users.belongsTo(db.address, {
   foreignKey: "address_id",
 });
 
+//RELATION TICKET TABLE
+db.classtype.hasMany(db.ticket, {
+  as: "ticket",
+  foreignKey: "id",
+});
+
+db.ticket.belongsTo(db.classtype, {
+  as: "class",
+  foreignKey: "class_id",
+});
+
+//RELATION BOOKING
+db.booking.belongsTo(db.ticket, {
+  as: "ticket",
+  foreignKey: "ticket_id",
+});
+
+db.ticket.belongsTo(db.booking, {
+  as: "booking",
+  foreignKey: "id",
+});
 //RELATION FOR BOOKING
 // db.users.belongsTo(db.booking, {
 //   as: "bookings",
