@@ -2,11 +2,14 @@ import express from "express";
 import {
   getUsers,
   Register,
+  createAddress,
   Login,
   Logout,
   whoAmI,
   deleteUsers,
   updateUsers,
+  deleteAddress,
+  updateAddress,
   getUsersById,
   handleGetRoot,
 } from "../controllers/HandlerUsers.js";
@@ -51,11 +54,11 @@ const prefix = "/v1/api/";
 router.get(prefix, handleGetRoot);
 router.get(prefix + "users", getUsers);
 router.get(prefix + "users/:id", getUsersById);
-router.post(prefix + "register", Register);
+router.post(prefix + "register", Register, createAddress);
 router.post(prefix + "login", Login);
 router.delete(prefix + "logout", verifyToken, Logout);
-router.delete(prefix + "users/delete/:id", verifyToken, deleteUsers);
-router.put(prefix + "users/edit/:id", verifyToken, updateUsers);
+router.delete(prefix + "users/delete/:id", verifyToken, deleteUsers, deleteAddress);
+router.put(prefix + "users/edit/:id", verifyToken, updateUsers, updateAddress);
 router.get(prefix + "whoami", verifyToken, whoAmI);
 
 //ROUTES FOR TICKETS
