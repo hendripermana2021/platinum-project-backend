@@ -91,6 +91,8 @@ export const Register = async (req, res) => {
       gender,
       phone,
       birthdate,
+      address_id: id,
+      role_id: 2,
       postalcode,
       pictures,
       password: hashPassword,
