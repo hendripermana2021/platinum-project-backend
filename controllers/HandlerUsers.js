@@ -69,17 +69,12 @@ export const Register = async (req, res) => {
     firstname,
     lastname,
     gender,
-    nohp,
+    phone,
     birthdate,
-    country,
-    province,
-    city,
-    address,
     postalcode,
     pictures,
     password,
     confPassword,
-    role,
   } = req.body;
   if (password !== confPassword)
     return res
@@ -94,17 +89,33 @@ export const Register = async (req, res) => {
       firstname,
       lastname,
       gender,
-      nohp,
+      phone,
       birthdate,
-      country,
-      province,
-      city,
-      address,
       postalcode,
       pictures,
       password: hashPassword,
     });
     res.json({ msg: "Register Berhasil" });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const createAddress = async (req, res) => {
+  const {
+    homeAddress,
+    country,
+    province,
+    city,
+  } = req.body;
+  try {
+    await Address.create({
+      homeAddress,
+      country,
+      province,
+      city,
+    });
+    res.json({ msg: "Added Address Successfully" });
   } catch (error) {
     console.log(error);
   }
@@ -125,10 +136,6 @@ export const Login = async (req, res) => {
     const gender = user[0].gender;
     const nohp = user[0].nohp;
     const birthdate = user[0].birthdate;
-    const country = user[0].country;
-    const province = user[0].province;
-    const city = user[0].city;
-    const address = user[0].address;
     const postalcode = user[0].postalcode;
     const pictures = user[0].pictures;
     const email = user[0].email;
@@ -141,10 +148,6 @@ export const Login = async (req, res) => {
         email,
         nohp,
         birthdate,
-        country,
-        province,
-        city,
-        address,
         postalcode,
         pictures,
       },
@@ -163,10 +166,6 @@ export const Login = async (req, res) => {
         lastname,
         nohp,
         birthdate,
-        country,
-        province,
-        city,
-        address,
         postalcode,
         pictures,
       },
@@ -250,6 +249,20 @@ export const deleteUsers = async (req, res) => {
   });
 };
 
+export const deleteAddress = async (req, res) => {
+  const address = await Address.findAll();
+  const { id } = req.params;
+
+  await Address.destroy({
+    where: { id },
+  });
+
+  return res.status(200).json({
+    success: true,
+    message: "Delete Data Successfully",
+  });
+};
+
 export const updateUsers = async (req, res) => {
   const { id } = req.params;
   const dataBeforeDelete = await Users.findOne({
@@ -269,12 +282,8 @@ export const updateUsers = async (req, res) => {
     firstname,
     lastname,
     gender,
-    nohp,
+    phone,
     birthdate,
-    country,
-    province,
-    city,
-    address,
     postalcode,
     pictures,
   } = req.body;
@@ -285,12 +294,8 @@ export const updateUsers = async (req, res) => {
         firstname,
         lastname,
         gender,
-        nohp,
+        phone,
         birthdate,
-        country,
-        province,
-        city,
-        address,
         postalcode,
         pictures,
       },
@@ -301,6 +306,36 @@ export const updateUsers = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Users Success Updated",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const updateAddress = async (req, res) => {
+  const { id } = req.params;
+
+  const {
+    homeAddress,
+    country,
+    province,
+    city,
+  } = req.body;
+  try {
+    await Address.update(
+      {
+        homeAddress,
+        country,
+        province,
+        city,
+      },
+      {
+        where: { id: id },
+      }
+    );
+    return res.status(200).json({
+      success: true,
+      message: "Address Success Updated",
     });
   } catch (error) {
     console.log(error);
