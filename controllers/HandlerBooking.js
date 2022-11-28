@@ -1,10 +1,7 @@
-import classtype from "../models/classtype.js";
 import db from "../models/index.js";
 
 const Booking = db.booking;
-const Users = db.users;
 const Ticket = db.ticket;
-const Airport = db.airport;
 const Type = db.classtype;
 export const getBooking = async (req, res) => {
   try {
@@ -20,6 +17,12 @@ export const getBooking = async (req, res) => {
             "price",
             "country",
             "passanger_ammount",
+          ],
+          include: [
+            {
+              model: Type,
+              as: "class",
+            },
           ],
         },
       ],
@@ -46,6 +49,12 @@ export const getBookingById = async (req, res) => {
             "country",
             "passanger_ammount",
           ],
+          include: [
+            {
+              model: Type,
+              as: "class",
+            },
+          ],
         },
       ],
     });
@@ -56,11 +65,11 @@ export const getBookingById = async (req, res) => {
 };
 
 export const createBooking = async (req, res) => {
-  const { passanger_id } = req.body;
+  const { ticket_id, passanger_id } = req.body;
   try {
     await Booking.create({
-      ticket_id: req.user.id,
-      passanger_id: req.passanger_id,
+      ticket_id,
+      passanger_id,
       isBooking: true,
     });
     res.json({ msg: "Added Booking Successfully" });
@@ -83,9 +92,8 @@ export const softDeleteBooking = async (req, res) => {
       message: "Booking doesn't exist or has been deleted!",
     });
   }
-  const { isBooking } = req.body;
   try {
-    await Cars.update(
+    await Booking.update(
       {
         isBooking: false,
       },
@@ -95,9 +103,34 @@ export const softDeleteBooking = async (req, res) => {
     );
     return res.status(200).json({
       success: true,
-      message: "Booking Cancled",
+      message: "Booking Canceled",
     });
   } catch (error) {
     console.log(error);
   }
+};
+
+export const deleteBooking = async (req, res) => {
+  const booking = await Booking.findAll();
+  const { id } = req.params;
+  const dataBefore = await Booking.findOne({
+    where: { id: id },
+  });
+  const parsedDataProfile = JSON.parse(JSON.stringify(dataBefore));
+
+  if (!parsedDataProfile) {
+    return res.status(400).json({
+      success: false,
+      message: "Booking not found or nothing!",
+    });
+  }
+
+  await Booking.destroy({
+    where: { id },
+  });
+
+  return res.status(200).json({
+    success: true,
+    message: "Delete Data Successfully",
+  });
 };

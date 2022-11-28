@@ -33,7 +33,7 @@
     "model-flight": "npx sequelize-cli model:generate --name Flight --attributes departureAirport:integer,arrivalAirport:integer,departureDate:date,arrivalDate:date,departureTime:time,arrivalTime:time,flightType:integer,planeName:string",
     "model-flighttype": "npx sequelize-cli model:generate --name FlightType --attributes type:string",
     "model-classtype": "npx sequelize-cli model:generate --name ClassType --attributes type:string",
-    "model-passanger": "npx sequelize-cli model:generate --name Passanger --attributes name:string,email:string,age:integer,identityType:string,identityNumber:string",
+    "model-passanger": "npx sequelize-cli model:generate --name Passanger --attributes name:string,email:string,age:integer,identityType:string,identityNumber:string,booking_id:integer",
     "model-history": "npx sequelize-cli model:generate --name History --attributes id_ticket:integer,id_users:integer",
     "db:seed": "npx sequelize-cli db:seed:all",
     "db:migrate": "npx sequelize-cli db:migrate",

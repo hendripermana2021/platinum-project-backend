@@ -6,17 +6,14 @@ const Wishlist = db.wishlist;
 export const getWishlist = async (req, res) => {
   try {
     const wishlist = await Wishlist.findAll({
-      attributes: ["id", "id_ticket", "id_users", "isWishlist"],
       include: [
         {
           model: Users,
           as: "users",
-          attributes: ["id", "firstname", "lastname"],
         },
         {
           model: Ticket,
-          as: "tickets",
-          attributes: ["id", "arrival_id", "departure_date"],
+          as: "ticket",
         },
       ],
     });
@@ -30,17 +27,14 @@ export const getWishlistbyid = async (req, res) => {
   try {
     const wishlist = await Wishlist.findOne({
       where: { id: req.params.id },
-      attributes: ["id", "id_ticket", "id_users", "isWishlist"],
       include: [
         {
           model: Users,
           as: "users",
-          attributes: ["id", "firstname", "lastname"],
         },
         {
           model: Ticket,
-          as: "tickets",
-          attributes: ["id", "arrival_id", "departure_date"],
+          as: "ticket",
         },
       ],
     });
@@ -51,22 +45,18 @@ export const getWishlistbyid = async (req, res) => {
 };
 
 export const createWishlist = async (req, res) => {
-  const {
-    id_ticket,
-    id_users,
-    isWishlist
-  } = req.body;
+  const { user_id, ticket_id } = req.body;
   try {
     await Wishlist.create({
-      id_ticket,
-      id_users: req.user.userId,
-      isWishlist: true
+      user_id,
+      ticket_id,
+      isWishlist: true,
     });
     res.json({ msg: "Added Wishlist Successfully" });
   } catch (error) {
     console.log(error);
   }
-}
+};
 
 export const deleteWishlist = async (req, res) => {
   const wishlist = await Wishlist.findAll();

@@ -95,10 +95,47 @@ db.booking.belongsTo(db.ticket, {
   foreignKey: "ticket_id",
 });
 
-db.ticket.belongsTo(db.booking, {
+db.ticket.hasMany(db.booking, {
   as: "booking",
   foreignKey: "id",
 });
+
+// //RELATION FOR WISHLIST
+db.wishlist.belongsTo(db.users, {
+  as: "users",
+  foreignKey: "user_id",
+});
+
+db.users.hasMany(db.wishlist, {
+  as: "wishlist",
+  foreignKey: "id",
+});
+
+db.wishlist.belongsTo(db.ticket, {
+  as: "ticket",
+  foreignKey: "ticket_id",
+});
+
+// db.ticket.belongsTo(db.wishlist, {
+//   as: "wishlists",
+//   foreignKey: "id_ticket",
+// });
+
+// db.wishlist.belongsTo(db.users, {
+//   as: "users",
+//   foreignKey: "id",
+// });
+
+// db.users.belongsTo(db.wishlist, {
+//   as: "wishlists",
+//   foreignKey: "id",
+// });
+
+// db.booking.hasMany(db.classtype, {
+//   as: "class",
+//   foreignKey: "id",
+// });
+
 //RELATION FOR BOOKING
 // db.users.belongsTo(db.booking, {
 //   as: "bookings",
@@ -127,27 +164,6 @@ db.ticket.belongsTo(db.booking, {
 
 // db.booking.belongsTo(db.airport, {
 //   as: "airports",
-//   foreignKey: "id",
-// });
-
-// //RELATION FOR WISHLIST
-// db.wishlist.belongsTo(db.ticket, {
-//   as: "tickets",
-//   foreignKey: "id",
-// });
-
-// db.ticket.belongsTo(db.wishlist, {
-//   as: "wishlists",
-//   foreignKey: "id_ticket",
-// });
-
-// db.wishlist.belongsTo(db.users, {
-//   as: "users",
-//   foreignKey: "id",
-// });
-
-// db.users.belongsTo(db.wishlist, {
-//   as: "wishlists",
 //   foreignKey: "id",
 // });
 

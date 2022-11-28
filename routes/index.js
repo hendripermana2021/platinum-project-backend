@@ -2,7 +2,6 @@ import express from "express";
 import {
   getUsers,
   Register,
-  createAddress,
   Login,
   Logout,
   whoAmI,
@@ -29,13 +28,26 @@ import {
   updateAirport,
 } from "../controllers/HandleAirport.js";
 import { refreshToken } from "../controllers/RefreshToken.js";
-import { getBooking, getBookingById } from "../controllers/HandlerBooking.js";
 import {
+  createBooking,
+  deleteBooking,
+  getBooking,
+  getBookingById,
+  softDeleteBooking,
+} from "../controllers/HandlerBooking.js";
+import {
+  createWishlist,
+  deleteWishlist,
   getWishlist,
   getWishlistbyid,
 } from "../controllers/HandlerWishlist.js";
 import { getHistory, getHistoryById } from "../controllers/HandlerHistory.js";
-import { getPassanger } from "../controllers/HandlerPassanger.js";
+import {
+  createPassanger,
+  deletePassanger,
+  getPassanger,
+  getPassangerById,
+} from "../controllers/HandlerPassanger.js";
 const router = express.Router();
 const prefix = "/v1/api/";
 // import fs from "fs";
@@ -55,7 +67,7 @@ const prefix = "/v1/api/";
 router.get(prefix, handleGetRoot);
 router.get(prefix + "users", getUsers);
 router.get(prefix + "users/:id", getUsersById);
-router.post(prefix + "register", Register, createAddress);
+router.post(prefix + "register", Register);
 router.post(prefix + "login", Login);
 router.delete(prefix + "logout", verifyToken, Logout);
 router.delete(
@@ -84,13 +96,21 @@ router.post(prefix + "airports", createAirport);
 //ROUTES FOR BOOKING
 router.get(prefix + "bookings", getBooking);
 router.get(prefix + "bookings/:id", getBookingById);
+router.put(prefix + "bookings/create", createBooking);
+router.delete(prefix + "bookings/delete/:id", softDeleteBooking);
+router.delete(prefix + "bookings/deleted/:id", deleteBooking);
 
 //ROUTER FOR PASSANGERS
 router.get(prefix + "passanger", getPassanger);
+router.get(prefix + "passanger/:id", getPassangerById);
+router.post(prefix + "passanger/create", createPassanger);
+router.delete(prefix + "passanger/delete/:id", deletePassanger);
 
 //ROUTES FOR WISHLIST
 router.get(prefix + "wishlists", getWishlist);
 router.get(prefix + "wishlists/:id", getWishlistbyid);
+router.post(prefix + "wishlists/create", createWishlist);
+router.delete(prefix + "wishlists/delete/:id", deleteWishlist);
 
 //ROUTES FOR HISTORY_PAYMENT
 router.get(prefix + "history-payment", getHistory);

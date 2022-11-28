@@ -12,6 +12,7 @@ module.exports = {
           age: 20,
           identityType: "Identity Type Budi",
           identityNumber: "Identity Number Budi",
+          booking_id: 1,
           createdAt: new Date(),
           updatedAt: new Date(),
         },

@@ -14,6 +14,14 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
+        {
+          homeAddress: "Jalan Delitua Pamah 2",
+          city: "Medan 2",
+          province: "Sumatera Utara 2",
+          country: "Indonesia 2",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ],
       {}
     );

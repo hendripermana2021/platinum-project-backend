@@ -64,17 +64,19 @@ export const getUsersById = async (req, res) => {
 
 export const Register = async (req, res) => {
   const {
-    id,
     email,
     firstname,
     lastname,
     gender,
     phone,
     birthdate,
-    postalcode,
     pictures,
     password,
     confPassword,
+    homeAddress,
+    country,
+    province,
+    city,
   } = req.body;
   if (password !== confPassword)
     return res
@@ -84,44 +86,45 @@ export const Register = async (req, res) => {
   const hashPassword = await bcrypt.hash(password, salt);
   try {
     await Users.create({
-      id,
       email,
       firstname,
       lastname,
       gender,
       phone,
       birthdate,
-      address_id: id,
+      Address,
       role_id: 2,
-      postalcode,
       pictures,
       password: hashPassword,
     });
-    res.json({ msg: "Register Berhasil" });
-  } catch (error) {
-    console.log(error);
-  }
-};
 
-export const createAddress = async (req, res) => {
-  const {
-    homeAddress,
-    country,
-    province,
-    city,
-  } = req.body;
-  try {
     await Address.create({
       homeAddress,
       country,
       province,
       city,
     });
-    res.json({ msg: "Added Address Successfully" });
+
+    res.json({ msg: "Register Berhasil" });
   } catch (error) {
     console.log(error);
   }
 };
+
+// export const createAddress = async (req, res) => {
+//   const { homeAddress, country, province, city } = req.body;
+//   try {
+//     await Address.create({
+//       homeAddress,
+//       country,
+//       province,
+//       city,
+//     });
+//     res.json({ msg: "Added Address Successfully" });
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 
 export const Login = async (req, res) => {
   try {
@@ -317,12 +320,7 @@ export const updateUsers = async (req, res) => {
 export const updateAddress = async (req, res) => {
   const { id } = req.params;
 
-  const {
-    homeAddress,
-    country,
-    province,
-    city,
-  } = req.body;
+  const { homeAddress, country, province, city } = req.body;
   try {
     await Address.update(
       {
