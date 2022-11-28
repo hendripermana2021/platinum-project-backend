@@ -92,7 +92,6 @@ export const Register = async (req, res) => {
       gender,
       phone,
       birthdate,
-      Address,
       role_id: 2,
       pictures,
       password: hashPassword,
@@ -110,21 +109,6 @@ export const Register = async (req, res) => {
     console.log(error);
   }
 };
-
-// export const createAddress = async (req, res) => {
-//   const { homeAddress, country, province, city } = req.body;
-//   try {
-//     await Address.create({
-//       homeAddress,
-//       country,
-//       province,
-//       city,
-//     });
-//     res.json({ msg: "Added Address Successfully" });
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
 
 export const Login = async (req, res) => {
   try {
@@ -248,16 +232,6 @@ export const deleteUsers = async (req, res) => {
     where: { id },
   });
 
-  return res.status(200).json({
-    success: true,
-    message: "Delete Data Successfully",
-  });
-};
-
-export const deleteAddress = async (req, res) => {
-  const address = await Address.findAll();
-  const { id } = req.params;
-
   await Address.destroy({
     where: { id },
   });
@@ -291,6 +265,10 @@ export const updateUsers = async (req, res) => {
     birthdate,
     postalcode,
     pictures,
+    homeAddress,
+    country,
+    province,
+    city,
   } = req.body;
   try {
     await Users.update(
@@ -303,27 +281,15 @@ export const updateUsers = async (req, res) => {
         birthdate,
         postalcode,
         pictures,
+        address_id: id,
       },
       {
         where: { id: id },
       }
     );
-    return res.status(200).json({
-      success: true,
-      message: "Users Success Updated",
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const updateAddress = async (req, res) => {
-  const { id } = req.params;
-
-  const { homeAddress, country, province, city } = req.body;
-  try {
     await Address.update(
       {
+        id: id,
         homeAddress,
         country,
         province,
@@ -335,7 +301,7 @@ export const updateAddress = async (req, res) => {
     );
     return res.status(200).json({
       success: true,
-      message: "Address Success Updated",
+      message: "Users Success Updated",
     });
   } catch (error) {
     console.log(error);
