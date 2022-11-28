@@ -7,7 +7,6 @@ import {
   whoAmI,
   deleteUsers,
   updateUsers,
-  deleteAddress,
   updateAddress,
   getUsersById,
   handleGetRoot,
@@ -78,12 +77,7 @@ router.get(prefix + "users/:id", getUsersById);
 router.post(prefix + "register", Register);
 router.post(prefix + "login", Login);
 router.delete(prefix + "logout", verifyToken, Logout);
-router.delete(
-  prefix + "users/delete/:id",
-  verifyToken,
-  deleteUsers,
-  deleteAddress
-);
+router.delete(prefix + "users/delete/:id", verifyToken, deleteUsers);
 router.put(prefix + "users/edit/:id", verifyToken, updateUsers, updateAddress);
 router.get(prefix + "whoami", verifyToken, whoAmI);
 
