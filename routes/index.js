@@ -47,7 +47,15 @@ import {
   deletePassanger,
   getPassanger,
   getPassangerById,
+  updatePassanger,
 } from "../controllers/HandlerPassanger.js";
+import {
+  createFlight,
+  deleteFlight,
+  getFlight,
+  getFlightById,
+  updateFlight,
+} from "../controllers/HandlerFlight.js";
 const router = express.Router();
 const prefix = "/v1/api/";
 // import fs from "fs";
@@ -103,6 +111,7 @@ router.delete(prefix + "bookings/deleted/:id", deleteBooking);
 //ROUTER FOR PASSANGERS
 router.get(prefix + "passanger", getPassanger);
 router.get(prefix + "passanger/:id", getPassangerById);
+router.put(prefix + "passanger/edit/:id", updatePassanger);
 router.post(prefix + "passanger/create", createPassanger);
 router.delete(prefix + "passanger/delete/:id", deletePassanger);
 
@@ -112,9 +121,12 @@ router.get(prefix + "wishlists/:id", getWishlistbyid);
 router.post(prefix + "wishlists/create", createWishlist);
 router.delete(prefix + "wishlists/delete/:id", deleteWishlist);
 
-//ROUTES FOR HISTORY_PAYMENT
-router.get(prefix + "history-payment", getHistory);
-router.get(prefix + "history-payment/:id", getHistoryById);
+//ROUTES FOR FLIGHT
+router.get(prefix + "flight", getFlight);
+router.get(prefix + "flight/:id", getFlightById);
+router.post(prefix + "flight/create", createFlight);
+router.delete(prefix + "flight/delete/:id", deleteFlight);
+router.put(prefix + "flight/edit/:id", updateFlight);
 
 // router.post(prefix + "admin/login", isAdmin);
 // router.post(prefix + "superadmin/login", isSuperAdmin);

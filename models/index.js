@@ -116,6 +116,22 @@ db.wishlist.belongsTo(db.ticket, {
   foreignKey: "ticket_id",
 });
 
+//RELATION FOR FLIGHT
+db.flight.belongsTo(db.airport, {
+  as: "DepartureTerminal",
+  foreignKey: "departureAirport",
+});
+
+db.flight.belongsTo(db.airport, {
+  as: "ArrivalTerminal",
+  foreignKey: "arrivalAirport",
+});
+
+db.flight.belongsTo(db.flighttype, {
+  as: "flighttype",
+  foreignKey: "flightType",
+});
+
 // db.ticket.belongsTo(db.wishlist, {
 //   as: "wishlists",
 //   foreignKey: "id_ticket",

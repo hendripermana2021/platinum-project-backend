@@ -15,6 +15,15 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
+        {
+          flight_id: 2,
+          class_id: 2,
+          price: 20000,
+          country: "Indonesia",
+          passanger_ammount: "Dewasa 1, Anak-anak 2, bayi 1",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ],
       {}
     );

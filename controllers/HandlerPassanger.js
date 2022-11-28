@@ -40,6 +40,45 @@ export const createPassanger = async (req, res) => {
   }
 };
 
+export const updatePassanger = async (req, res) => {
+  const { id } = req.params;
+  const dataBeforeDelete = await Passanger.findOne({
+    where: { id: id },
+  });
+  const parsedDataProfile = JSON.parse(JSON.stringify(dataBeforeDelete));
+
+  if (!parsedDataProfile) {
+    return res.status(400).json({
+      success: false,
+      message: "Users doesn't exist or has been deleted!",
+    });
+  }
+
+  const { name, email, age, indentityType, identityNumber, booking_id } =
+    req.body;
+  try {
+    await Passanger.update(
+      {
+        name,
+        email,
+        age,
+        indentityType,
+        identityNumber,
+        booking_id,
+      },
+      {
+        where: { id: id },
+      }
+    );
+    return res.status(200).json({
+      success: true,
+      message: "Passanger Success Updated",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const deletePassanger = async (req, res) => {
   const passanger = await Passanger.findAll();
   const { id } = req.params;

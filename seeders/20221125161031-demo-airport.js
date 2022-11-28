@@ -16,6 +16,16 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
+        {
+          name: "Bandara Raya Polonia Raya",
+          code: "SRJ-523",
+          city: "Medan",
+          country: "Medan",
+          terminal: "Polonia",
+          status: true,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ],
       {}
     );

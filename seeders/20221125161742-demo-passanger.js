@@ -16,6 +16,16 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
+        {
+          name: "Eko-Passanger2",
+          email: "Eko@gmail.com",
+          age: 30,
+          identityType: "Identity Type Eko",
+          identityNumber: "Identity Number Eko",
+          booking_id: 2,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ],
       {}
     );
