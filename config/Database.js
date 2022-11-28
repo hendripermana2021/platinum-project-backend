@@ -1,10 +1,10 @@
 import { Sequelize } from "sequelize";
 
-const db = new Sequelize("railway", "root", "dBMapj78ChpmemOVqV4c", {
-  host: "containers-us-west-67.railway.app",
+const db = new Sequelize("railway", "root", "zc7yB6TdpGHafC7T43aq", {
+  host: "containers-us-west-43.railway.app",
   dialect: "mysql",
-  url: "mysql://root:dBMapj78ChpmemOVqV4c@containers-us-west-67.railway.app:6993/railway",
-  port: "6993",
+  url: "mysql://root:zc7yB6TdpGHafC7T43aq@containers-us-west-43.railway.app:5734/railway",
+  port: "5734",
 });
 
 export default db;
