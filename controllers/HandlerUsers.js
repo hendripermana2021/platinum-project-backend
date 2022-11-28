@@ -123,7 +123,7 @@ export const Login = async (req, res) => {
     const firstname = user[0].firstname;
     const lastname = user[0].lastname;
     const gender = user[0].gender;
-    const nohp = user[0].nohp;
+    const phone = user[0].phone;
     const birthdate = user[0].birthdate;
     const postalcode = user[0].postalcode;
     const pictures = user[0].pictures;
@@ -135,7 +135,7 @@ export const Login = async (req, res) => {
         lastname,
         gender,
         email,
-        nohp,
+        phone,
         birthdate,
         postalcode,
         pictures,
@@ -153,7 +153,7 @@ export const Login = async (req, res) => {
         email,
         gender,
         lastname,
-        nohp,
+        phone,
         birthdate,
         postalcode,
         pictures,
