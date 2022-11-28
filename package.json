@@ -7,6 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./index.js",
+    "develop": "nodemon ./index.js",
     "db:create": "npx sequelize db:create",
     "seed:users": "npx sequelize-cli seed:generate --name demo-user",
     "seed:airport": "npx sequelize-cli seed:generate --name demo-airport",

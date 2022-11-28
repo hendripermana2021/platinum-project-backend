@@ -14,8 +14,10 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(router);
 app.use(bodyParser.urlencoded({ extended: true }));
-// export default defineConfig({
-//   plugins: [crx({ config })],
-// });
+const { PORT = 8000 } = process.env;
 
-app.listen(8000, () => console.log("Server running at port 8000"));
+app.listen(PORT, () => {
+  console.log("Listening on port", PORT);
+});
+
+// app.listen(8000 || DB_PORT, () => console.log("Server running at port 8000"));
