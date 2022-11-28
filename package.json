@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon ./index.js",
+    "start": "node ./index.js",
     "db:create": "npx sequelize db:create",
     "seed:users": "npx sequelize-cli seed:generate --name demo-user",
     "seed:airport": "npx sequelize-cli seed:generate --name demo-airport",
