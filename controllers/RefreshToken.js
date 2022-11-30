@@ -1,7 +1,7 @@
 import db from "../models/index.js";
 import jwt from "jsonwebtoken";
 
-const Users = db.Users;
+const Users = db.users;
 export const refreshToken = async (req, res) => {
   try {
     const refreshToken = req.cookies.refreshToken;
@@ -20,12 +20,9 @@ export const refreshToken = async (req, res) => {
         const userId = user[0].id;
         const firstname = user[0].firstname;
         const lastname = user[0].lastname;
-        const nohp = user[0].nohp;
-        const birthday = user[0].birthday;
-        const country = user[0].country;
-        const province = user[0].province;
-        const city = user[0].city;
-        const address = user[0].address;
+        const gender = user[0].gender;
+        const phone = user[0].phone;
+        const birthdate = user[0].birthdate;
         const postalcode = user[0].postalcode;
         const pictures = user[0].pictures;
         const email = user[0].email;
@@ -34,15 +31,12 @@ export const refreshToken = async (req, res) => {
             userId,
             firstname,
             lastname,
-            nohp,
-            birthday,
-            country,
-            province,
-            city,
-            address,
+            gender,
+            email,
+            phone,
+            birthdate,
             postalcode,
             pictures,
-            email,
           },
           process.env.ACCESS_TOKEN_SECRET,
           {
