@@ -39,7 +39,6 @@ import {
   getWishlist,
   getWishlistbyid,
 } from "../controllers/HandlerWishlist.js";
-import { getHistory, getHistoryById } from "../controllers/HandlerHistory.js";
 import {
   createPassanger,
   deletePassanger,
@@ -56,19 +55,7 @@ import {
 } from "../controllers/HandlerFlight.js";
 const router = express.Router();
 const prefix = "/v1/api/";
-// import fs from "fs";
-// import yaml from "js-yaml";
 
-// const swaggerDocument = yaml.load(
-//   fs.readFileSync("OpenAPICars-Users.yaml", "utf8")
-// );
-// import swaggerUI from "swagger-ui-express";
-
-// router.use(
-//   prefix + "api-docs",
-//   swaggerUI.serve,
-//   swaggerUI.setup(swaggerDocument)
-// );
 //ROUTES FOR USERS
 router.get(prefix, handleGetRoot);
 router.get(prefix + "users", getUsers);
@@ -81,32 +68,32 @@ router.put(prefix + "users/edit/:id", verifyToken, updateUsers);
 router.get(prefix + "whoami", verifyToken, whoAmI);
 
 //ROUTES FOR TICKETS
-router.get(prefix + "tickets", getTicket);
-router.post(prefix + "tickets", createTicket);
-router.delete(prefix + "tickets/delete/:id", deleteTicket);
-router.put(prefix + "tickets/edit/:id", updateTicket);
-router.get(prefix + "tickets/:id", getTicketById);
+router.get(prefix + "tickets", verifyToken, getTicket);
+router.post(prefix + "tickets", verifyToken, createTicket);
+router.delete(prefix + "tickets/delete/:id", verifyToken, deleteTicket);
+router.put(prefix + "tickets/edit/:id", verifyToken, updateTicket);
+router.get(prefix + "tickets/:id", verifyToken, getTicketById);
 
 //ROUTES FOR AIRPORT
-router.get(prefix + "airports", getAirport);
-router.get(prefix + "airports/:id", getAirportById);
-router.put(prefix + "airports/edit/:id", updateAirport);
-router.delete(prefix + "airports/delete/:id", deleteAirport);
-router.post(prefix + "airports", createAirport);
+router.get(prefix + "airports", verifyToken, getAirport);
+router.get(prefix + "airports/:id", verifyToken, getAirportById);
+router.put(prefix + "airports/edit/:id", verifyToken, updateAirport);
+router.delete(prefix + "airports/delete/:id", verifyToken, deleteAirport);
+router.post(prefix + "airports", verifyToken, createAirport);
 
 //ROUTES FOR BOOKING
-router.get(prefix + "bookings", getBooking);
-router.get(prefix + "bookings/:id", getBookingById);
-router.put(prefix + "bookings/create", createBooking);
-router.delete(prefix + "bookings/delete/:id", softDeleteBooking);
-router.delete(prefix + "bookings/deleted/:id", deleteBooking);
+router.get(prefix + "bookings", verifyToken, getBooking);
+router.get(prefix + "bookings/:id", verifyToken, getBookingById);
+router.post(prefix + "bookings/create", verifyToken, createBooking);
+router.delete(prefix + "bookings/delete/:id", verifyToken, softDeleteBooking);
+router.delete(prefix + "bookings/deleted/:id", verifyToken, deleteBooking);
 
 //ROUTER FOR PASSANGERS
-router.get(prefix + "passanger", getPassanger);
-router.get(prefix + "passanger/:id", getPassangerById);
-router.put(prefix + "passanger/edit/:id", updatePassanger);
-router.post(prefix + "passanger/create", createPassanger);
-router.delete(prefix + "passanger/delete/:id", deletePassanger);
+router.get(prefix + "passanger", verifyToken, getPassanger);
+router.get(prefix + "passanger/:id", verifyToken, getPassangerById);
+router.put(prefix + "passanger/edit/:id", verifyToken, updatePassanger);
+router.post(prefix + "passanger/create", verifyToken, createPassanger);
+router.delete(prefix + "passanger/delete/:id", verifyToken, deletePassanger);
 
 //ROUTES FOR WISHLIST
 router.get(prefix + "wishlists", getWishlist);

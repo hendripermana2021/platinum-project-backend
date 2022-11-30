@@ -4,18 +4,7 @@ import db from "../models/index.js";
 const Airport = db.airport;
 export const getAirport = async (req, res) => {
   try {
-    const airport = await Airport.findAll({
-      attributes: [
-        "id",
-        "name_airport",
-        "code_airport",
-        "address",
-        "city_airport",
-        "country_airport",
-        "terminal",
-        "status",
-      ],
-    });
+    const airport = await Airport.findAll({});
     res.json(airport);
   } catch (error) {
     console.log(error);
@@ -23,24 +12,14 @@ export const getAirport = async (req, res) => {
 };
 
 export const createAirport = async (req, res) => {
-  const {
-    name_airport,
-    code_airport,
-    address,
-    city_airport,
-    country_airport,
-    terminal,
-    status,
-  } = req.body;
+  const { name, code, city, country, terminal } = req.body;
   try {
     await Airport.create({
-      name_airport,
-      code_airport,
-      address,
-      city_airport,
-      country_airport,
+      name,
+      code,
+      city,
+      country,
       terminal,
-      status,
     });
     res.json({ msg: "Added Airport Successfully" });
   } catch (error) {
@@ -49,7 +28,7 @@ export const createAirport = async (req, res) => {
 };
 
 export const deleteAirport = async (req, res) => {
-  const Airport = await airport.findAll();
+  const airport = await Airport.findAll();
   const { id } = req.params;
   const dataBefore = await Airport.findOne({
     where: { id: id },
@@ -78,6 +57,13 @@ export const getAirportById = async (req, res) => {
     const airport = await Airport.findOne({
       where: { id: req.params.id },
     });
+
+    if (!airport) {
+      return res.status(400).json({
+        success: false,
+        message: "Airports Doesn't Existing",
+      });
+    }
     res.status(200).json(airport);
   } catch (error) {
     console.log(error);

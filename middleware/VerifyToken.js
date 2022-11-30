@@ -11,28 +11,18 @@ export const verifyToken = (req, res, next) => {
       lastname: decoded.lastname,
       gender: decoded.gender,
       email: decoded.email,
-      role: decoded.role,
-      nohp: decoded.nohp,
-      birthday: decoded.birthday,
-      country: decoded.country,
-      province: decoded.province,
-      city: decoded.city,
-      address: decoded.address,
-      postalcode: decoded.postalcode,
+      role_id: decoded.role_id,
+      phone: decoded.phone,
+      birthdate: decoded.birthdate,
       pictures: decoded.pictures,
     };
-    req.email = decoded.email;
-    req.role = decoded.role;
     req.firstname = decoded.firstname;
     req.lastname = decoded.lastname;
     req.gender = decoded.gender;
-    req.nohp = decoded.nohp;
-    req.birthday = decoded.birthday;
-    req.country = decoded.country;
-    req.province = decoded.province;
-    req.city = decoded.city;
-    req.address = decoded.address;
-    req.postalcode = decoded.postalcode;
+    req.email = decoded.email;
+    req.role_id = decoded.role_id;
+    req.phone = decoded.phone;
+    req.birthdate = decoded.birthdate;
     req.pictures = decoded.pictures;
     next();
   });
