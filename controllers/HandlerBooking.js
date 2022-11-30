@@ -3,6 +3,8 @@ import db from "../models/index.js";
 const Booking = db.booking;
 const Ticket = db.ticket;
 const Type = db.classtype;
+const UserBooking = db.userbooking;
+const User = db.users;
 export const getBooking = async (req, res) => {
   try {
     const booking = await Booking.findAll({
@@ -133,4 +135,67 @@ export const deleteBooking = async (req, res) => {
     success: true,
     message: "Delete Data Successfully",
   });
+};
+
+export const createUserBooking = async (req, res) => {
+  const { user_id, booking_id } = req.body;
+  try {
+    await UserBooking.create({
+      user_id: req.user.id,
+      booking_id,
+    });
+    res.json({ msg: "Added User Booking Successfully" });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getUserBooking = async (req, res) => {
+  try {
+    const userBooking = await UserBooking.findAll({
+      attributes: ["user_id", "booking_id"],
+      include: [
+        {
+          model: User,
+          as: "user",
+          attributes: [
+            "user_id",
+            "firstname",
+            "lastname",
+          ],
+        },
+        {
+          model: Booking,
+          as: "booking",
+          attributes: [
+            "ticket_id",
+            "passanger_id",
+            "isBooking",
+          ],
+          include: [
+            {
+              model: Ticket,
+              as: "ticket",
+              attributes: [
+                "flight_id",
+                "class_id",
+                "price",
+                "country",
+                "passanger_ammount",
+              ],
+              include: [
+                {
+                  model: Type,
+                  as: "class",
+                },
+              ],
+            },
+          ]
+        }
+      ],
+    });
+    res.json(userBooking);
+  } catch (error) {
+    console.log(error);
+  }
 };
