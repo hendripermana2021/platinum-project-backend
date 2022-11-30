@@ -1,4 +1,3 @@
-import airport from "../models/airport.js";
 import db from "../models/index.js";
 
 const Airport = db.airport;
