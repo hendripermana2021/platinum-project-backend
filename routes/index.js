@@ -32,6 +32,7 @@ import {
   getBooking,
   getBookingById,
   softDeleteBooking,
+  getUserBooking,
 } from "../controllers/HandlerBooking.js";
 import {
   createWishlist,
@@ -84,9 +85,11 @@ router.post(prefix + "airports", verifyToken, createAirport);
 //ROUTES FOR BOOKING
 router.get(prefix + "bookings", verifyToken, getBooking);
 router.get(prefix + "bookings/:id", verifyToken, getBookingById);
+router.get(prefix + "userbookings", verifyToken, getUserBooking);
 router.post(prefix + "bookings/create", verifyToken, createBooking);
 router.delete(prefix + "bookings/delete/:id", verifyToken, softDeleteBooking);
 router.delete(prefix + "bookings/deleted/:id", verifyToken, deleteBooking);
+
 
 //ROUTER FOR PASSANGERS
 router.get(prefix + "passanger", verifyToken, getPassanger);
