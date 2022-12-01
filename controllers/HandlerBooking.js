@@ -88,12 +88,11 @@ export const getBookingBy = async (req, res) => {
 export const createBooking = async (req, res) => {
   const { ticket_id, passanger_id } = req.body;
   try {
-    let booking = await Booking.create({
+    await Booking.create({
       ticket_id,
       passanger_id,
       isBooking: true,
     });
-
     res.json({ msg: "Added Booking Successfully" });
   } catch (error) {
     console.log(error);
@@ -158,7 +157,7 @@ export const deleteBooking = async (req, res) => {
 };
 
 export const createUserBooking = async (req, res) => {
-  const { booking_id } = req.body;
+  const { user_id, booking_id } = req.body;
   try {
     await UserBooking.create({
       user_id: req.user.id,
