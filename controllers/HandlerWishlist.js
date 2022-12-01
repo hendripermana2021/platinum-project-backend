@@ -17,7 +17,11 @@ export const getWishlist = async (req, res) => {
         },
       ],
     });
-    res.json(wishlist);
+    res.status(200).json({
+      success: true,
+      message: "Ticket Added",
+      data: wishlist,
+    });
   } catch (error) {
     console.log(error);
   }
@@ -25,7 +29,7 @@ export const getWishlist = async (req, res) => {
 
 export const getWishlistbyid = async (req, res) => {
   try {
-    const wishlist = await Wishlist.findOne({
+    const wishlist = await Wishlist.findAll({
       where: { id: req.params.id },
       include: [
         {
@@ -38,7 +42,18 @@ export const getWishlistbyid = async (req, res) => {
         },
       ],
     });
-    res.status(200).json(wishlist);
+
+    if (wishlist == "") {
+      return res.status(400).json({
+        success: false,
+        message: "Wishlist Doesn't Existing",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "ticket you searched Found",
+      data: wishlist,
+    });
   } catch (error) {
     console.log(error);
   }

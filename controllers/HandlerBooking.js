@@ -1,25 +1,20 @@
 import db from "../models/index.js";
+import { Op } from "sequelize";
 
 const Booking = db.booking;
 const Ticket = db.ticket;
 const Type = db.classtype;
 const UserBooking = db.userbooking;
 const User = db.users;
+const Passanger = db.passanger;
 export const getBooking = async (req, res) => {
   try {
     const booking = await Booking.findAll({
-      attributes: ["ticket_id", "passanger_id", "isBooking"],
+      attributes: ["id", "ticket_id", "passanger_id", "isBooking"],
       include: [
         {
           model: Ticket,
           as: "ticket",
-          attributes: [
-            "flight_id",
-            "class_id",
-            "price",
-            "country",
-            "passanger_ammount",
-          ],
           include: [
             {
               model: Type,
@@ -27,30 +22,39 @@ export const getBooking = async (req, res) => {
             },
           ],
         },
+        {
+          model: Passanger,
+          as: "passanger",
+        },
       ],
     });
-    res.json(booking);
+    if (booking == "") {
+      return res.status(400).json({
+        success: false,
+        message: "booking Doesn't Existing",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "data you searched Found",
+      data: booking,
+    });
   } catch (error) {
     console.log(error);
   }
 };
 
-export const getBookingById = async (req, res) => {
+export const getBookingBy = async (req, res) => {
   try {
-    const booking = await Booking.findOne({
-      where: { id: req.params.id },
-      attributes: ["ticket_id", "passanger_id", "isBooking"],
+    const { search } = await req.params;
+    const booking = await Booking.findAll({
+      where: {
+        [Op.or]: [{ id: { [Op.like]: `%` + search + `%` } }],
+      },
       include: [
         {
           model: Ticket,
           as: "ticket",
-          attributes: [
-            "flight_id",
-            "class_id",
-            "price",
-            "country",
-            "passanger_ammount",
-          ],
           include: [
             {
               model: Type,
@@ -58,9 +62,24 @@ export const getBookingById = async (req, res) => {
             },
           ],
         },
+        {
+          model: Passanger,
+          as: "passanger",
+        },
       ],
     });
-    res.status(200).json(booking);
+    if (booking == "") {
+      return res.status(400).json({
+        success: false,
+        message: "booking Doesn't Existing",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "data you searched Found",
+      data: booking,
+    });
   } catch (error) {
     console.log(error);
   }
@@ -69,11 +88,12 @@ export const getBookingById = async (req, res) => {
 export const createBooking = async (req, res) => {
   const { ticket_id, passanger_id } = req.body;
   try {
-    await Booking.create({
+    let booking = await Booking.create({
       ticket_id,
       passanger_id,
       isBooking: true,
     });
+
     res.json({ msg: "Added Booking Successfully" });
   } catch (error) {
     console.log(error);
@@ -138,7 +158,7 @@ export const deleteBooking = async (req, res) => {
 };
 
 export const createUserBooking = async (req, res) => {
-  const { user_id, booking_id } = req.body;
+  const { booking_id } = req.body;
   try {
     await UserBooking.create({
       user_id: req.user.id,
@@ -158,20 +178,12 @@ export const getUserBooking = async (req, res) => {
         {
           model: User,
           as: "user",
-          attributes: [
-            "user_id",
-            "firstname",
-            "lastname",
-          ],
+          attributes: ["user_id", "firstname", "lastname"],
         },
         {
           model: Booking,
           as: "booking",
-          attributes: [
-            "ticket_id",
-            "passanger_id",
-            "isBooking",
-          ],
+          attributes: ["ticket_id", "passanger_id", "isBooking"],
           include: [
             {
               model: Ticket,
@@ -190,11 +202,15 @@ export const getUserBooking = async (req, res) => {
                 },
               ],
             },
-          ]
-        }
+          ],
+        },
       ],
     });
-    res.json(userBooking);
+    res.status(200).json({
+      success: true,
+      message: "data you searched Found",
+      data: userBooking,
+    });
   } catch (error) {
     console.log(error);
   }

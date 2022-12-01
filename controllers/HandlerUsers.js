@@ -1,8 +1,7 @@
 import db from "../models/index.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { refreshToken } from "./RefreshToken.js";
-import role from "../models/role.js";
+import { Op } from "sequelize";
 
 const Users = db.users;
 const Role = db.role;
@@ -37,26 +36,43 @@ export const getUsers = async (req, res) => {
           attributes: ["homeAddress", "province", "city"],
         },
       ],
-
-      // include: [
-      //   {
-      //     model: Dummy,
-      //     attributes: ["firstname", "dummy"],
-      //   },
-      // ],
     });
-    res.json(users);
+    res.status(200).json({
+      success: true,
+      message: "data you searched Found",
+      data: users,
+    });
   } catch (error) {
     console.log(error);
   }
 };
 
-export const getUsersById = async (req, res) => {
+export const getUsersBy = async (req, res) => {
   try {
-    const users = await Users.findOne({
-      where: { id: req.params.id },
+    const { search } = await req.params;
+    const users = await Users.findAll({
+      where: {
+        [Op.or]: [
+          { firstname: { [Op.like]: `%` + search + `%` } },
+          { lastname: { [Op.like]: `%` + search + `%` } },
+          { email: { [Op.like]: `%` + search + `%` } },
+          { phone: { [Op.like]: `%` + search + `%` } },
+          { gender: { [Op.like]: `%` + search + `%` } },
+        ],
+      },
     });
-    res.status(200).json(users);
+
+    if (users == "") {
+      return res.status(400).json({
+        status: false,
+        message: "Users not found",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "data users searched Found",
+      data: users,
+    });
   } catch (error) {
     console.log(error);
   }
@@ -82,9 +98,28 @@ export const Register = async (req, res) => {
     return res
       .status(400)
       .json({ msg: "Password dan Confirm Password tidak cocok" });
+
+  const users = await Users.findAll({
+    where: {
+      email: email,
+    },
+  });
+  if (users != "")
+    return res.status(400).json({
+      status: false,
+      msg: "your email has been created",
+    });
+
   const salt = await bcrypt.genSalt();
   const hashPassword = await bcrypt.hash(password, salt);
   try {
+    await Address.create({
+      homeAddress,
+      country,
+      province,
+      city,
+    });
+
     await Users.create({
       email,
       firstname,
@@ -95,13 +130,6 @@ export const Register = async (req, res) => {
       role_id: 2,
       pictures,
       password: hashPassword,
-    });
-
-    await Address.create({
-      homeAddress,
-      country,
-      province,
-      city,
     });
 
     res.json({ msg: "Register Berhasil" });

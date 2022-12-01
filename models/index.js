@@ -110,6 +110,16 @@ db.ticket.hasMany(db.booking, {
   foreignKey: "id",
 });
 
+db.booking.belongsTo(db.passanger, {
+  as: "passanger",
+  foreignKey: "passanger_id",
+});
+
+db.passanger.belongsTo(db.booking, {
+  as: "booking",
+  foreignKey: "booking_id",
+});
+
 // //RELATION FOR WISHLIST
 db.wishlist.belongsTo(db.users, {
   as: "users",

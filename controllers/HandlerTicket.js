@@ -1,9 +1,12 @@
 import db from "../models/index.js";
+import userbooking from "../models/userbooking.js";
 
 const Ticket = db.ticket;
 const Type = db.classtype;
 const Flight = db.flight;
 const Airport = db.airport;
+const Booking = db.booking;
+const UserBooking = db.userbooking;
 export const getTicket = async (req, res) => {
   try {
     const ticket = await Ticket.findAll({
@@ -29,7 +32,11 @@ export const getTicket = async (req, res) => {
         },
       ],
     });
-    res.json(ticket);
+    res.status(200).json({
+      success: true,
+      message: "ticket you searched Found",
+      data: ticket,
+    });
   } catch (error) {
     console.log(error);
   }
@@ -61,7 +68,11 @@ export const getTicketById = async (req, res) => {
         },
       ],
     });
-    res.status(200).json(ticket);
+    res.status(200).json({
+      success: true,
+      message: "Ticket Found",
+      data: ticket,
+    });
   } catch (error) {
     console.log(error);
   }
@@ -143,6 +154,45 @@ export const updateTicket = async (req, res) => {
       success: true,
       message: "Ticket Success Updated",
     });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const HandlerBooked = async (req, res) => {
+  try {
+    let { id } = req.params;
+    let ticket = await Ticket.findAll({
+      where: {
+        id: id,
+      },
+    });
+    let booking = Booking.create({
+      ticket_id: ticket[0].id,
+      isBooking: true,
+    });
+
+    // let result = await Booking.findOne({
+    //   where: {
+    //     id: id,
+    //   },
+    // });
+
+    await UserBooking.create({
+      booking_id: ticket.id,
+    });
+
+    res.json({
+      success: true,
+      message: "Booking added",
+    });
+  } catch (error) {}
+};
+
+export const getUserBooking = async (req, res) => {
+  try {
+    const userbooking = await UserBooking.findAll({});
+    res.json(userbooking);
   } catch (error) {
     console.log(error);
   }
