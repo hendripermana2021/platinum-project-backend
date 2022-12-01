@@ -113,7 +113,6 @@ export const Register = async (req, res) => {
   const salt = await bcrypt.genSalt();
   const hashPassword = await bcrypt.hash(password, salt);
   try {
-<<<<<<< HEAD
     await Address.create({
       homeAddress,
       country,
@@ -122,9 +121,6 @@ export const Register = async (req, res) => {
     });
 
     await Users.create({
-=======
-    let user = await Users.create({
->>>>>>> 7de1839774d8c5759cfde965c39d49f59db93c88
       email,
       firstname,
       lastname,
@@ -136,18 +132,6 @@ export const Register = async (req, res) => {
       password: hashPassword,
     });
 
-<<<<<<< HEAD
-=======
-    await Address.create({
-      userId: user.id,
-      homeAddress,
-      country,
-      province,
-      city,
-      is_initialized: 0,
-    });
-
->>>>>>> 7de1839774d8c5759cfde965c39d49f59db93c88
     res.json({ msg: "Register Berhasil" });
   } catch (error) {
     console.log(error);
@@ -333,14 +317,14 @@ export const updateUsers = async (req, res) => {
     );
     await Address.update(
       {
+        id: id,
         homeAddress,
         country,
         province,
         city,
-        is_initialized: 0,
       },
       {
-        where: { userId: id },
+        where: { id: id },
       }
     );
     return res.status(200).json({
