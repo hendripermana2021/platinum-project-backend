@@ -2,22 +2,30 @@ import db from "../models/index.js";
 
 const Ticket = db.ticket;
 const Type = db.classtype;
+const Flight = db.flight;
+const Airport = db.airport;
 export const getTicket = async (req, res) => {
   try {
     const ticket = await Ticket.findAll({
-      attributes: [
-        "id",
-        "flight_id",
-        "class_id",
-        "price",
-        "country",
-        "passanger_ammount",
-      ],
       include: [
         {
           model: Type,
           as: "class",
           attributes: ["type"],
+        },
+        {
+          model: Flight,
+          as: "flight",
+          include: [
+            {
+              model: Airport,
+              as: "DepartureTerminal",
+            },
+            {
+              model: Airport,
+              as: "ArrivalTerminal",
+            },
+          ],
         },
       ],
     });
@@ -31,6 +39,27 @@ export const getTicketById = async (req, res) => {
   try {
     const ticket = await Ticket.findOne({
       where: { id: req.params.id },
+      include: [
+        {
+          model: Type,
+          as: "class",
+          attributes: ["type"],
+        },
+        {
+          model: Flight,
+          as: "flight",
+          include: [
+            {
+              model: Airport,
+              as: "DepartureTerminal",
+            },
+            {
+              model: Airport,
+              as: "ArrivalTerminal",
+            },
+          ],
+        },
+      ],
     });
     res.status(200).json(ticket);
   } catch (error) {

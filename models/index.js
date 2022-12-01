@@ -89,6 +89,16 @@ db.ticket.belongsTo(db.classtype, {
   foreignKey: "class_id",
 });
 
+db.ticket.belongsTo(db.flight, {
+  as: "flight",
+  foreignKey: "flight_id",
+});
+
+db.flight.hasMany(db.ticket, {
+  as: "ticket",
+  foreignKey: "id",
+});
+
 //RELATION BOOKING
 db.booking.belongsTo(db.ticket, {
   as: "ticket",
