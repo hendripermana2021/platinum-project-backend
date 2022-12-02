@@ -71,7 +71,7 @@ router.put(prefix + "users/edit/:id", verifyToken, updateUsers);
 router.get(prefix + "whoami", verifyToken, whoAmI);
 
 //ROUTES FOR TICKETS
-router.get(prefix + "tickets", verifyToken, getTicket);
+router.get(prefix + "tickets", getTicket);
 router.post(prefix + "tickets", verifyToken, createTicket);
 router.delete(prefix + "tickets/delete/:id", verifyToken, deleteTicket);
 router.put(prefix + "tickets/edit/:id", verifyToken, updateTicket);
