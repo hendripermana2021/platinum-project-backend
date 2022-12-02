@@ -1,4 +1,5 @@
 import db from "../models/index.js";
+import { Op } from "sequelize";
 
 const Flight = db.flight;
 const Airport = db.airport;
@@ -21,16 +22,30 @@ export const getFlight = async (req, res) => {
         },
       ],
     });
-    res.json(flight);
+    res.status(200).json({
+      success: true,
+      message: "data you searched Found",
+      data: flight,
+    });
   } catch (error) {
     console.log(error);
   }
 };
 
-export const getFlightById = async (req, res) => {
+export const getFlightBy = async (req, res) => {
   try {
-    const flight = await Flight.findOne({
-      where: { id: req.params.id },
+    const { search } = await req.params;
+    let flight = await Flight.findAll({
+      where: {
+        [Op.or]: [
+          { id: { [Op.like]: `%` + search + `%` } },
+          { departureDate: { [Op.like]: `%` + search + `%` } },
+          { arrivalDate: { [Op.like]: `%` + search + `%` } },
+          { departureTime: { [Op.like]: `%` + search + `%` } },
+          { arrivalDate: { [Op.like]: `%` + search + `%` } },
+          { planeName: { [Op.like]: `%` + search + `%` } },
+        ],
+      },
       include: [
         {
           model: Airport,
@@ -46,7 +61,19 @@ export const getFlightById = async (req, res) => {
         },
       ],
     });
-    res.status(200).json(flight);
+
+    if (flight == "") {
+      return res.status(400).json({
+        success: false,
+        message: "Flight Doesn't Existing",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "data you searched Found",
+      data: flight,
+    });
   } catch (error) {
     console.log(error);
   }
@@ -74,7 +101,24 @@ export const createFlight = async (req, res) => {
       flightType,
       planeName,
     });
-    res.json({ msg: "Added Flight Successfully" });
+
+    const flight = await Flight.findAll({
+      where: {
+        departureAirport: departureAirport,
+        arrivalAirport: arrivalAirport,
+        departureDate: departureDate,
+        arrivalDate: arrivalDate,
+        departureTime: departureTime,
+        arrivalTime: arrivalTime,
+        flightType: flightType,
+        planeName: planeName,
+      },
+    });
+    res.status(200).json({
+      success: true,
+      msg: "Added Flight Successfully",
+      data: flight,
+    });
   } catch (error) {
     console.log(error);
   }

@@ -1,10 +1,15 @@
 import db from "../models/index.js";
+import { Op } from "sequelize";
 
 const Airport = db.airport;
 export const getAirport = async (req, res) => {
   try {
     const airport = await Airport.findAll({});
-    res.json(airport);
+    res.status(200).json({
+      success: true,
+      message: "data you searched Found",
+      data: airport,
+    });
   } catch (error) {
     console.log(error);
   }
@@ -12,6 +17,27 @@ export const getAirport = async (req, res) => {
 
 export const createAirport = async (req, res) => {
   const { name, code, city, country, terminal } = req.body;
+  const airportName = await Airport.findAll({
+    where: {
+      name: name,
+    },
+  });
+  if (airportName != "")
+    return res.status(400).json({
+      success: false,
+      msg: "airports is already exists",
+    });
+
+  const airportCode = await Airport.findAll({
+    where: {
+      code: code,
+    },
+  });
+  if (airportCode != "")
+    return res.status(400).json({
+      success: false,
+      msg: "code is already exists",
+    });
   try {
     await Airport.create({
       name,
@@ -20,7 +46,20 @@ export const createAirport = async (req, res) => {
       country,
       terminal,
     });
-    res.json({ msg: "Added Airport Successfully" });
+
+    const airport = await Airport.findAll({
+      where: {
+        name: name,
+        code: code,
+        city: city,
+      },
+    });
+
+    res.status(200).json({
+      success: true,
+      msg: "Added Airport Successfully",
+      data: airport,
+    });
   } catch (error) {
     console.log(error);
   }
@@ -51,19 +90,54 @@ export const deleteAirport = async (req, res) => {
   });
 };
 
-export const getAirportById = async (req, res) => {
+export const getAirportBy = async (req, res) => {
   try {
-    const airport = await Airport.findOne({
-      where: { id: req.params.id },
+    const { search } = await req.params;
+    let airport = await Airport.findAll({
+      where: {
+        [Op.or]: [
+          { name: { [Op.like]: `%` + search + `%` } },
+          { id: { [Op.like]: `%` + search + `%` } },
+          { code: { [Op.like]: `%` + search + `%` } },
+          { city: { [Op.like]: `%` + search + `%` } },
+          { country: { [Op.like]: `%` + search + `%` } },
+          { terminal: { [Op.like]: `%` + search + `%` } },
+        ],
+      },
     });
-
-    if (!airport) {
+    if (airport == "") {
       return res.status(400).json({
         success: false,
         message: "Airports Doesn't Existing",
       });
     }
-    res.status(200).json(airport);
+    res.status(200).json({
+      success: true,
+      message: "data you searched Found",
+      data: airport,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getAirportById = async (req, res) => {
+  try {
+    const airport = await Airport.findAll({
+      where: { id: req.params.id },
+    });
+
+    if (!airport == "") {
+      return res.status(400).json({
+        success: false,
+        message: "Airports Doesn't Existing",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "data you searched Found",
+      data: airport,
+    });
   } catch (error) {
     console.log(error);
   }
