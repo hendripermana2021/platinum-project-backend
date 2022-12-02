@@ -94,13 +94,25 @@ export const createFlight = async (req, res) => {
     await Flight.create({
       departureAirport,
       arrivalAirport,
-      // .,/.
       departureDate,
       arrivalDate,
       departureTime,
       arrivalTime,
       flightType,
       planeName,
+    });
+
+    const flight = await Flight.findAll({
+      where: {
+        departureAirport: departureAirport,
+        arrivalAirport: arrivalAirport,
+        departureDate: departureDate,
+        arrivalDate: arrivalDate,
+        departureTime: departureTime,
+        arrivalTime: arrivalTime,
+        flightType: flightType,
+        planeName: planeName,
+      },
     });
     res.status(200).json({
       success: true,

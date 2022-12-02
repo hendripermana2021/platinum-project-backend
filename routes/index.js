@@ -18,6 +18,7 @@ import {
   getTicketById,
   HandlerBooked,
   getUserBooking,
+  getTicketBy,
 } from "../controllers/HandlerTicket.js";
 import { verifyToken } from "../middleware/VerifyToken.js";
 import {
@@ -41,6 +42,7 @@ import {
   deleteWishlist,
   getWishlist,
   getWishlistbyid,
+  getWishlistby,
 } from "../controllers/HandlerWishlist.js";
 import {
   createPassanger,
@@ -72,6 +74,7 @@ router.get(prefix + "whoami", verifyToken, whoAmI);
 
 //ROUTES FOR TICKETS
 router.get(prefix + "tickets", getTicket);
+router.get(prefix + "tickets/search/:departure/:arrival", getTicketBy);
 router.post(prefix + "tickets", verifyToken, createTicket);
 router.delete(prefix + "tickets/delete/:id", verifyToken, deleteTicket);
 router.put(prefix + "tickets/edit/:id", verifyToken, updateTicket);
@@ -102,6 +105,7 @@ router.delete(prefix + "passanger/delete/:id", verifyToken, deletePassanger);
 //ROUTES FOR WISHLIST
 router.get(prefix + "wishlists", verifyToken, getWishlist);
 router.get(prefix + "wishlists/:id", verifyToken, getWishlistbyid);
+router.get(prefix + "wishlists/name/:search", getWishlistby);
 router.post(prefix + "wishlists/create/:id", verifyToken, createWishlist);
 router.delete(prefix + "wishlists/delete/:id", verifyToken, deleteWishlist);
 

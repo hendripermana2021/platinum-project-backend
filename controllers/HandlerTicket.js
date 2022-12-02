@@ -1,5 +1,5 @@
 import db from "../models/index.js";
-import userbooking from "../models/userbooking.js";
+import { Op } from "sequelize";
 
 const Ticket = db.ticket;
 const Type = db.classtype;
@@ -72,6 +72,66 @@ export const getTicketById = async (req, res) => {
       success: true,
       message: "Ticket Found",
       data: ticket,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getTicketBy = async (req, res) => {
+  try {
+    const { arrival, departure } = req.params;
+    let ticket = await Ticket.findAll({
+      include: [
+        {
+          model: Type,
+          as: "class",
+          attributes: ["type"],
+        },
+        {
+          model: Flight,
+          as: "flight",
+          include: [
+            {
+              model: Airport,
+              as: "DepartureTerminal",
+              where: {
+                code: departure,
+              },
+            },
+            {
+              model: Airport,
+              as: "ArrivalTerminal",
+              where: {
+                code: arrival,
+              },
+            },
+          ],
+        },
+      ],
+    });
+
+    const result = [];
+
+    for (let i = 0; i < ticket.length; i++) {
+      if (
+        ticket[i].flight !== null &&
+        ticket[i].flight.departureDate > Date.now()
+      )
+        result.push(ticket[i]);
+    }
+
+    if (!result) {
+      res.status(400).json({
+        success: false,
+        message: "Ticket Not Found",
+        data: result,
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "Ticket Found",
+      data: result,
     });
   } catch (error) {
     console.log(error);

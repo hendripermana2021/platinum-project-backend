@@ -3,9 +3,15 @@ import db from "../models/index.js";
 const Users = db.users;
 const Ticket = db.ticket;
 const Wishlist = db.wishlist;
+const Flight = db.flight;
+const Airport = db.airport;
+
 export const getWishlist = async (req, res) => {
   try {
     const wishlist = await Wishlist.findAll({
+      where: {
+        user_id: req.user.userId,
+      },
       include: [
         {
           model: Users,
@@ -14,6 +20,22 @@ export const getWishlist = async (req, res) => {
         {
           model: Ticket,
           as: "ticket",
+          include: [
+            {
+              model: Flight,
+              as: "flight",
+              include: [
+                {
+                  model: Airport,
+                  as: "DepartureTerminal",
+                },
+                {
+                  model: Airport,
+                  as: "ArrivalTerminal",
+                },
+              ],
+            },
+          ],
         },
       ],
     });
@@ -39,6 +61,70 @@ export const getWishlistbyid = async (req, res) => {
         {
           model: Ticket,
           as: "ticket",
+          include: [
+            {
+              model: Flight,
+              as: "flight",
+              include: [
+                {
+                  model: Airport,
+                  as: "DepartureTerminal",
+                },
+                {
+                  model: Airport,
+                  as: "ArrivalTerminal",
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+
+    if (wishlist == "") {
+      return res.status(400).json({
+        success: false,
+        message: "Wishlist Doesn't Existing",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "ticket you searched Found",
+      data: wishlist,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getWishlistby = async (req, res) => {
+  try {
+    const { search } = req.params;
+    const wishlist = await Wishlist.findAll({
+      include: [
+        {
+          model: Users,
+          as: "users",
+        },
+        {
+          model: Ticket,
+          as: "ticket",
+          include: [
+            {
+              model: Flight,
+              as: "flight",
+              include: [
+                {
+                  model: Airport,
+                  as: "DepartureTerminal",
+                },
+                {
+                  model: Airport,
+                  as: "ArrivalTerminal",
+                },
+              ],
+            },
+          ],
         },
       ],
     });
