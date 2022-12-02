@@ -97,7 +97,9 @@ export const Register = async (req, res) => {
   if (password !== confPassword)
     return res
       .status(400)
-      .json({ msg: "Password dan Confirm Password tidak cocok" });
+      .json({ 
+        success: false,
+        msg: "Password dan Confirm Password tidak cocok" });
 
   const users = await Users.findAll({
     where: {
@@ -132,7 +134,9 @@ export const Register = async (req, res) => {
       password: hashPassword,
     });
 
-    res.json({ msg: "Register Berhasil" });
+    res.json({ 
+      success: true,
+      msg: "Register Berhasil" });
   } catch (error) {
     console.log(error);
   }
@@ -206,7 +210,9 @@ export const Login = async (req, res) => {
     });
     res.json({ accessToken });
   } catch (error) {
-    res.status(404).json({ msg: "Email tidak ditemukan" });
+    res.status(404).json({ 
+      success: false,
+      msg: "Email tidak ditemukan" });
   }
 };
 
