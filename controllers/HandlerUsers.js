@@ -8,8 +8,9 @@ const Role = db.role;
 const Address = db.address;
 export const handleGetRoot = async (req, res) => {
   res.status(200).json({
+    code: 200,
     status: "OK",
-    message: "Management API For Order Ticketing is Ready",
+    msg: "Management API For Order Ticketing is Ready",
   });
 };
 
@@ -38,8 +39,9 @@ export const getUsers = async (req, res) => {
       ],
     });
     res.status(200).json({
-      success: true,
-      message: "data you searched Found",
+      code: 200,
+      status: true,
+      msg: "data you searched Found",
       data: users,
     });
   } catch (error) {
@@ -64,13 +66,15 @@ export const getUsersBy = async (req, res) => {
 
     if (users == "") {
       return res.status(400).json({
+        code: 400,
         status: false,
-        message: "Users not found",
+        msg: "Users not found",
       });
     }
     res.status(200).json({
-      success: true,
-      message: "data users searched Found",
+      code: 200,
+      status: true,
+      msg: "data users searched Found",
       data: users,
     });
   } catch (error) {
@@ -95,9 +99,11 @@ export const Register = async (req, res) => {
     city,
   } = req.body;
   if (password !== confPassword)
-    return res
-      .status(400)
-      .json({ msg: "Password dan Confirm Password tidak cocok" });
+    return res.status(400).json({
+      code: 400,
+      status: false,
+      msg: "Password dan Confirm Password tidak cocok",
+    });
 
   const users = await Users.findAll({
     where: {
@@ -106,8 +112,9 @@ export const Register = async (req, res) => {
   });
   if (users != "")
     return res.status(400).json({
+      code: 400,
       status: false,
-      msg: "your email has been created",
+      msg: "your email has been created before",
     });
 
   const salt = await bcrypt.genSalt();
@@ -132,7 +139,11 @@ export const Register = async (req, res) => {
       password: hashPassword,
     });
 
-    res.json({ msg: "Register Berhasil" });
+    res.status(200).json({
+      code: 200,
+      status: true,
+      msg: "Register Berhasil",
+    });
   } catch (error) {
     console.log(error);
   }
@@ -193,7 +204,7 @@ export const Login = async (req, res) => {
     );
 
     await Users.update(
-      { refresh_token: refreshToken },
+      { refresh_token: refreshToken, access_token: accessToken },
       {
         where: {
           id: userId,
@@ -204,9 +215,16 @@ export const Login = async (req, res) => {
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
     });
-    res.json({ accessToken });
+    res.status(200).json({
+      code: 200,
+      msg: "Token Has Been Created",
+      accessToken,
+    });
   } catch (error) {
-    res.status(404).json({ msg: "Email tidak ditemukan" });
+    res.status(404).json({
+      code: 404,
+      msg: "Email tidak ditemukan",
+    });
   }
 };
 
@@ -229,13 +247,21 @@ export const Logout = async (req, res) => {
     }
   );
   res.clearCookie("refreshToken");
-  return res.sendStatus(200);
+  return res.sendStatus(200).json({
+    code: 200,
+    status: true,
+    msg: "You Logout Now",
+  });
 };
 
 export const whoAmI = async (req, res) => {
   try {
     const currentUser = req.user;
-    res.status(200).json(currentUser);
+    res.status(200).json({
+      code: 200,
+      msg: "This data Users Login Now",
+      currentUser,
+    });
   } catch (error) {
     console.log(error);
   }
@@ -251,8 +277,9 @@ export const deleteUsers = async (req, res) => {
 
   if (!parsedDataProfile) {
     return res.status(400).json({
-      success: false,
-      message: "Users Account doesn't exist or has been deleted!",
+      code: 400,
+      status: false,
+      msg: "Users Account doesn't exist or has been deleted!",
     });
   }
 
@@ -265,8 +292,9 @@ export const deleteUsers = async (req, res) => {
   });
 
   return res.status(200).json({
-    success: true,
-    message: "Delete Data Successfully",
+    code: 200,
+    status: true,
+    msg: "Delete Data Successfully",
   });
 };
 
@@ -279,8 +307,9 @@ export const updateUsers = async (req, res) => {
 
   if (!parsedDataProfile) {
     return res.status(400).json({
-      success: false,
-      message: "Users doesn't exist or has been deleted!",
+      code: 400,
+      status: false,
+      msg: "Users doesn't exist or has been deleted!",
     });
   }
 
@@ -328,8 +357,9 @@ export const updateUsers = async (req, res) => {
       }
     );
     return res.status(200).json({
-      success: true,
-      message: "Users Success Updated",
+      code: 200,
+      status: true,
+      msg: "Users Success Updated",
     });
   } catch (error) {
     console.log(error);
