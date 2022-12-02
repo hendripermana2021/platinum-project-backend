@@ -17,6 +17,27 @@ export const getAirport = async (req, res) => {
 
 export const createAirport = async (req, res) => {
   const { name, code, city, country, terminal } = req.body;
+  const airportName = await Airport.findAll({
+    where: {
+      name: name,
+    },
+  });
+  if (airportName != "")
+    return res.status(400).json({
+      success: false,
+      msg: "airports is already exists",
+    });
+
+  const airportCode = await Airport.findAll({
+    where: {
+      code: code,
+    },
+  });
+  if (airportCode != "")
+    return res.status(400).json({
+      success: false,
+      msg: "code is already exists",
+    });
   try {
     await Airport.create({
       name,
@@ -25,7 +46,20 @@ export const createAirport = async (req, res) => {
       country,
       terminal,
     });
-    res.json({ msg: "Added Airport Successfully" });
+
+    const airport = await Airport.findAll({
+      where: {
+        name: name,
+        code: code,
+        city: city,
+      },
+    });
+
+    res.status(200).json({
+      success: true,
+      msg: "Added Airport Successfully",
+      data: airport,
+    });
   } catch (error) {
     console.log(error);
   }

@@ -60,17 +60,23 @@ export const getWishlistbyid = async (req, res) => {
 };
 
 export const createWishlist = async (req, res) => {
-  const { user_id, ticket_id } = req.body;
   try {
-    await Wishlist.create({
-      user_id,
-      ticket_id,
+    let { id } = req.params;
+    let ticket = await Ticket.findAll({
+      where: {
+        id: id,
+      },
+    });
+    let wishlist = Wishlist.create({
+      user_id: req.user.userId,
+      ticket_id: ticket[0].id,
       isWishlist: true,
     });
-    res.json({ msg: "Added Wishlist Successfully" });
-  } catch (error) {
-    console.log(error);
-  }
+    res.json({
+      success: true,
+      message: "Wishlist added",
+    });
+  } catch (error) {}
 };
 
 export const deleteWishlist = async (req, res) => {

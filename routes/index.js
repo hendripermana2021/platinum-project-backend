@@ -75,19 +75,19 @@ router.get(prefix + "tickets", verifyToken, getTicket);
 router.post(prefix + "tickets", verifyToken, createTicket);
 router.delete(prefix + "tickets/delete/:id", verifyToken, deleteTicket);
 router.put(prefix + "tickets/edit/:id", verifyToken, updateTicket);
-router.get(prefix + "tickets/:id", verifyToken, getTicketById);
+router.get(prefix + "tickets/:id", getTicketById);
 
 //ROUTES FOR AIRPORT
-router.get(prefix + "airports", verifyToken, getAirport);
-router.get(prefix + "airports/:search", verifyToken, getAirportBy);
-router.get(prefix + "airports/id/:id", verifyToken, getAirportById);
+router.get(prefix + "airports", getAirport);
+router.get(prefix + "airports/:search", getAirportBy);
+router.get(prefix + "airports/id/:id", getAirportById);
 router.put(prefix + "airports/edit/:id", verifyToken, updateAirport);
 router.delete(prefix + "airports/delete/:id", verifyToken, deleteAirport);
 router.post(prefix + "airports", verifyToken, createAirport);
 
 //ROUTES FOR BOOKING
-router.get(prefix + "bookings", verifyToken, getBooking);
-router.get(prefix + "bookings/:search", verifyToken, getBookingBy);
+router.get(prefix + "bookings", getBooking);
+router.get(prefix + "bookings/:search", getBookingBy);
 router.post(prefix + "bookings/create", verifyToken, createBooking);
 router.delete(prefix + "bookings/delete/:id", verifyToken, softDeleteBooking);
 router.delete(prefix + "bookings/deleted/:id", verifyToken, deleteBooking);
@@ -100,10 +100,10 @@ router.post(prefix + "passanger/create", verifyToken, createPassanger);
 router.delete(prefix + "passanger/delete/:id", verifyToken, deletePassanger);
 
 //ROUTES FOR WISHLIST
-router.get(prefix + "wishlists", getWishlist);
-router.get(prefix + "wishlists/:id", getWishlistbyid);
-router.post(prefix + "wishlists/create", createWishlist);
-router.delete(prefix + "wishlists/delete/:id", deleteWishlist);
+router.get(prefix + "wishlists", verifyToken, getWishlist);
+router.get(prefix + "wishlists/:id", verifyToken, getWishlistbyid);
+router.post(prefix + "wishlists/create/:id", verifyToken, createWishlist);
+router.delete(prefix + "wishlists/delete/:id", verifyToken, deleteWishlist);
 
 //ROUTES FOR FLIGHT
 router.get(prefix + "flight", verifyToken, getFlight);
@@ -112,12 +112,13 @@ router.post(prefix + "flight/create", verifyToken, createFlight);
 router.delete(prefix + "flight/delete/:id", verifyToken, deleteFlight);
 router.put(prefix + "flight/edit/:id", verifyToken, updateFlight);
 
+//API FOR ACTION BUYER
 router.post(prefix + "book/:id", HandlerBooked);
 router.get(prefix + "book/", getUserBooking);
 
-// router.post(prefix + "admin/login", isAdmin);
-// router.post(prefix + "superadmin/login", isSuperAdmin);
-// router.get(prefix + "token", refreshToken);
+//API FOR TOKEN
+router.get(prefix + "token", refreshToken);
+
 // // endpoint untuk tambah admin yang bisa hanya superadminc
 // router.post(prefix + "registrasi-admin", verifyToken, RegisterAdmin);
 

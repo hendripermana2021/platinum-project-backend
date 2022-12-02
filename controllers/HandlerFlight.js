@@ -94,6 +94,7 @@ export const createFlight = async (req, res) => {
     await Flight.create({
       departureAirport,
       arrivalAirport,
+      // .,/.
       departureDate,
       arrivalDate,
       departureTime,
@@ -101,7 +102,11 @@ export const createFlight = async (req, res) => {
       flightType,
       planeName,
     });
-    res.json({ msg: "Added Flight Successfully" });
+    res.status(200).json({
+      success: true,
+      msg: "Added Flight Successfully",
+      data: flight,
+    });
   } catch (error) {
     console.log(error);
   }

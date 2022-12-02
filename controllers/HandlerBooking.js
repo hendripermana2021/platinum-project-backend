@@ -1,5 +1,6 @@
 import db from "../models/index.js";
 import { Op } from "sequelize";
+import airport from "../models/airport.js";
 
 const Booking = db.booking;
 const Ticket = db.ticket;
@@ -48,9 +49,6 @@ export const getBookingBy = async (req, res) => {
   try {
     const { search } = await req.params;
     const booking = await Booking.findAll({
-      where: {
-        [Op.or]: [{ id: { [Op.like]: `%` + search + `%` } }],
-      },
       include: [
         {
           model: Ticket,
@@ -67,6 +65,9 @@ export const getBookingBy = async (req, res) => {
           as: "passanger",
         },
       ],
+      where: {
+        [Op.or]: [{ id: { [Op.like]: `%` + search + `%` } }],
+      },
     });
     if (booking == "") {
       return res.status(400).json({
@@ -93,7 +94,34 @@ export const createBooking = async (req, res) => {
       passanger_id,
       isBooking: true,
     });
-    res.json({ msg: "Added Booking Successfully" });
+    const booking = await Booking.findAll({
+      where: {
+        ticket_id: ticket_id,
+        passanger_id: passanger_id,
+      },
+      include: [
+        {
+          model: Ticket,
+          as: "ticket",
+          include: [
+            {
+              model: Type,
+              as: "class",
+            },
+          ],
+        },
+        {
+          model: Passanger,
+          as: "passanger",
+        },
+      ],
+    });
+
+    res.status(200).json({
+      success: true,
+      msg: "Added Booking Successfully",
+      data: booking,
+    });
   } catch (error) {
     console.log(error);
   }
@@ -157,7 +185,7 @@ export const deleteBooking = async (req, res) => {
 };
 
 export const createUserBooking = async (req, res) => {
-  const { user_id, booking_id } = req.body;
+  const { booking_id } = req.body;
   try {
     await UserBooking.create({
       user_id: req.user.id,

@@ -79,18 +79,31 @@ export const getTicketById = async (req, res) => {
 };
 
 export const createTicket = async (req, res) => {
-  const { id, flight_id, class_id, price, country, passanger_ammount } =
-    req.body;
+  const { flight_id, class_id, price, country, passanger_ammount } = req.body;
   try {
     await Ticket.create({
-      id,
       flight_id,
       class_id,
       price,
       country,
       passanger_ammount,
     });
-    res.json({ msg: "Added Ticket Successfully" });
+
+    const ticket = await Ticket.findAll({
+      where: {
+        flight_id: flight_id,
+        class_id: class_id,
+        price: price,
+        country: country,
+        passanger_ammount: passanger_ammount,
+      },
+    });
+
+    res.status(200).json({
+      success: true,
+      msg: "Added Ticket Successfully",
+      data: ticket,
+    });
   } catch (error) {
     console.log(error);
   }
@@ -171,12 +184,6 @@ export const HandlerBooked = async (req, res) => {
       ticket_id: ticket[0].id,
       isBooking: true,
     });
-
-    // let result = await Booking.findOne({
-    //   where: {
-    //     id: id,
-    //   },
-    // });
 
     await UserBooking.create({
       booking_id: ticket.id,

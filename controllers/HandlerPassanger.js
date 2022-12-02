@@ -42,7 +42,22 @@ export const createPassanger = async (req, res) => {
       identityNumber,
       booking_id,
     });
-    res.json({ msg: "Added Passanger Successfully" });
+
+    const passanger = await Passanger.findAll({
+      where: {
+        name: name,
+        email: email,
+        age: age,
+        identityNumber: identityNumber,
+        indentityType: indentityType,
+      },
+    });
+
+    res.status(200).json({
+      success: true,
+      msg: "Added Passanger Successfully",
+      data: passanger,
+    });
   } catch (error) {
     console.log(error);
   }
