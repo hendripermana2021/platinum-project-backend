@@ -7,7 +7,7 @@ dotenv.config();
 const app = express();
 import bodyParser from "body-parser";
 
-app.use(cors({ credentials: true }));
+app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
 app.use(router);

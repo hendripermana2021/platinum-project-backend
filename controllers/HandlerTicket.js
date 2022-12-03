@@ -80,9 +80,9 @@ export const getTicketById = async (req, res) => {
   }
 };
 
-export const getTicketBy = async (req, res) => {
+export const getTicketByOneWay = async (req, res) => {
   try {
-    const { arrival, departure } = req.params;
+    const { arrival, departure, datesearch } = req.params;
     let ticket = await Ticket.findAll({
       include: [
         {
@@ -114,16 +114,16 @@ export const getTicketBy = async (req, res) => {
     });
 
     const result = [];
-
+    const generateDate = new Date(datesearch);
     for (let i = 0; i < ticket.length; i++) {
       if (
         ticket[i].flight !== null &&
-        ticket[i].flight.departureDate > Date.now()
+        ticket[i].flight.departureDate >= generateDate
       )
         result.push(ticket[i]);
     }
 
-    if (!result) {
+    if (result == "") {
       res.status(400).json({
         code: 400,
         status: false,

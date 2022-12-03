@@ -18,7 +18,7 @@ import {
   getTicketById,
   HandlerBooked,
   getUserBooking,
-  getTicketBy,
+  getTicketByOneWay,
 } from "../controllers/HandlerTicket.js";
 import { verifyToken } from "../middleware/VerifyToken.js";
 import {
@@ -74,7 +74,10 @@ router.get(prefix + "whoami", verifyToken, whoAmI);
 
 //ROUTES FOR TICKETS
 router.get(prefix + "tickets", getTicket);
-router.get(prefix + "tickets/search/:departure/:arrival", getTicketBy);
+router.get(
+  prefix + "tickets/search/:departure/:arrival/:datesearch",
+  getTicketByOneWay
+);
 router.post(prefix + "tickets", verifyToken, createTicket);
 router.delete(prefix + "tickets/delete/:id", verifyToken, deleteTicket);
 router.put(prefix + "tickets/edit/:id", verifyToken, updateTicket);
