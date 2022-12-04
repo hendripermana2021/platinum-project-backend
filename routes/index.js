@@ -93,14 +93,9 @@ router.delete(prefix + "airports/delete/:id", verifyToken, deleteAirport);
 router.post(prefix + "airports", verifyToken, createAirport);
 
 //ROUTES FOR BOOKING
-<<<<<<< HEAD
-router.get(prefix + "bookings", verifyToken, getBooking);
-router.get(prefix + "bookings/:id", verifyToken, getBookingById);
-router.get(prefix + "userbookings", verifyToken, getUserBooking);
-=======
 router.get(prefix + "bookings", getBooking);
 router.get(prefix + "bookings/:search", getBookingBy);
->>>>>>> d5c2d134c04159694d50e62a7c5f9f2cbc5820b4
+router.get(prefix + "userbookings", verifyToken, getUserBooking);
 router.post(prefix + "bookings/create", verifyToken, createBooking);
 router.delete(prefix + "bookings/delete/:id", verifyToken, softDeleteBooking);
 router.delete(prefix + "bookings/deleted/:id", verifyToken, deleteBooking);
