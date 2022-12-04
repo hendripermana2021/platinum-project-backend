@@ -6,8 +6,9 @@ export const getPassanger = async (req, res) => {
   try {
     const passanger = await Passanger.findAll();
     res.status(200).json({
-      success: true,
-      message: "data you searched Found",
+      code: 200,
+      status: true,
+      msg: "data you searched Found",
       data: passanger,
     });
   } catch (error) {
@@ -21,8 +22,9 @@ export const getPassangerById = async (req, res) => {
       where: { id: req.params.id },
     });
     res.status(200).json({
-      success: true,
-      message: "data you searched Found",
+      code: 200,
+      status: true,
+      msg: "data you searched Found",
       data: passanger,
     });
   } catch (error) {
@@ -54,7 +56,8 @@ export const createPassanger = async (req, res) => {
     });
 
     res.status(200).json({
-      success: true,
+      code: 200,
+      status: true,
       msg: "Added Passanger Successfully",
       data: passanger,
     });
@@ -72,8 +75,9 @@ export const updatePassanger = async (req, res) => {
 
   if (!parsedDataProfile) {
     return res.status(400).json({
-      success: false,
-      message: "Users doesn't exist or has been deleted!",
+      code: 400,
+      status: false,
+      msg: "Users doesn't exist or has been deleted!",
     });
   }
 
@@ -94,8 +98,9 @@ export const updatePassanger = async (req, res) => {
       }
     );
     return res.status(200).json({
-      success: true,
-      message: "Passanger Success Updated",
+      code: 200,
+      status: true,
+      msg: "Passanger Success Updated",
     });
   } catch (error) {
     console.log(error);
@@ -112,8 +117,9 @@ export const deletePassanger = async (req, res) => {
 
   if (!parsedDataProfile) {
     return res.status(400).json({
-      success: false,
-      message: "Passanger not found or nothing!",
+      code: 400,
+      status: false,
+      msg: "Passanger not found or nothing!",
     });
   }
   await Passanger.destroy({
@@ -121,7 +127,7 @@ export const deletePassanger = async (req, res) => {
   });
 
   return res.status(200).json({
-    success: true,
-    message: "Delete Data Successfully",
+    status: true,
+    msg: "Delete Data Successfully",
   });
 };

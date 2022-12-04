@@ -23,8 +23,9 @@ export const getFlight = async (req, res) => {
       ],
     });
     res.status(200).json({
-      success: true,
-      message: "data you searched Found",
+      code: 200,
+      status: true,
+      msg: "data you searched Found",
       data: flight,
     });
   } catch (error) {
@@ -64,14 +65,16 @@ export const getFlightBy = async (req, res) => {
 
     if (flight == "") {
       return res.status(400).json({
-        success: false,
-        message: "Flight Doesn't Existing",
+        code: 400,
+        status: false,
+        msg: "Flight Doesn't Existing",
       });
     }
 
     res.status(200).json({
-      success: true,
-      message: "data you searched Found",
+      code: 200,
+      status: true,
+      msg: "data you searched Found",
       data: flight,
     });
   } catch (error) {
@@ -115,7 +118,8 @@ export const createFlight = async (req, res) => {
       },
     });
     res.status(200).json({
-      success: true,
+      code: 200,
+      status: true,
       msg: "Added Flight Successfully",
       data: flight,
     });
@@ -133,8 +137,9 @@ export const updateFlight = async (req, res) => {
 
   if (!parsedDataProfile) {
     return res.status(400).json({
-      success: false,
-      message: "Flight doesn't exist or has been deleted!",
+      code: 400,
+      status: false,
+      msg: "Flight doesn't exist or has been deleted!",
     });
   }
 
@@ -165,8 +170,9 @@ export const updateFlight = async (req, res) => {
       }
     );
     return res.status(200).json({
-      success: true,
-      message: "Flight Success Updated",
+      code: 200,
+      status: true,
+      msg: "Flight Success Updated",
     });
   } catch (error) {
     console.log(error);
@@ -183,8 +189,9 @@ export const deleteFlight = async (req, res) => {
 
   if (!parsedDataProfile) {
     return res.status(400).json({
-      success: false,
-      message: "Flight not found or nothing!",
+      code: 400,
+      status: false,
+      msg: "Flight not found or nothing!",
     });
   }
 
@@ -193,7 +200,8 @@ export const deleteFlight = async (req, res) => {
   });
 
   return res.status(200).json({
-    success: true,
-    message: "Delete Data Successfully",
+    code: 200,
+    status: true,
+    msg: "Delete Flight Successfully",
   });
 };

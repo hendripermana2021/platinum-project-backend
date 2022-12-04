@@ -43,7 +43,9 @@ export const refreshToken = async (req, res) => {
             expiresIn: "1d",
           }
         );
-        res.json({ accessToken });
+        res
+          .status(200)
+          .json({ code: 200, msg: "Token Refresh Finish", accessToken });
       }
     );
   } catch (error) {

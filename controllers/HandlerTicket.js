@@ -33,8 +33,9 @@ export const getTicket = async (req, res) => {
       ],
     });
     res.status(200).json({
-      success: true,
-      message: "ticket you searched Found",
+      code: 200,
+      status: true,
+      msg: "ticket you searched Found",
       data: ticket,
     });
   } catch (error) {
@@ -69,8 +70,9 @@ export const getTicketById = async (req, res) => {
       ],
     });
     res.status(200).json({
-      success: true,
-      message: "Ticket Found",
+      code: 200,
+      status: true,
+      msg: "Ticket You searched Found",
       data: ticket,
     });
   } catch (error) {
@@ -78,9 +80,9 @@ export const getTicketById = async (req, res) => {
   }
 };
 
-export const getTicketBy = async (req, res) => {
+export const getTicketByOneWay = async (req, res) => {
   try {
-    const { arrival, departure } = req.params;
+    const { arrival, departure, datesearch } = req.params;
     let ticket = await Ticket.findAll({
       include: [
         {
@@ -112,25 +114,27 @@ export const getTicketBy = async (req, res) => {
     });
 
     const result = [];
-
+    const generateDate = new Date(datesearch);
     for (let i = 0; i < ticket.length; i++) {
       if (
         ticket[i].flight !== null &&
-        ticket[i].flight.departureDate > Date.now()
+        ticket[i].flight.departureDate >= generateDate
       )
         result.push(ticket[i]);
     }
 
-    if (!result) {
+    if (result == "") {
       res.status(400).json({
-        success: false,
-        message: "Ticket Not Found",
+        code: 400,
+        status: false,
+        msg: "Ticket Not Found",
         data: result,
       });
     }
     res.status(200).json({
-      success: true,
-      message: "Ticket Found",
+      code: 200,
+      status: true,
+      msg: "Ticket Found",
       data: result,
     });
   } catch (error) {
@@ -160,7 +164,8 @@ export const createTicket = async (req, res) => {
     });
 
     res.status(200).json({
-      success: true,
+      code: 200,
+      status: true,
       msg: "Added Ticket Successfully",
       data: ticket,
     });
@@ -179,8 +184,9 @@ export const deleteTicket = async (req, res) => {
 
   if (!parsedDataProfile) {
     return res.status(400).json({
-      success: false,
-      message: "Ticket Doesn't Existing",
+      code: 400,
+      status: false,
+      msg: "Ticket Doesn't Existing",
     });
   }
 
@@ -189,8 +195,9 @@ export const deleteTicket = async (req, res) => {
   });
 
   return res.status(200).json({
-    success: true,
-    message: "Delete Ticket Successfully",
+    code: 200,
+    status: true,
+    msg: "Delete Ticket Successfully",
   });
 };
 
@@ -203,8 +210,9 @@ export const updateTicket = async (req, res) => {
 
   if (!parsedDataProfile) {
     return res.status(400).json({
-      success: false,
-      message: "Ticket Not Found",
+      code: 400,
+      status: false,
+      msg: "Ticket Not Found",
     });
   }
 
@@ -224,8 +232,9 @@ export const updateTicket = async (req, res) => {
       }
     );
     return res.status(200).json({
-      success: true,
-      message: "Ticket Success Updated",
+      code: 200,
+      status: true,
+      msg: "Ticket Success Updated",
     });
   } catch (error) {
     console.log(error);
@@ -249,9 +258,10 @@ export const HandlerBooked = async (req, res) => {
       booking_id: ticket.id,
     });
 
-    res.json({
-      success: true,
-      message: "Booking added",
+    res.status(200).json({
+      code: 200,
+      status: true,
+      msg: "Booking added",
     });
   } catch (error) {}
 };
@@ -259,7 +269,12 @@ export const HandlerBooked = async (req, res) => {
 export const getUserBooking = async (req, res) => {
   try {
     const userbooking = await UserBooking.findAll({});
-    res.json(userbooking);
+    res.status(200).json({
+      code: 200,
+      status: true,
+      msg: "Get Users Booking Successful",
+      data: userbooking,
+    });
   } catch (error) {
     console.log(error);
   }

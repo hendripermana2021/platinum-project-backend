@@ -6,8 +6,9 @@ export const getAirport = async (req, res) => {
   try {
     const airport = await Airport.findAll({});
     res.status(200).json({
-      success: true,
-      message: "data you searched Found",
+      code: 200,
+      status: true,
+      msg: "Airports searched Found",
       data: airport,
     });
   } catch (error) {
@@ -24,7 +25,8 @@ export const createAirport = async (req, res) => {
   });
   if (airportName != "")
     return res.status(400).json({
-      success: false,
+      code: 400,
+      status: false,
       msg: "airports is already exists",
     });
 
@@ -35,7 +37,8 @@ export const createAirport = async (req, res) => {
   });
   if (airportCode != "")
     return res.status(400).json({
-      success: false,
+      code: 400,
+      status: false,
       msg: "code is already exists",
     });
   try {
@@ -56,7 +59,8 @@ export const createAirport = async (req, res) => {
     });
 
     res.status(200).json({
-      success: true,
+      code: 200,
+      status: true,
       msg: "Added Airport Successfully",
       data: airport,
     });
@@ -75,8 +79,9 @@ export const deleteAirport = async (req, res) => {
 
   if (!parsedDataProfile) {
     return res.status(400).json({
-      success: false,
-      message: "Airports Doesn't Existing",
+      code: 400,
+      status: false,
+      msg: "Airports Doesn't Existing",
     });
   }
 
@@ -85,8 +90,9 @@ export const deleteAirport = async (req, res) => {
   });
 
   return res.status(200).json({
-    success: true,
-    message: "Delete Airport Successfully",
+    code: 200,
+    status: true,
+    msg: "Delete Airport Successfully",
   });
 };
 
@@ -107,13 +113,15 @@ export const getAirportBy = async (req, res) => {
     });
     if (airport == "") {
       return res.status(400).json({
-        success: false,
-        message: "Airports Doesn't Existing",
+        code: 400,
+        status: false,
+        msg: "Airports Doesn't Existing",
       });
     }
     res.status(200).json({
-      success: true,
-      message: "data you searched Found",
+      code: 200,
+      status: true,
+      msg: "data you searched Found",
       data: airport,
     });
   } catch (error) {
@@ -129,13 +137,15 @@ export const getAirportById = async (req, res) => {
 
     if (!airport == "") {
       return res.status(400).json({
-        success: false,
-        message: "Airports Doesn't Existing",
+        code: 400,
+        status: false,
+        msg: "Airports Doesn't Existing",
       });
     }
     res.status(200).json({
-      success: true,
-      message: "data you searched Found",
+      code: 200,
+      status: true,
+      msg: "data you searched Found",
       data: airport,
     });
   } catch (error) {
@@ -152,8 +162,9 @@ export const updateAirport = async (req, res) => {
 
   if (!parsedDataProfile) {
     return res.status(400).json({
-      success: false,
-      message: "Airports doesn't exist or has been deleted!",
+      code: 400,
+      status: false,
+      msg: "Airports doesn't exist or has been deleted!",
     });
   }
 
@@ -182,8 +193,10 @@ export const updateAirport = async (req, res) => {
       }
     );
     return res.status(200).json({
-      success: true,
-      message: "Airport Success Updated",
+      code: 200,
+      status: true,
+      msg: "Airport Success Updated",
+      data: Airport,
     });
   } catch (error) {
     console.log(error);

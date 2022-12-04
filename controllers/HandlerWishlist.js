@@ -40,8 +40,9 @@ export const getWishlist = async (req, res) => {
       ],
     });
     res.status(200).json({
-      success: true,
-      message: "Ticket Added",
+      code: 200,
+      status: true,
+      msg: "Ticket Added",
       data: wishlist,
     });
   } catch (error) {
@@ -83,13 +84,15 @@ export const getWishlistbyid = async (req, res) => {
 
     if (wishlist == "") {
       return res.status(400).json({
-        success: false,
-        message: "Wishlist Doesn't Existing",
+        code: 400,
+        status: false,
+        msg: "Wishlist Doesn't Existing",
       });
     }
     res.status(200).json({
-      success: true,
-      message: "ticket you searched Found",
+      code: 200,
+      status: true,
+      msg: "Wishlist you searched Found",
       data: wishlist,
     });
   } catch (error) {
@@ -131,13 +134,15 @@ export const getWishlistby = async (req, res) => {
 
     if (wishlist == "") {
       return res.status(400).json({
-        success: false,
-        message: "Wishlist Doesn't Existing",
+        code: 400,
+        status: false,
+        msg: "Wishlist Doesn't Existing",
       });
     }
     res.status(200).json({
-      success: true,
-      message: "ticket you searched Found",
+      code: 200,
+      status: true,
+      msg: "ticket you searched Found",
       data: wishlist,
     });
   } catch (error) {
@@ -158,9 +163,9 @@ export const createWishlist = async (req, res) => {
       ticket_id: ticket[0].id,
       isWishlist: true,
     });
-    res.json({
-      success: true,
-      message: "Wishlist added",
+    res.status(200).json({
+      status: true,
+      msg: "Wishlist added",
     });
   } catch (error) {}
 };
@@ -175,8 +180,9 @@ export const deleteWishlist = async (req, res) => {
 
   if (!parsedDataProfile) {
     return res.status(400).json({
-      success: false,
-      message: "Wishlist Doesn't Existing",
+      code: 400,
+      status: false,
+      msg: "Wishlist Doesn't Existing",
     });
   }
 
@@ -185,7 +191,8 @@ export const deleteWishlist = async (req, res) => {
   });
 
   return res.status(200).json({
-    success: true,
-    message: "Delete Wishlist Successfully",
+    code: 200,
+    status: true,
+    msg: "Delete Wishlist Successfully",
   });
 };
