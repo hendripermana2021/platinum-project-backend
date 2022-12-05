@@ -1,6 +1,4 @@
 node_modules
 coverage
 junit.xml
-config
-config.json
 google-cloud-key.json
