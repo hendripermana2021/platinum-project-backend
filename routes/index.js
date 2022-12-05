@@ -10,6 +10,7 @@ import {
   getUsersBy,
   handleGetRoot,
 } from "../controllers/HandlerUsers.js";
+import { uploadPictures } from "../controllers/HandlerFile.js";
 import {
   getTicket,
   createTicket,
@@ -38,6 +39,7 @@ import {
   getBookingBy,
   getBookingById,
   softDeleteBooking,
+  getUserBooking,
 } from "../controllers/HandlerBooking.js";
 import {
   createWishlist,
@@ -71,7 +73,7 @@ router.post(prefix + "register", Register);
 router.post(prefix + "login", Login);
 router.delete(prefix + "logout", verifyToken, Logout);
 router.delete(prefix + "users/delete/:id", verifyToken, deleteUsers);
-router.put(prefix + "users/edit/:id", verifyToken, updateUsers);
+router.put(prefix + "users/edit/:id", verifyToken, uploadPictures, updateUsers);
 router.get(prefix + "whoami", verifyToken, whoAmI);
 
 //ROUTES FOR TICKETS
@@ -94,6 +96,7 @@ router.post(prefix + "airports", verifyToken, createAirport);
 router.get(prefix + "bookings", getBooking);
 router.get(prefix + "bookings/:search", getBookingBy);
 router.get(prefix + "bookings/byid/:id", getBookingById);
+router.get(prefix + "userbookings", verifyToken, getUserBooking);
 router.post(prefix + "bookings/create", verifyToken, createBooking);
 router.delete(prefix + "bookings/delete/:id", verifyToken, softDeleteBooking);
 router.delete(prefix + "bookings/deleted/:id", verifyToken, deleteBooking);
