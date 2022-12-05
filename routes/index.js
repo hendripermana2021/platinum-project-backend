@@ -62,10 +62,7 @@ import {
 import { BuyingTicket, getPayment } from "../controllers/HandlerPayment.js";
 const router = express.Router();
 const prefix = "/v1/api/";
-const { 
-  uploadPictures,
-  getListFiles,
-} = pkg;
+const { uploadPictures, getListFiles } = pkg;
 
 //ROUTES FOR USERS
 router.get(prefix, handleGetRoot);

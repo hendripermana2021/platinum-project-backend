@@ -90,7 +90,6 @@ const download = async (req, res) => {
     });
   }
 };
-
 module.exports = {
   uploadPictures,
   getListFiles,

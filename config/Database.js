@@ -36,7 +36,7 @@ module.exports = {
     host: DB_HOST,
     port: DB_PORT,
     url: DB_URI,
-    dialect: "postgres",
+    dialect: "mysql",
   },
 };
 
