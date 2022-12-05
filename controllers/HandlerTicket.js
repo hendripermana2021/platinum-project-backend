@@ -150,64 +150,6 @@ export const getTicketQuery = async (req, res) => {
       msg: "Ticket Found",
       data: result,
     });
-
-    // if (isroundtrip == false) {
-    //   const result = [];
-    //   const departureDate = new Date(datedeparture);
-    //   for (let i = 0; i < ticket.length; i++) {
-    //     if (
-    //       ticket[i].flight !== null &&
-    //       ticket[i].flight.departureDate >= departureDate &&
-    //       ticket[i].passanger_ammount == passanger_ammount
-    //     )
-    //       result.push(ticket[i]);
-    //   }
-
-    //   if (result == []) {
-    //     res.status(400).json({
-    //       code: 400,
-    //       status: false,
-    //       msg: "Ticket Not Found",
-    //       data: result,
-    //     });
-    //   }
-    //   res.status(200).json({
-    //     code: 200,
-    //     status: true,
-    //     msg: "Ticket Found",
-    //     data: result,
-    //   });
-    // }
-
-    // if (isroundtrip == true) {
-    //   const result = [];
-    //   const departureDate = new Date(datedeparture);
-    //   const arrivalDate = new Date(datearrival);
-    //   for (let i = 0; i < ticket.length; i++) {
-    //     if (
-    //       ticket[i].flight !== null &&
-    //       ticket[i].flight.departureDate >= departureDate &&
-    //       ticket[i].flight.arrivalDate >= arrivalDate &&
-    //       ticket[i].passanger_ammount == passanger_ammount
-    //     )
-    //       result.push(ticket[i]);
-    //   }
-    //   res.status(200).json({
-    //     code: 200,
-    //     status: true,
-    //     msg: "Ticket Found",
-    //     data: result,
-    //   });
-
-    //   if (result == "") {
-    //     res.status(400).json({
-    //       code: 400,
-    //       status: false,
-    //       msg: "Ticket Not Found",
-    //       data: result,
-    //     });
-    //   }
-    // }
   } catch (error) {
     console.log(error);
   }
@@ -215,31 +157,12 @@ export const getTicketQuery = async (req, res) => {
 
 export const createTicket = async (req, res) => {
   try {
-    for (let i = 0; i < req.body.length; i++) {
-      await Ticket.create({
-        flight_id: req.body[i].flight_id,
-        class_id: req.body[i].class_id,
-        price: req.body[i].price,
-        country: req.body[i].country,
-        passanger_ammount: req.body[i].passanger_ammount,
-        isroundtrip: req.body[i].isroundtrip,
-      });
-
-      // const ticket = await Ticket.findAll({
-      //   where: {
-      //     flight_id: req.body[i].flight_id,
-      //     class_id: req.body[i].class_id,
-      //     price: req.body[i].price,
-      //     country: req.body[i].country,
-      //     passanger_ammount: req.body[i].passanger_ammount,
-      //   },
-    }
-
+    const ticket = await Ticket.bulkCreate(req.body);
     res.status(200).json({
       code: 200,
       status: true,
       msg: "Added Ticket Successfully",
-      // data: ticket,
+      data: ticket,
     });
   } catch (error) {
     console.log(error);
@@ -308,45 +231,6 @@ export const updateTicket = async (req, res) => {
       code: 200,
       status: true,
       msg: "Ticket Success Updated",
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const HandlerBooked = async (req, res) => {
-  try {
-    let { id } = req.params;
-    let ticket = await Ticket.findAll({
-      where: {
-        id: id,
-      },
-    });
-    let booking = Booking.create({
-      ticket_id: ticket[0].id,
-      isBooking: true,
-    });
-
-    await UserBooking.create({
-      booking_id: ticket.id,
-    });
-
-    res.status(200).json({
-      code: 200,
-      status: true,
-      msg: "Booking added",
-    });
-  } catch (error) {}
-};
-
-export const getUserBooking = async (req, res) => {
-  try {
-    const userbooking = await UserBooking.findAll({});
-    res.status(200).json({
-      code: 200,
-      status: true,
-      msg: "Get Users Booking Successful",
-      data: userbooking,
     });
   } catch (error) {
     console.log(error);

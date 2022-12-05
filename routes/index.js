@@ -47,7 +47,6 @@ import {
   getWishlistby,
 } from "../controllers/HandlerWishlist.js";
 import {
-  createPassanger,
   deletePassanger,
   getPassanger,
   getPassangerById,
@@ -60,6 +59,7 @@ import {
   getFlightBy,
   updateFlight,
 } from "../controllers/HandlerFlight.js";
+import { BuyingTicket, getPayment } from "../controllers/HandlerPayment.js";
 const router = express.Router();
 const prefix = "/v1/api/";
 const { 
@@ -111,7 +111,6 @@ router.delete(prefix + "bookings/deleted/:id", verifyToken, deleteBooking);
 router.get(prefix + "passanger", verifyToken, getPassanger);
 router.get(prefix + "passanger/:id", verifyToken, getPassangerById);
 router.put(prefix + "passanger/edit/:id", verifyToken, updatePassanger);
-router.post(prefix + "passanger/create", verifyToken, createPassanger);
 router.delete(prefix + "passanger/delete/:id", verifyToken, deletePassanger);
 
 //ROUTES FOR WISHLIST
@@ -133,6 +132,10 @@ router.post(prefix + "booking/payment", verifyToken, actionBooking);
 
 //API FOR TOKEN
 router.get(prefix + "token", refreshToken);
+
+//API FOR PAYMENT
+router.get(prefix + "payments", verifyToken, getPayment);
+router.put(prefix + "buytickets/:id", verifyToken, BuyingTicket);
 
 // // endpoint untuk tambah admin yang bisa hanya superadminc
 // router.post(prefix + "registrasi-admin", verifyToken, RegisterAdmin);

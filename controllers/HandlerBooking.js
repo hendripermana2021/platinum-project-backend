@@ -366,33 +366,17 @@ export const getUserBooking = async (req, res) => {
 
 export const actionBooking = async (req, res) => {
   try {
-    const totalPassanger = req.query.totalPassanger;
     const booking_id = req.query.booking_id;
     const totalPrice = req.query.totalPrice;
+    const passanger = await Passanger.bulkCreate(req.body);
 
-    for (let i = 0; i < totalPassanger; i++) {
-      await Passanger.create({
-        name: req.body[i].name,
-        email: req.body[i].email,
-        age: req.body[i].age,
-        identityType: req.body[i].identityType,
-        identityNumber: req.body[i].identityNumber,
-        booking_id: req.body[i].booking_id,
-      });
-    }
-    await UserBooking.create({
+    const userbooking = await UserBooking.create({
       user_id: req.user.userId,
       booking_id: booking_id,
     });
 
-    const userbooking = await UserBooking.findAll({
-      where: {
-        createdAt: Date.now(),
-      },
-    });
-
-    await Payment.create({
-      userBooking_id: booking_id,
+    const payment = await Payment.create({
+      userBooking_id: userbooking.id,
       totalPrice: totalPrice,
       paymentType: "wallet",
       isPayed: false,
@@ -401,7 +385,8 @@ export const actionBooking = async (req, res) => {
     res.status(200).json({
       code: 200,
       status: true,
-      msg: "Data has Been Created",
+      msg: "Data has been created and save",
+      data: { passanger, userbooking, payment },
     });
   } catch (error) {
     console.log(error);
