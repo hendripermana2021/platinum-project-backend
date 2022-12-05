@@ -69,7 +69,7 @@ export const BuyingTicket = async (req, res) => {
       },
     });
 
-    await History.create({
+    const history = await History.create({
       userBooking_id: payment[0].id,
       payment_id: id,
       isHistory: true,
@@ -79,7 +79,7 @@ export const BuyingTicket = async (req, res) => {
       code: 200,
       status: true,
       msg: "Ticket already Booked",
-      data: payment,
+      data: { payment, history },
     });
   } catch (error) {}
 };

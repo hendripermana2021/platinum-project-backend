@@ -5,7 +5,7 @@ const { Storage } = require("@google-cloud/storage");
 const storage = new Storage({ keyFilename: "google-cloud-key.json" });
 const bucket = storage.bucket("platinum-project-backend");
 
-export const uploadPictures = async (req, res) => {
+const uploadPictures = async (req, res) => {
   try {
     await processFile(req, res);
 
@@ -58,7 +58,7 @@ export const uploadPictures = async (req, res) => {
   }
 };
 
-export const getListFiles = async (req, res) => {
+const getListFiles = async (req, res) => {
   try {
     const [files] = await bucket.getFiles();
     let fileInfos = [];
@@ -80,7 +80,7 @@ export const getListFiles = async (req, res) => {
   }
 };
 
-export const download = async (req, res) => {
+const download = async (req, res) => {
   try {
     const [metaData] = await bucket.file(req.params.name).getMetadata();
     res.redirect(metaData.mediaLink);
@@ -89,4 +89,9 @@ export const download = async (req, res) => {
       message: "Could not download the file. " + err,
     });
   }
+};
+module.exports = {
+  uploadPictures,
+  getListFiles,
+  download,
 };
