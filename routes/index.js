@@ -18,7 +18,7 @@ import {
   getTicketById,
   HandlerBooked,
   getUserBooking,
-  getTicketByOneWay,
+  getTicketQuery,
 } from "../controllers/HandlerTicket.js";
 import { verifyToken } from "../middleware/VerifyToken.js";
 import {
@@ -31,10 +31,12 @@ import {
 } from "../controllers/HandleAirport.js";
 import { refreshToken } from "../controllers/RefreshToken.js";
 import {
+  actionBooking,
   createBooking,
   deleteBooking,
   getBooking,
   getBookingBy,
+  getBookingById,
   softDeleteBooking,
 } from "../controllers/HandlerBooking.js";
 import {
@@ -74,10 +76,7 @@ router.get(prefix + "whoami", verifyToken, whoAmI);
 
 //ROUTES FOR TICKETS
 router.get(prefix + "tickets", getTicket);
-router.get(
-  prefix + "tickets/search/:departure/:arrival/:datesearch",
-  getTicketByOneWay
-);
+router.get(prefix + "tickets/search", getTicketQuery);
 router.post(prefix + "tickets", verifyToken, createTicket);
 router.delete(prefix + "tickets/delete/:id", verifyToken, deleteTicket);
 router.put(prefix + "tickets/edit/:id", verifyToken, updateTicket);
@@ -86,7 +85,7 @@ router.get(prefix + "tickets/:id", getTicketById);
 //ROUTES FOR AIRPORT
 router.get(prefix + "airports", getAirport);
 router.get(prefix + "airports/:search", getAirportBy);
-router.get(prefix + "airports/id/:id", getAirportById);
+router.get(prefix + "airports/byid/:id", getAirportById);
 router.put(prefix + "airports/edit/:id", verifyToken, updateAirport);
 router.delete(prefix + "airports/delete/:id", verifyToken, deleteAirport);
 router.post(prefix + "airports", verifyToken, createAirport);
@@ -94,6 +93,7 @@ router.post(prefix + "airports", verifyToken, createAirport);
 //ROUTES FOR BOOKING
 router.get(prefix + "bookings", getBooking);
 router.get(prefix + "bookings/:search", getBookingBy);
+router.get(prefix + "bookings/byid/:id", getBookingById);
 router.post(prefix + "bookings/create", verifyToken, createBooking);
 router.delete(prefix + "bookings/delete/:id", verifyToken, softDeleteBooking);
 router.delete(prefix + "bookings/deleted/:id", verifyToken, deleteBooking);
@@ -120,8 +120,7 @@ router.delete(prefix + "flight/delete/:id", verifyToken, deleteFlight);
 router.put(prefix + "flight/edit/:id", verifyToken, updateFlight);
 
 //API FOR ACTION BUYER
-router.post(prefix + "book/:id", HandlerBooked);
-router.get(prefix + "book/", getUserBooking);
+router.post(prefix + "booking/payment", verifyToken, actionBooking);
 
 //API FOR TOKEN
 router.get(prefix + "token", refreshToken);

@@ -7,15 +7,17 @@ module.exports = {
       "Bookings",
       [
         {
-          ticket_id: 1,
-          passanger_id: 1,
+          ticket_id_departure: 1,
+          ticket_id_return: 2,
+          totalPassanger: 3,
           isBooking: true,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
-          ticket_id: 2,
-          passanger_id: 2,
+          ticket_id_departure: 3,
+          ticket_id_return: 4,
+          totalPassanger: 5,
           isBooking: true,
           createdAt: new Date(),
           updatedAt: new Date(),

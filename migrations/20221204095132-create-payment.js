@@ -2,36 +2,24 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Flights', {
+    await queryInterface.createTable('Payments', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      departureAirport: {
+      userBooking_id: {
         type: Sequelize.INTEGER
       },
-      arrivalAirport: {
-        type: Sequelize.INTEGER
-      },
-      departureDate: {
-        type: Sequelize.DATE
-      },
-      arrivalDate: {
-        type: Sequelize.DATE
-      },
-      departureTime: {
-        type: Sequelize.TIME
-      },
-      arrivalTime: {
-        type: Sequelize.TIME
-      },
-      flightType: {
-        type: Sequelize.INTEGER
-      },
-      planeName: {
+      paymentType: {
         type: Sequelize.STRING
+      },
+      totalPrice: {
+        type: Sequelize.FLOAT
+      },
+      isPayed: {
+        type: Sequelize.BOOLEAN
       },
       createdAt: {
         allowNull: false,
@@ -44,6 +32,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Flights');
+    await queryInterface.dropTable('Payments');
   }
 };

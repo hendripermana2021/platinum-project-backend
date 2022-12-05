@@ -1,6 +1,5 @@
 import db from "../models/index.js";
 import { Op } from "sequelize";
-import airport from "../models/airport.js";
 
 const Booking = db.booking;
 const Ticket = db.ticket;
@@ -8,14 +7,24 @@ const Type = db.classtype;
 const UserBooking = db.userbooking;
 const User = db.users;
 const Passanger = db.passanger;
+const Payment = db.payment;
 export const getBooking = async (req, res) => {
   try {
     const booking = await Booking.findAll({
-      attributes: ["id", "ticket_id", "passanger_id", "isBooking"],
       include: [
         {
           model: Ticket,
-          as: "ticket",
+          as: "ticketDeparture",
+          include: [
+            {
+              model: Type,
+              as: "class",
+            },
+          ],
+        },
+        {
+          model: Ticket,
+          as: "ticketReturn",
           include: [
             {
               model: Type,
@@ -54,7 +63,17 @@ export const getBookingBy = async (req, res) => {
       include: [
         {
           model: Ticket,
-          as: "ticket",
+          as: "ticketDeparture",
+          include: [
+            {
+              model: Type,
+              as: "class",
+            },
+          ],
+        },
+        {
+          model: Ticket,
+          as: "ticketReturn",
           include: [
             {
               model: Type,
@@ -90,23 +109,83 @@ export const getBookingBy = async (req, res) => {
   }
 };
 
+export const getBookingById = async (req, res) => {
+  try {
+    const booking = await Booking.findAll({
+      where: { id: req.params.id },
+      include: [
+        {
+          model: Ticket,
+          as: "ticketDeparture",
+          include: [
+            {
+              model: Type,
+              as: "class",
+            },
+          ],
+        },
+        {
+          model: Ticket,
+          as: "ticketReturn",
+          include: [
+            {
+              model: Type,
+              as: "class",
+            },
+          ],
+        },
+        {
+          model: Passanger,
+          as: "passanger",
+        },
+      ],
+    });
+
+    if (booking == "") {
+      return res.status(400).json({
+        code: 400,
+        status: false,
+        msg: "Booking Doesn't Existing",
+      });
+    }
+    res.status(200).json({
+      code: 200,
+      status: true,
+      msg: "data you searched Found",
+      data: booking,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const createBooking = async (req, res) => {
-  const { ticket_id, passanger_id } = req.body;
+  const { ticket_id_departure, ticket_id_return, totalPassanger } = req.body;
   try {
     await Booking.create({
-      ticket_id,
-      passanger_id,
-      isBooking: true,
+      ticket_id_departure,
+      ticket_id_return,
+      totalPassanger,
+      isBooking: false,
     });
     const booking = await Booking.findAll({
       where: {
-        ticket_id: ticket_id,
-        passanger_id: passanger_id,
+        createdAt: Date.now(),
       },
       include: [
         {
           model: Ticket,
-          as: "ticket",
+          as: "ticketDeparture",
+          include: [
+            {
+              model: Type,
+              as: "class",
+            },
+          ],
+        },
+        {
+          model: Ticket,
+          as: "ticketReturn",
           include: [
             {
               model: Type,
@@ -197,7 +276,7 @@ export const createUserBooking = async (req, res) => {
   const { booking_id } = req.body;
   try {
     await UserBooking.create({
-      user_id: req.user.id,
+      user_id: req.user.userId,
       booking_id,
     });
 
@@ -207,23 +286,14 @@ export const createUserBooking = async (req, res) => {
         {
           model: User,
           as: "user",
-          attributes: ["user_id", "firstname", "lastname"],
         },
         {
           model: Booking,
           as: "booking",
-          attributes: ["ticket_id", "passanger_id", "isBooking"],
           include: [
             {
               model: Ticket,
               as: "ticket",
-              attributes: [
-                "flight_id",
-                "class_id",
-                "price",
-                "country",
-                "passanger_ammount",
-              ],
               include: [
                 {
                   model: Type,
@@ -288,6 +358,50 @@ export const getUserBooking = async (req, res) => {
       status: true,
       msg: "data you searched Found",
       data: userBooking,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const actionBooking = async (req, res) => {
+  try {
+    const totalPassanger = req.query.totalPassanger;
+    const booking_id = req.query.booking_id;
+    const totalPrice = req.query.totalPrice;
+
+    for (let i = 0; i < totalPassanger; i++) {
+      await Passanger.create({
+        name: req.body[i].name,
+        email: req.body[i].email,
+        age: req.body[i].age,
+        identityType: req.body[i].identityType,
+        identityNumber: req.body[i].identityNumber,
+        booking_id: req.body[i].booking_id,
+      });
+    }
+    await UserBooking.create({
+      user_id: req.user.userId,
+      booking_id: booking_id,
+    });
+
+    const userbooking = await UserBooking.findAll({
+      where: {
+        createdAt: Date.now(),
+      },
+    });
+
+    await Payment.create({
+      userBooking_id: booking_id,
+      totalPrice: totalPrice,
+      paymentType: "wallet",
+      isPayed: false,
+    });
+
+    res.status(200).json({
+      code: 200,
+      status: true,
+      msg: "Data has Been Created",
     });
   } catch (error) {
     console.log(error);

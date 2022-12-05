@@ -338,7 +338,6 @@ export const updateUsers = async (req, res) => {
         birthdate,
         postalcode,
         pictures,
-        address_id: id,
       },
       {
         where: { id: id },

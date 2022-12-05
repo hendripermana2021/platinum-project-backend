@@ -44,7 +44,7 @@ export const getFlightBy = async (req, res) => {
           { arrivalDate: { [Op.like]: `%` + search + `%` } },
           { departureTime: { [Op.like]: `%` + search + `%` } },
           { arrivalDate: { [Op.like]: `%` + search + `%` } },
-          { planeName: { [Op.like]: `%` + search + `%` } },
+          { namePlane: { [Op.like]: `%` + search + `%` } },
         ],
       },
       include: [
@@ -91,7 +91,13 @@ export const createFlight = async (req, res) => {
     departureTime,
     arrivalTime,
     flightType,
-    planeName,
+    planeId,
+    flight_id,
+    class_id,
+    price,
+    country,
+    passanger_ammount,
+    isroundtrip,
   } = req.body;
   try {
     await Flight.create({
@@ -102,21 +108,29 @@ export const createFlight = async (req, res) => {
       departureTime,
       arrivalTime,
       flightType,
-      planeName,
     });
 
-    const flight = await Flight.findAll({
-      where: {
-        departureAirport: departureAirport,
-        arrivalAirport: arrivalAirport,
-        departureDate: departureDate,
-        arrivalDate: arrivalDate,
-        departureTime: departureTime,
-        arrivalTime: arrivalTime,
-        flightType: flightType,
-        planeName: planeName,
-      },
+    await Ticket.create({
+      flight_id,
+      class_id,
+      price,
+      country,
+      passanger_ammount,
+      isroundtrip,
     });
+
+    // const flight = await Flight.findAll({
+    //   where: {
+    //     departureAirport: departureAirport,
+    //     arrivalAirport: arrivalAirport,
+    //     departureDate: departureDate,
+    //     arrivalDate: arrivalDate,
+    //     departureTime: departureTime,
+    //     arrivalTime: arrivalTime,
+    //     flightType: flightType,
+    //     planeId: planeId,
+    //   },
+    // });
     res.status(200).json({
       code: 200,
       status: true,

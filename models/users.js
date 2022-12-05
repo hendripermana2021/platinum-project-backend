@@ -20,10 +20,11 @@ module.exports = (sequelize, DataTypes) => {
     email: DataTypes.STRING,
     phone: DataTypes.STRING,
     birthdate: DataTypes.DATE,
-    address_id: DataTypes.INTEGER,
     password: DataTypes.STRING,
     role_id: DataTypes.INTEGER,
     pictures: DataTypes.STRING,
+    isgoogleauth: DataTypes.BOOLEAN,
+    isfacebookauth: DataTypes.BOOLEAN,
     access_token: DataTypes.TEXT,
     refresh_token: DataTypes.TEXT
   }, {

@@ -135,7 +135,7 @@ export const getAirportById = async (req, res) => {
       where: { id: req.params.id },
     });
 
-    if (!airport == "") {
+    if (airport == "") {
       return res.status(400).json({
         code: 400,
         status: false,

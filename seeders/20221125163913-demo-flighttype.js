@@ -7,12 +7,12 @@ module.exports = {
       "FlightTypes",
       [
         {
-          type: "Flight Type 1",
+          type: "Economy",
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
-          type: "Flight Type 2",
+          type: "Business",
           createdAt: new Date(),
           updatedAt: new Date(),
         },

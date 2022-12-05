@@ -33,33 +33,22 @@ export const getPassangerById = async (req, res) => {
 };
 
 export const createPassanger = async (req, res) => {
-  const { name, email, age, indentityType, identityNumber, booking_id } =
-    req.body;
   try {
-    await Passanger.create({
-      name,
-      email,
-      age,
-      indentityType,
-      identityNumber,
-      booking_id,
-    });
-
-    const passanger = await Passanger.findAll({
-      where: {
-        name: name,
-        email: email,
-        age: age,
-        identityNumber: identityNumber,
-        indentityType: indentityType,
-      },
-    });
+    for (let i = 0; i < req.body.length; i++) {
+      await Passanger.create({
+        name: req.body[i].name,
+        email: req.body[i].email,
+        age: req.body[i].age,
+        identityType: req.body[i].identityType,
+        identityNumber: req.body[i].identityNumber,
+        booking_id: req.body[i].booking_id,
+      });
+    }
 
     res.status(200).json({
       code: 200,
       status: true,
       msg: "Added Passanger Successfully",
-      data: passanger,
     });
   } catch (error) {
     console.log(error);
@@ -81,7 +70,7 @@ export const updatePassanger = async (req, res) => {
     });
   }
 
-  const { name, email, age, indentityType, identityNumber, booking_id } =
+  const { name, email, age, identityType, identityNumber, booking_id } =
     req.body;
   try {
     await Passanger.update(
@@ -89,7 +78,7 @@ export const updatePassanger = async (req, res) => {
         name,
         email,
         age,
-        indentityType,
+        identityType,
         identityNumber,
         booking_id,
       },
