@@ -11,6 +11,9 @@ import {
   handleGetRoot,
 } from "../controllers/HandlerUsers.js";
 import {
+  uploadPictures,
+} from "../controllers/HandlerFile.js";
+import {
   getTicket,
   createTicket,
   deleteTicket,
@@ -70,7 +73,7 @@ router.post(prefix + "register", Register);
 router.post(prefix + "login", Login);
 router.delete(prefix + "logout", verifyToken, Logout);
 router.delete(prefix + "users/delete/:id", verifyToken, deleteUsers);
-router.put(prefix + "users/edit/:id", verifyToken, updateUsers);
+router.put(prefix + "users/edit/:id", verifyToken, uploadPictures, updateUsers);
 router.get(prefix + "whoami", verifyToken, whoAmI);
 
 //ROUTES FOR TICKETS
