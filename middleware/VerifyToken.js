@@ -16,6 +16,7 @@ export const verifyToken = (req, res, next) => {
       birthdate: decoded.birthdate,
       pictures: decoded.pictures,
     };
+    req.id = decoded.userId;
     req.firstname = decoded.firstname;
     req.lastname = decoded.lastname;
     req.gender = decoded.gender;

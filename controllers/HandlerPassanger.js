@@ -32,29 +32,6 @@ export const getPassangerById = async (req, res) => {
   }
 };
 
-export const createPassanger = async (req, res) => {
-  try {
-    for (let i = 0; i < req.body.length; i++) {
-      await Passanger.create({
-        name: req.body[i].name,
-        email: req.body[i].email,
-        age: req.body[i].age,
-        identityType: req.body[i].identityType,
-        identityNumber: req.body[i].identityNumber,
-        booking_id: req.body[i].booking_id,
-      });
-    }
-
-    res.status(200).json({
-      code: 200,
-      status: true,
-      msg: "Added Passanger Successfully",
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 export const updatePassanger = async (req, res) => {
   const { id } = req.params;
   const dataBeforeDelete = await Passanger.findOne({

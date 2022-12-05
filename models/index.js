@@ -58,6 +58,7 @@ db.users = require("../models/users.js")(sequelize, Sequelize);
 db.wishlist = require("../models/wishlist.js")(sequelize, Sequelize);
 db.plane = require("../models/plane.js")(sequelize, Sequelize);
 db.payment = require("../models/payment.js")(sequelize, Sequelize);
+db.history = require("../models/history.js")(sequelize, Sequelize);
 
 //RELATION FOR USERS API
 db.role.hasMany(db.users, {
@@ -171,76 +172,15 @@ db.plane.belongsTo(db.flight, {
   foreignKey: "id",
 });
 
-// db.ticket.belongsTo(db.wishlist, {
-//   as: "wishlists",
-//   foreignKey: "id_ticket",
-// });
+//RELATION FOR PAYMENT
+db.payment.belongsTo(db.userbooking, {
+  as: "usersPayment",
+  foreignKey: "UserBooking_id",
+});
 
-// db.wishlist.belongsTo(db.users, {
-//   as: "users",
-//   foreignKey: "id",
-// });
-
-// db.users.belongsTo(db.wishlist, {
-//   as: "wishlists",
-//   foreignKey: "id",
-// });
-
-// db.booking.hasMany(db.classtype, {
-//   as: "class",
-//   foreignKey: "id",
-// });
-
-//RELATION FOR BOOKING
-// db.users.belongsTo(db.booking, {
-//   as: "bookings",
-//   foreignKey: "id",
-// });
-
-// db.booking.belongsTo(db.users, {
-//   as: "users",
-//   foreignKey: "id",
-// });
-
-// db.ticket.belongsTo(db.booking, {
-//   as: "bookings",
-//   foreignKey: "id_ticket",
-// });
-
-// db.booking.belongsTo(db.ticket, {
-//   as: "tickets",
-//   foreignKey: "id",
-// });
-
-// // db.airport.belongsTo(db.booking, {
-// //   as: "bookings",
-// //   foreignKey: "id_airport",
-// // });
-
-// db.booking.belongsTo(db.airport, {
-//   as: "airports",
-//   foreignKey: "id",
-// });
-
-// //RELATION FOR HISTORY
-// db.history.belongsTo(db.ticket, {
-//   as: "tickets",
-//   foreignKey: "id",
-// });
-
-// db.ticket.belongsTo(db.history, {
-//   as: "histories",
-//   foreignKey: "id_ticket",
-// });
-
-// db.history.belongsTo(db.users, {
-//   as: "users",
-//   foreignKey: "id",
-// });
-
-// db.users.belongsTo(db.history, {
-//   as: "histories",
-//   foreignKey: "id",
-// });
-
+//RELATION USERBOOKING
+db.userbooking.belongsTo(db.users, {
+  as: "users",
+  foreignKey: "user_id",
+});
 module.exports = db;
