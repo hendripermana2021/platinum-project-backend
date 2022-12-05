@@ -10,7 +10,6 @@ import {
   getUsersBy,
   handleGetRoot,
 } from "../controllers/HandlerUsers.js";
-// import { uploadPictures } from "../controllers/HandlerFile.js";
 import {
   getTicket,
   createTicket,
@@ -19,6 +18,7 @@ import {
   getTicketById,
   getTicketQuery,
 } from "../controllers/HandlerTicket.js";
+import pkg from "../uploadImage/HandlerFile.js";
 import { verifyToken } from "../middleware/VerifyToken.js";
 import {
   createAirport,
@@ -62,6 +62,10 @@ import {
 import { BuyingTicket, getPayment } from "../controllers/HandlerPayment.js";
 const router = express.Router();
 const prefix = "/v1/api/";
+const { 
+  uploadPictures,
+  getListFiles,
+} = pkg;
 
 //ROUTES FOR USERS
 router.get(prefix, handleGetRoot);
@@ -73,6 +77,10 @@ router.delete(prefix + "logout", verifyToken, Logout);
 router.delete(prefix + "users/delete/:id", verifyToken, deleteUsers);
 router.put(prefix + "users/edit/:id", verifyToken, updateUsers);
 router.get(prefix + "whoami", verifyToken, whoAmI);
+
+//ROUTES FOR UPLOAD FILE
+router.post(prefix + "upload", uploadPictures);
+router.get(prefix + "profilepictures", getListFiles);
 
 //ROUTES FOR TICKETS
 router.get(prefix + "tickets", getTicket);
