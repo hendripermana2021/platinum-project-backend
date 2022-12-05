@@ -1,8 +1,8 @@
-const processFile = require("../middleware/upload");
+const processFile = require("./Upload.js");
 const { format } = require("util");
 const { Storage } = require("@google-cloud/storage");
 
-const storage = new Storage({ keyFilename: "binar-final-project-3318adfbfcd0.json" });
+const storage = new Storage({ keyFilename: "google-cloud-key.json" });
 const bucket = storage.bucket("platinum-project-backend");
 
 const uploadPictures = async (req, res) => {

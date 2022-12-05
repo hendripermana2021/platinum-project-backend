@@ -2,4 +2,5 @@ node_modules
 coverage
 junit.xml
 config
-binar-final-project-3318adfbfcd0.json
+config.json
+google-cloud-key.json
