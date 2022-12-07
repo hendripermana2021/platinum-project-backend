@@ -367,8 +367,8 @@ export const getUserBooking = async (req, res) => {
 
 export const actionBooking = async (req, res) => {
   // const { ticket_id_departure, ticket_id_return } = req.body;
-  const ticket_id_departure = req.body.ticket_id_departure;
-  const ticket_id_return = req.body.ticket_id_return;
+  const ticket_id_departure = req.body.ticket.ticket_id_departure;
+  const ticket_id_return = req.body.ticket.ticket_id_return;
   const passanger = req.body.passanger;
   const passangerBulk = await Passanger.bulkCreate(passanger);
 
