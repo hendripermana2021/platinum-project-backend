@@ -390,7 +390,6 @@ export const actionBooking = async (req, res) => {
     res.status(200).json({
       code: 200,
       msg: "data created",
-      data: { passangerBooking, booking, passangerBulk },
     });
   } catch (error) {}
 };
