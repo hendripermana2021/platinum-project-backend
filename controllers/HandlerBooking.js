@@ -392,9 +392,14 @@ export const actionBooking = async (req, res) => {
       user_id: req.user.userId,
       booking_id: booking.id,
     });
+
+    const payment = await Payment.create({
+      userBooking_id: userbooking.id,
+    });
     res.status(200).json({
       code: 200,
       msg: "data created",
+      data: { passangerBooking, passangerBulk, payment },
     });
   } catch (error) {}
 };

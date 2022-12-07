@@ -47,17 +47,17 @@ export const updatePassanger = async (req, res) => {
     });
   }
 
-  const { name, email, age, identityType, identityNumber, booking_id } =
+  const { firstname, lastname, email, age, identityType, identityNumber } =
     req.body;
   try {
     await Passanger.update(
       {
-        name,
+        firstname,
+        lastname,
         email,
         age,
         identityType,
         identityNumber,
-        booking_id,
       },
       {
         where: { id: id },
