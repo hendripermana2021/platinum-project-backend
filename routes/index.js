@@ -31,13 +31,12 @@ import {
 import { refreshToken } from "../controllers/RefreshToken.js";
 import {
   actionBooking,
-  createBooking,
-  deleteBooking,
   getBooking,
   getBookingBy,
   getBookingById,
   softDeleteBooking,
   getUserBooking,
+  isPaymentBooking,
 } from "../controllers/HandlerBooking.js";
 import {
   createWishlist,
@@ -100,9 +99,7 @@ router.get(prefix + "bookings", getBooking);
 router.get(prefix + "bookings/:search", getBookingBy);
 router.get(prefix + "bookings/byid/:id", getBookingById);
 router.get(prefix + "userbookings", verifyToken, getUserBooking);
-router.post(prefix + "bookings/create", verifyToken, createBooking);
 router.delete(prefix + "bookings/delete/:id", verifyToken, softDeleteBooking);
-router.delete(prefix + "bookings/deleted/:id", verifyToken, deleteBooking);
 
 //ROUTER FOR PASSANGERS
 router.get(prefix + "passanger", verifyToken, getPassanger);
@@ -125,7 +122,8 @@ router.delete(prefix + "flight/delete/:id", verifyToken, deleteFlight);
 router.put(prefix + "flight/edit/:id", verifyToken, updateFlight);
 
 //API FOR ACTION BUYER
-router.post(prefix + "booking/payment", verifyToken, actionBooking);
+router.post(prefix + "booking", verifyToken, actionBooking);
+router.get(prefix + "booking/payment/:id", verifyToken, isPaymentBooking);
 
 //API FOR TOKEN
 router.get(prefix + "token", refreshToken);
