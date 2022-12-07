@@ -9,7 +9,10 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      name: {
+      firstname: {
+        type: Sequelize.STRING
+      },
+      lastname: {
         type: Sequelize.STRING
       },
       email: {
@@ -23,9 +26,6 @@ module.exports = {
       },
       identityNumber: {
         type: Sequelize.STRING
-      },
-      booking_id: {
-        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,

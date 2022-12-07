@@ -387,6 +387,11 @@ export const actionBooking = async (req, res) => {
     const passangerBooking = await PassangerBooking.bulkCreate(
       passangerBookingData
     );
+
+    const userbooking = await UserBooking.create({
+      user_id: req.user.userId,
+      booking_id: booking.id,
+    });
     res.status(200).json({
       code: 200,
       msg: "data created",
