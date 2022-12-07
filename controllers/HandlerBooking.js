@@ -8,6 +8,7 @@ const UserBooking = db.userbooking;
 const User = db.users;
 const Passanger = db.passanger;
 const Payment = db.payment;
+const PassangerBooking = db.passangerbooking;
 export const getBooking = async (req, res) => {
   try {
     const booking = await Booking.findAll({
@@ -365,30 +366,31 @@ export const getUserBooking = async (req, res) => {
 };
 
 export const actionBooking = async (req, res) => {
+  // const { ticket_id_departure, ticket_id_return } = req.body;
+  const ticket_id_departure = req.body.ticket.ticket_id_departure;
+  const ticket_id_return = req.body.ticket.ticket_id_return;
+  const passanger = req.body.passanger;
+  const passangerBulk = await Passanger.bulkCreate(passanger);
+
   try {
-    const booking_id = req.query.booking_id;
-    const totalPrice = req.query.totalPrice;
-    const passanger = await Passanger.bulkCreate(req.body);
-
-    const userbooking = await UserBooking.create({
-      user_id: req.user.userId,
-      booking_id: booking_id,
+    const booking = await Booking.create({
+      ticket_id_departure: ticket_id_departure,
+      ticket_id_return: ticket_id_return,
+      isBooking: false,
     });
 
-    const payment = await Payment.create({
-      userBooking_id: userbooking.id,
-      totalPrice: totalPrice,
-      paymentType: "wallet",
-      isPayed: false,
-    });
+    const passangerBookingData = passangerBulk.map((data) => ({
+      idPassanger: data.id,
+      idBooking: booking.id,
+    }));
 
+    const passangerBooking = await PassangerBooking.bulkCreate(
+      passangerBookingData
+    );
     res.status(200).json({
       code: 200,
-      status: true,
-      msg: "Data has been created and save",
-      data: { passanger, userbooking, payment },
+      msg: "data created",
+      data: { passangerBooking, booking, passangerBulk },
     });
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };

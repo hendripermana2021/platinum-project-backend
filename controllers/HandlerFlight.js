@@ -4,6 +4,7 @@ import { Op } from "sequelize";
 const Flight = db.flight;
 const Airport = db.airport;
 const FlightType = db.flighttype;
+const Ticket = db.ticket;
 export const getFlight = async (req, res) => {
   try {
     const flight = await Flight.findAll({
@@ -92,15 +93,9 @@ export const createFlight = async (req, res) => {
     arrivalTime,
     flightType,
     planeId,
-    flight_id,
-    class_id,
-    price,
-    country,
-    passanger_ammount,
-    isroundtrip,
   } = req.body;
   try {
-    await Flight.create({
+    const flight = await Flight.create({
       departureAirport,
       arrivalAirport,
       departureDate,
@@ -108,29 +103,17 @@ export const createFlight = async (req, res) => {
       departureTime,
       arrivalTime,
       flightType,
+      planeId,
     });
 
-    await Ticket.create({
-      flight_id,
+    const ticket = await Ticket.create({
+      flight_id: flight.id,
       class_id,
       price,
       country,
-      passanger_ammount,
       isroundtrip,
     });
 
-    // const flight = await Flight.findAll({
-    //   where: {
-    //     departureAirport: departureAirport,
-    //     arrivalAirport: arrivalAirport,
-    //     departureDate: departureDate,
-    //     arrivalDate: arrivalDate,
-    //     departureTime: departureTime,
-    //     arrivalTime: arrivalTime,
-    //     flightType: flightType,
-    //     planeId: planeId,
-    //   },
-    // });
     res.status(200).json({
       code: 200,
       status: true,

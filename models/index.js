@@ -59,6 +59,10 @@ db.wishlist = require("../models/wishlist.js")(sequelize, Sequelize);
 db.plane = require("../models/plane.js")(sequelize, Sequelize);
 db.payment = require("../models/payment.js")(sequelize, Sequelize);
 db.history = require("../models/history.js")(sequelize, Sequelize);
+db.passangerbooking = require("../models/passangerbooking.js")(
+  sequelize,
+  Sequelize
+);
 
 //RELATION FOR USERS API
 db.role.hasMany(db.users, {
@@ -141,8 +145,13 @@ db.users.hasMany(db.wishlist, {
 });
 
 db.wishlist.belongsTo(db.ticket, {
-  as: "ticket",
-  foreignKey: "ticket_id",
+  as: "ticketDeparture",
+  foreignKey: "ticket_id_departure",
+});
+
+db.wishlist.belongsTo(db.ticket, {
+  as: "ticketReturn",
+  foreignKey: "ticket_id_return",
 });
 
 //RELATION FOR FLIGHT
