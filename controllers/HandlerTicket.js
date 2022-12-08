@@ -1,5 +1,4 @@
 import db from "../models/index.js";
-import { Op } from "sequelize";
 
 const Ticket = db.ticket;
 const Type = db.classtype;
@@ -8,6 +7,7 @@ const Airport = db.airport;
 const Booking = db.booking;
 const UserBooking = db.userbooking;
 const Plane = db.plane;
+const FlightType = db.flighttype;
 export const getTicket = async (req, res) => {
   try {
     const ticket = await Ticket.findAll({
@@ -30,8 +30,12 @@ export const getTicket = async (req, res) => {
               as: "ArrivalTerminal",
             },
             {
+              model: FlightType,
+              as: "flighttype",
+            },
+            {
               model: Plane,
-              as: "flight_plane",
+              as: "planename",
             },
           ],
         },
@@ -71,8 +75,12 @@ export const getTicketById = async (req, res) => {
               as: "ArrivalTerminal",
             },
             {
+              model: FlightType,
+              as: "flighttype",
+            },
+            {
               model: Plane,
-              as: "plane",
+              as: "planename",
             },
           ],
         },
@@ -110,16 +118,18 @@ export const getTicketQuery = async (req, res) => {
             {
               model: Airport,
               as: "DepartureTerminal",
-              where: {
-                code: departure,
-              },
             },
             {
               model: Airport,
               as: "ArrivalTerminal",
-              where: {
-                code: arrival,
-              },
+            },
+            {
+              model: FlightType,
+              as: "flighttype",
+            },
+            {
+              model: Plane,
+              as: "planename",
             },
           ],
         },

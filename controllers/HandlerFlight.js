@@ -142,7 +142,9 @@ export const createFlight = async (req, res) => {
     arrivalTime,
     flightType,
     planeId,
-  } = req.body;
+  } = req.body.flight;
+
+  const { class_id, price, country } = req.body.ticket;
   try {
     const flight = await Flight.create({
       departureAirport,
@@ -160,14 +162,14 @@ export const createFlight = async (req, res) => {
       class_id,
       price,
       country,
-      isroundtrip,
+      isRoundTrip: true,
     });
 
     res.status(200).json({
       code: 200,
       status: true,
       msg: "Added Flight Successfully",
-      data: flight,
+      data: { flight, ticket },
     });
   } catch (error) {
     console.log(error);
@@ -243,6 +245,12 @@ export const deleteFlight = async (req, res) => {
 
   await Flight.destroy({
     where: { id },
+  });
+
+  await Ticket.destroy({
+    where: {
+      flight_id: dataBefore.id,
+    },
   });
 
   return res.status(200).json({
