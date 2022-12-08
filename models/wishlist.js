@@ -15,7 +15,8 @@ module.exports = (sequelize, DataTypes) => {
   }
   Wishlist.init({
     user_id: DataTypes.INTEGER,
-    ticket_id: DataTypes.INTEGER,
+    ticket_id_departure: DataTypes.INTEGER,
+    ticket_id_return: DataTypes.INTEGER,
     isWishlist: DataTypes.BOOLEAN
   }, {
     sequelize,

@@ -19,7 +19,27 @@ export const getWishlist = async (req, res) => {
         },
         {
           model: Ticket,
-          as: "ticket",
+          as: "ticketDeparture",
+          include: [
+            {
+              model: Flight,
+              as: "flight",
+              include: [
+                {
+                  model: Airport,
+                  as: "DepartureTerminal",
+                },
+                {
+                  model: Airport,
+                  as: "ArrivalTerminal",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          model: Ticket,
+          as: "ticketReturn",
           include: [
             {
               model: Flight,
@@ -61,7 +81,27 @@ export const getWishlistbyid = async (req, res) => {
         },
         {
           model: Ticket,
-          as: "ticket",
+          as: "ticketDeparture",
+          include: [
+            {
+              model: Flight,
+              as: "flight",
+              include: [
+                {
+                  model: Airport,
+                  as: "DepartureTerminal",
+                },
+                {
+                  model: Airport,
+                  as: "ArrivalTerminal",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          model: Ticket,
+          as: "ticketReturn",
           include: [
             {
               model: Flight,
@@ -111,7 +151,27 @@ export const getWishlistby = async (req, res) => {
         },
         {
           model: Ticket,
-          as: "ticket",
+          as: "ticketDeparture",
+          include: [
+            {
+              model: Flight,
+              as: "flight",
+              include: [
+                {
+                  model: Airport,
+                  as: "DepartureTerminal",
+                },
+                {
+                  model: Airport,
+                  as: "ArrivalTerminal",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          model: Ticket,
+          as: "ticketReturn",
           include: [
             {
               model: Flight,
@@ -151,6 +211,7 @@ export const getWishlistby = async (req, res) => {
 };
 
 export const createWishlist = async (req, res) => {
+  const { ticket_id_departure, ticket_id_return } = req.body;
   try {
     let { id } = req.params;
     let ticket = await Ticket.findAll({
@@ -160,14 +221,17 @@ export const createWishlist = async (req, res) => {
     });
     let wishlist = Wishlist.create({
       user_id: req.user.userId,
-      ticket_id: ticket[0].id,
+      ticket_id_departure,
+      ticket_id_return,
       isWishlist: true,
     });
     res.status(200).json({
       status: true,
       msg: "Wishlist added",
     });
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const deleteWishlist = async (req, res) => {

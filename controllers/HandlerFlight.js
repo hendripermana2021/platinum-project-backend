@@ -4,6 +4,8 @@ import { Op } from "sequelize";
 const Flight = db.flight;
 const Airport = db.airport;
 const FlightType = db.flighttype;
+const Ticket = db.ticket;
+const Plane = db.plane;
 export const getFlight = async (req, res) => {
   try {
     const flight = await Flight.findAll({
@@ -20,6 +22,10 @@ export const getFlight = async (req, res) => {
           model: FlightType,
           as: "flighttype",
         },
+        {
+          model: Plane,
+          as: "planename",
+        },
       ],
     });
     res.status(200).json({
@@ -35,18 +41,17 @@ export const getFlight = async (req, res) => {
 
 export const getFlightBy = async (req, res) => {
   try {
-    const { search } = await req.params;
+    const { search } = req.params;
     let flight = await Flight.findAll({
-      where: {
-        [Op.or]: [
-          { id: { [Op.like]: `%` + search + `%` } },
-          { departureDate: { [Op.like]: `%` + search + `%` } },
-          { arrivalDate: { [Op.like]: `%` + search + `%` } },
-          { departureTime: { [Op.like]: `%` + search + `%` } },
-          { arrivalDate: { [Op.like]: `%` + search + `%` } },
-          { namePlane: { [Op.like]: `%` + search + `%` } },
-        ],
-      },
+      // where: {
+      //   [Op.or]: [
+      //     { id: { [Op.like]: `%` + search + `%` } },
+      //     { departureDate: { [Op.like]: `%` + search + `%` } },
+      //     { arrivalDate: { [Op.like]: `%` + search + `%` } },
+      //     { departureTime: { [Op.like]: `%` + search + `%` } },
+      //     { arrivalDate: { [Op.like]: `%` + search + `%` } },
+      //   ],
+      // },
       include: [
         {
           model: Airport,
@@ -59,6 +64,13 @@ export const getFlightBy = async (req, res) => {
         {
           model: FlightType,
           as: "flighttype",
+        },
+        {
+          model: Plane,
+          as: "planename",
+          where: {
+            [Op.or]: [{ namePlane: { [Op.like]: `%` + search + `%` } }],
+          },
         },
       ],
     });
@@ -82,6 +94,44 @@ export const getFlightBy = async (req, res) => {
   }
 };
 
+export const getFlightById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const flight = await Flight.findAll({
+      where: {
+        id: id,
+      },
+      include: [
+        {
+          model: Airport,
+          as: "DepartureTerminal",
+        },
+        {
+          model: Airport,
+          as: "ArrivalTerminal",
+        },
+        {
+          model: FlightType,
+          as: "flighttype",
+        },
+        {
+          model: Plane,
+          as: "planename",
+        },
+      ],
+    });
+
+    res.status(200).json({
+      code: 200,
+      status: true,
+      msg: "Flight Found",
+      data: flight,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const createFlight = async (req, res) => {
   const {
     departureAirport,
@@ -92,15 +142,11 @@ export const createFlight = async (req, res) => {
     arrivalTime,
     flightType,
     planeId,
-    flight_id,
-    class_id,
-    price,
-    country,
-    passanger_ammount,
-    isroundtrip,
-  } = req.body;
+  } = req.body.flight;
+
+  const { class_id, price, country } = req.body.ticket;
   try {
-    await Flight.create({
+    const flight = await Flight.create({
       departureAirport,
       arrivalAirport,
       departureDate,
@@ -108,34 +154,22 @@ export const createFlight = async (req, res) => {
       departureTime,
       arrivalTime,
       flightType,
+      planeId,
     });
 
-    await Ticket.create({
-      flight_id,
+    const ticket = await Ticket.create({
+      flight_id: flight.id,
       class_id,
       price,
       country,
-      passanger_ammount,
-      isroundtrip,
+      isRoundTrip: true,
     });
 
-    // const flight = await Flight.findAll({
-    //   where: {
-    //     departureAirport: departureAirport,
-    //     arrivalAirport: arrivalAirport,
-    //     departureDate: departureDate,
-    //     arrivalDate: arrivalDate,
-    //     departureTime: departureTime,
-    //     arrivalTime: arrivalTime,
-    //     flightType: flightType,
-    //     planeId: planeId,
-    //   },
-    // });
     res.status(200).json({
       code: 200,
       status: true,
       msg: "Added Flight Successfully",
-      data: flight,
+      data: { flight, ticket },
     });
   } catch (error) {
     console.log(error);
@@ -211,6 +245,12 @@ export const deleteFlight = async (req, res) => {
 
   await Flight.destroy({
     where: { id },
+  });
+
+  await Ticket.destroy({
+    where: {
+      flight_id: dataBefore.id,
+    },
   });
 
   return res.status(200).json({
