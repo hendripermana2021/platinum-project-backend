@@ -37,6 +37,7 @@ import {
   softDeleteBooking,
   getUserBooking,
   isPaymentBooking,
+  cancelBooking,
 } from "../controllers/HandlerBooking.js";
 import {
   createWishlist,
@@ -56,6 +57,7 @@ import {
   deleteFlight,
   getFlight,
   getFlightBy,
+  getFlightById,
   updateFlight,
 } from "../controllers/HandlerFlight.js";
 import { BuyingTicket, getPayment } from "../controllers/HandlerPayment.js";
@@ -98,32 +100,34 @@ router.post(prefix + "airports", verifyToken, createAirport);
 router.get(prefix + "bookings", getBooking);
 router.get(prefix + "bookings/:search", getBookingBy);
 router.get(prefix + "bookings/byid/:id", getBookingById);
-router.get(prefix + "userbookings", verifyToken, getUserBooking);
-router.delete(prefix + "bookings/delete/:id", verifyToken, softDeleteBooking);
+router.get(prefix + "userbookings", getUserBooking);
+router.delete(prefix + "bookings/delete/:id", softDeleteBooking);
 
 //ROUTER FOR PASSANGERS
-router.get(prefix + "passanger", verifyToken, getPassanger);
-router.get(prefix + "passanger/:id", verifyToken, getPassangerById);
-router.put(prefix + "passanger/edit/:id", verifyToken, updatePassanger);
-router.delete(prefix + "passanger/delete/:id", verifyToken, deletePassanger);
+router.get(prefix + "passanger", getPassanger);
+router.get(prefix + "passanger/:id", getPassangerById);
+router.put(prefix + "passanger/edit/:id", updatePassanger);
+router.delete(prefix + "passanger/delete/:id", deletePassanger);
 
 //ROUTES FOR WISHLIST
-router.get(prefix + "wishlists", verifyToken, getWishlist);
-router.get(prefix + "wishlists/:id", verifyToken, getWishlistbyid);
+router.get(prefix + "wishlists", getWishlist);
+router.get(prefix + "wishlists/:id", getWishlistbyid);
 router.get(prefix + "wishlists/name/:search", getWishlistby);
-router.post(prefix + "wishlists/create/:id", verifyToken, createWishlist);
-router.delete(prefix + "wishlists/delete/:id", verifyToken, deleteWishlist);
+router.post(prefix + "wishlists/create/:id", createWishlist);
+router.delete(prefix + "wishlists/delete/:id", deleteWishlist);
 
 //ROUTES FOR FLIGHT
-router.get(prefix + "flight", verifyToken, getFlight);
-router.get(prefix + "flight/:search", verifyToken, getFlightBy);
-router.post(prefix + "flight/create", verifyToken, createFlight);
-router.delete(prefix + "flight/delete/:id", verifyToken, deleteFlight);
-router.put(prefix + "flight/edit/:id", verifyToken, updateFlight);
+router.get(prefix + "flight", getFlight);
+router.get(prefix + "flight/:search", getFlightBy);
+router.get(prefix + "flight/byid/:id", getFlightById);
+router.post(prefix + "flight/create", createFlight);
+router.delete(prefix + "flight/delete/:id", deleteFlight);
+router.put(prefix + "flight/edit/:id", updateFlight);
 
 //API FOR ACTION BUYER
 router.post(prefix + "booking", verifyToken, actionBooking);
 router.get(prefix + "booking/payment/:id", verifyToken, isPaymentBooking);
+router.get(prefix + "cancel/booking/:id", verifyToken, cancelBooking);
 
 //API FOR TOKEN
 router.get(prefix + "token", refreshToken);
@@ -131,8 +135,5 @@ router.get(prefix + "token", refreshToken);
 //API FOR PAYMENT
 router.get(prefix + "payments", verifyToken, getPayment);
 router.put(prefix + "buytickets/:id", verifyToken, BuyingTicket);
-
-// // endpoint untuk tambah admin yang bisa hanya superadminc
-// router.post(prefix + "registrasi-admin", verifyToken, RegisterAdmin);
 
 export default router;

@@ -283,7 +283,9 @@ export const actionBooking = async (req, res) => {
       msg: "data created",
       data: { booking, passangerBooking, passangerBulk, userbooking, payment },
     });
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const isPaymentBooking = async (req, res) => {
@@ -332,7 +334,9 @@ export const isPaymentBooking = async (req, res) => {
       msg: "Payment Success",
       data: history,
     });
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const cancelBooking = async (req, res) => {
@@ -369,5 +373,7 @@ export const cancelBooking = async (req, res) => {
       status: true,
       msg: "Booking Canceled",
     });
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 };

@@ -229,7 +229,9 @@ export const createWishlist = async (req, res) => {
       status: true,
       msg: "Wishlist added",
     });
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const deleteWishlist = async (req, res) => {

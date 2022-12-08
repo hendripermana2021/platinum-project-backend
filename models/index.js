@@ -171,7 +171,7 @@ db.flight.belongsTo(db.flighttype, {
 });
 
 db.flight.belongsTo(db.plane, {
-  as: "flight_plane",
+  as: "planename",
   foreignKey: "planeId",
 });
 

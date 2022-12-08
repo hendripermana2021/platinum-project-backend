@@ -81,5 +81,7 @@ export const BuyingTicket = async (req, res) => {
       msg: "Ticket already Booked",
       data: { payment, history },
     });
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 };

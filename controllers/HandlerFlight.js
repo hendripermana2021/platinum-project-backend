@@ -5,6 +5,7 @@ const Flight = db.flight;
 const Airport = db.airport;
 const FlightType = db.flighttype;
 const Ticket = db.ticket;
+const Plane = db.plane;
 export const getFlight = async (req, res) => {
   try {
     const flight = await Flight.findAll({
@@ -21,6 +22,10 @@ export const getFlight = async (req, res) => {
           model: FlightType,
           as: "flighttype",
         },
+        {
+          model: Plane,
+          as: "planename",
+        },
       ],
     });
     res.status(200).json({
@@ -36,18 +41,17 @@ export const getFlight = async (req, res) => {
 
 export const getFlightBy = async (req, res) => {
   try {
-    const { search } = await req.params;
+    const { search } = req.params;
     let flight = await Flight.findAll({
-      where: {
-        [Op.or]: [
-          { id: { [Op.like]: `%` + search + `%` } },
-          { departureDate: { [Op.like]: `%` + search + `%` } },
-          { arrivalDate: { [Op.like]: `%` + search + `%` } },
-          { departureTime: { [Op.like]: `%` + search + `%` } },
-          { arrivalDate: { [Op.like]: `%` + search + `%` } },
-          { namePlane: { [Op.like]: `%` + search + `%` } },
-        ],
-      },
+      // where: {
+      //   [Op.or]: [
+      //     { id: { [Op.like]: `%` + search + `%` } },
+      //     { departureDate: { [Op.like]: `%` + search + `%` } },
+      //     { arrivalDate: { [Op.like]: `%` + search + `%` } },
+      //     { departureTime: { [Op.like]: `%` + search + `%` } },
+      //     { arrivalDate: { [Op.like]: `%` + search + `%` } },
+      //   ],
+      // },
       include: [
         {
           model: Airport,
@@ -60,6 +64,13 @@ export const getFlightBy = async (req, res) => {
         {
           model: FlightType,
           as: "flighttype",
+        },
+        {
+          model: Plane,
+          as: "planename",
+          where: {
+            [Op.or]: [{ namePlane: { [Op.like]: `%` + search + `%` } }],
+          },
         },
       ],
     });
@@ -76,6 +87,44 @@ export const getFlightBy = async (req, res) => {
       code: 200,
       status: true,
       msg: "data you searched Found",
+      data: flight,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getFlightById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const flight = await Flight.findAll({
+      where: {
+        id: id,
+      },
+      include: [
+        {
+          model: Airport,
+          as: "DepartureTerminal",
+        },
+        {
+          model: Airport,
+          as: "ArrivalTerminal",
+        },
+        {
+          model: FlightType,
+          as: "flighttype",
+        },
+        {
+          model: Plane,
+          as: "planename",
+        },
+      ],
+    });
+
+    res.status(200).json({
+      code: 200,
+      status: true,
+      msg: "Flight Found",
       data: flight,
     });
   } catch (error) {
