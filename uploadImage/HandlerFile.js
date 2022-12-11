@@ -40,15 +40,17 @@ const uploadPictures = async (req, res) => {
       } catch {
         return res.status(500).json({
           code: 500,
+          status: true,
           message: `Uploaded the file successfully: ${req.file.originalname}, but public access is denied!`,
-          url: publicUrl,
+          data: publicUrl,
         });
       }
 
       res.status(200).json({
         code: 200,
+        status: true,
         msg: "Uploaded the file successfully: " + req.file.originalname,
-        url: publicUrl,
+        data: publicUrl,
       });
     });
 
@@ -59,12 +61,14 @@ const uploadPictures = async (req, res) => {
     if (err.code == "LIMIT_FILE_SIZE") {
       return res.status(500).json({
         code: 500,
+        status: false,
         msg: "File size cannot be larger than 2MB!",
       });
     }
 
     res.status(500).send({
       code: 500,
+      status: false,
       msg: `Could not upload the file: ${req.file.originalname}. ${err}`,
     });
   }

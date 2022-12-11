@@ -98,12 +98,13 @@ export const Register = async (req, res) => {
     province,
     city,
   } = req.body;
-  if (password !== confPassword)
-    return res
-      .status(400)
-      .json({ 
-        success: false,
-        msg: "Password dan Confirm Password tidak cocok" });
+  if (password !== confPassword) {
+    return res.status(400).json({
+      code: 400, 
+      success: false,
+      msg: "Password dan Confirm Password tidak cocok",
+    });
+  }
 
   const users = await Users.findAll({
     where: {
@@ -139,7 +140,11 @@ export const Register = async (req, res) => {
       password: hashPassword,
     });
 
-    res.json({ msg: "Register Berhasil" });
+    res.status(200).json({
+      code: 200,
+      status: true, 
+      msg: "Register Berhasil",
+    });
   } catch (error) {
     console.log(error);
   }
@@ -153,7 +158,12 @@ export const Login = async (req, res) => {
       },
     });
     const match = await bcrypt.compare(req.body.password, user[0].password);
-    if (!match) return res.status(400).json({ msg: "Wrong Password" });
+    if (!match) {
+      return res.status(400).json({
+        code: 400,
+        status: false,
+        msg: "Wrong Password" });
+    }
     const userId = user[0].id;
     const firstname = user[0].firstname;
     const lastname = user[0].lastname;
@@ -252,6 +262,7 @@ export const whoAmI = async (req, res) => {
     const currentUser = req.user;
     res.status(200).json({
       code: 200,
+      status: true,
       msg: "This data Users Login Now",
       currentUser,
     });
