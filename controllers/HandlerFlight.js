@@ -3,7 +3,6 @@ import { Op } from "sequelize";
 
 const Flight = db.flight;
 const Airport = db.airport;
-const FlightType = db.flighttype;
 const Ticket = db.ticket;
 const Plane = db.plane;
 export const getFlight = async (req, res) => {
@@ -17,10 +16,6 @@ export const getFlight = async (req, res) => {
         {
           model: Airport,
           as: "ArrivalTerminal",
-        },
-        {
-          model: FlightType,
-          as: "flighttype",
         },
         {
           model: Plane,
@@ -43,15 +38,6 @@ export const getFlightBy = async (req, res) => {
   try {
     const { search } = req.params;
     let flight = await Flight.findAll({
-      // where: {
-      //   [Op.or]: [
-      //     { id: { [Op.like]: `%` + search + `%` } },
-      //     { departureDate: { [Op.like]: `%` + search + `%` } },
-      //     { arrivalDate: { [Op.like]: `%` + search + `%` } },
-      //     { departureTime: { [Op.like]: `%` + search + `%` } },
-      //     { arrivalDate: { [Op.like]: `%` + search + `%` } },
-      //   ],
-      // },
       include: [
         {
           model: Airport,
@@ -60,10 +46,6 @@ export const getFlightBy = async (req, res) => {
         {
           model: Airport,
           as: "ArrivalTerminal",
-        },
-        {
-          model: FlightType,
-          as: "flighttype",
         },
         {
           model: Plane,
@@ -111,10 +93,6 @@ export const getFlightById = async (req, res) => {
           as: "ArrivalTerminal",
         },
         {
-          model: FlightType,
-          as: "flighttype",
-        },
-        {
           model: Plane,
           as: "planename",
         },
@@ -140,7 +118,6 @@ export const createFlight = async (req, res) => {
     arrivalDate,
     departureTime,
     arrivalTime,
-    flightType,
     planeId,
   } = req.body.flight;
 
@@ -153,7 +130,6 @@ export const createFlight = async (req, res) => {
       arrivalDate,
       departureTime,
       arrivalTime,
-      flightType,
       planeId,
     });
 
@@ -191,6 +167,12 @@ export const updateFlight = async (req, res) => {
     });
   }
 
+  // const ticket = await Ticket.findOne({
+  //   where: {
+  //     flight_id: parsedDataProfile.id,
+  //   },
+  // });
+
   const {
     departureAirport,
     arrivalAirport,
@@ -198,9 +180,11 @@ export const updateFlight = async (req, res) => {
     arrivalDate,
     departureTime,
     arrivalTime,
-    flightType,
-    planeName,
-  } = req.body;
+    planeId,
+  } = req.body.flight;
+
+  const { class_id, price, country } = req.body.ticket;
+
   try {
     await Flight.update(
       {
@@ -210,11 +194,21 @@ export const updateFlight = async (req, res) => {
         arrivalDate,
         departureTime,
         arrivalTime,
-        flightType,
-        planeName,
+        planeId,
       },
       {
         where: { id: id },
+      }
+    );
+
+    await Ticket.update(
+      {
+        class_id,
+        price,
+        country,
+      },
+      {
+        where: { flight_id: parsedDataProfile.id },
       }
     );
     return res.status(200).json({
@@ -249,7 +243,7 @@ export const deleteFlight = async (req, res) => {
 
   await Ticket.destroy({
     where: {
-      flight_id: dataBefore.id,
+      flight_id: parsedDataProfile.id,
     },
   });
 

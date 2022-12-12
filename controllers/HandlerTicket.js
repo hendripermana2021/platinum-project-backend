@@ -7,7 +7,6 @@ const Airport = db.airport;
 const Booking = db.booking;
 const UserBooking = db.userbooking;
 const Plane = db.plane;
-const FlightType = db.flighttype;
 export const getTicket = async (req, res) => {
   try {
     const ticket = await Ticket.findAll({
@@ -28,10 +27,6 @@ export const getTicket = async (req, res) => {
             {
               model: Airport,
               as: "ArrivalTerminal",
-            },
-            {
-              model: FlightType,
-              as: "flighttype",
             },
             {
               model: Plane,
@@ -73,10 +68,6 @@ export const getTicketById = async (req, res) => {
             {
               model: Airport,
               as: "ArrivalTerminal",
-            },
-            {
-              model: FlightType,
-              as: "flighttype",
             },
             {
               model: Plane,
@@ -122,10 +113,6 @@ export const getTicketQuery = async (req, res) => {
             {
               model: Airport,
               as: "ArrivalTerminal",
-            },
-            {
-              model: FlightType,
-              as: "flighttype",
             },
             {
               model: Plane,

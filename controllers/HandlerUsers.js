@@ -99,11 +99,10 @@ export const Register = async (req, res) => {
     city,
   } = req.body;
   if (password !== confPassword)
-    return res
-      .status(400)
-      .json({ 
-        success: false,
-        msg: "Password dan Confirm Password tidak cocok" });
+    return res.status(400).json({
+      success: false,
+      msg: "Password dan Confirm Password tidak cocok",
+    });
 
   const users = await Users.findAll({
     where: {

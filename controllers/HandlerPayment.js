@@ -4,34 +4,35 @@ const Payment = db.payment;
 const UserBooking = db.userbooking;
 const Users = db.users;
 const History = db.history;
+const Booking = db.booking;
+const PassangerBooking = db.passangerbooking;
+const Passanger = db.passanger;
+const Wallet = db.wallet;
+const Ticket = db.ticket;
+const sequelize = db.sequelize;
+import { QueryTypes } from "sequelize";
 
 export const getPayment = async (req, res) => {
   try {
-    const payment = await Payment.findAll({
-      where: {
-        isPayed: false,
-      },
-      include: [
-        {
-          model: UserBooking,
-          as: "usersPayment",
-          where: {
-            user_id: req.user.userId,
-          },
-          include: [
-            {
-              model: Users,
-              as: "users",
-            },
-          ],
-        },
-      ],
+    const getDataByUserId = req.user.userId;
+    const sql = `SELECT  FROM userbookings ub JOIN payments p on ub.id = p.userBooking_id JOIN bookings b on ub.booking_id = b.id JOIN tickets t on b.ticket_id_departure = t.id JOIN flights f on t.flight_id = f.id WHERE p.isPayed = false AND user_id = ${getDataByUserId}`;
+    const replacements = {};
+    const payments = await sequelize.query(sql, {
+      replacements,
+      type: QueryTypes.SELECT,
+      raw: true,
     });
+    console.log(payments);
+
+    let paymentParsedData = JSON.parse(JSON.stringify(payments));
+
     res.status(200).json({
       code: 200,
       status: true,
       msg: "This Payment you have ",
-      data: payment,
+      data: {
+        paymentParsedData,
+      },
     });
   } catch (error) {
     console.log(error);
@@ -80,6 +81,76 @@ export const BuyingTicket = async (req, res) => {
       status: true,
       msg: "Ticket already Booked",
       data: { payment, history },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const isPaymentBooking = async (req, res) => {
+  const { id } = req.params;
+  const wallet = req.body.wallet;
+
+  try {
+    const payment = await Payment.findOne({
+      where: {
+        id: id,
+      },
+      include: [
+        {
+          model: UserBooking,
+          as: "usersPayment",
+          where: {
+            user_id: req.user.userId,
+          },
+        },
+      ],
+    });
+
+    const paymentMutual = JSON.parse(JSON.stringify(payment));
+
+    if (paymentMutual == 0) {
+      res.status(400).json({
+        code: 400,
+        status: false,
+        msg: "You Dont have Payment Ticket",
+      });
+    }
+
+    if (paymentMutual.totalPrice >= wallet) {
+      res.status(400).json({
+        code: 400,
+        status: false,
+        msg: "Wallet is not Enough please Top Up",
+      });
+    }
+
+    let paymentResult = wallet - paymentMutual.totalPrice;
+
+    const walletView = await Wallet.update(
+      {
+        balance: paymentResult,
+      },
+      {
+        where: { user_id: req.user.userId },
+      }
+    );
+
+    const history = await History.create({
+      userBooking_id: paymentMutual.userBooking_id,
+      payment_id: paymentMutual.id,
+      isHistory: true,
+    });
+
+    // await Payment.destroy({
+    //   where: { id },
+    // });\
+
+    res.status(200).json({
+      code: 200,
+      status: true,
+      msg: "Payment Success",
+      data: { payment, history, walletView },
     });
   } catch (error) {
     console.log(error);
