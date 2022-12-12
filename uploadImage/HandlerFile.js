@@ -10,7 +10,11 @@ const uploadPictures = async (req, res) => {
     await processFile(req, res);
 
     if (!req.file) {
-      return res.status(400).send({ message: "Please upload a file!" });
+      return res.status(400).json({
+        code: 400,
+        status: false,
+        msg: "Please upload a file!",
+      });
     }
 
     const blob = bucket.file(req.file.originalname);
@@ -19,26 +23,35 @@ const uploadPictures = async (req, res) => {
     });
 
     blobStream.on("error", (err) => {
-      res.status(500).send({ message: err.message });
+      res.status(500).json({
+        code: 500,
+        status: false,
+        message: err.message,
+      });
     });
 
     blobStream.on("finish", async (data) => {
+      let fileName = blob.name;
       const publicUrl = format(
-        `https://storage.googleapis.com/${bucket.name}/${blob.name}`
+        `https://storage.googleapis.com/${bucket.name}/${fileName.replace(/ /g,"%20")}`
       );
 
       try {
         await bucket.file(req.file.originalname).makePublic();
       } catch {
-        return res.status(500).send({
-          message: `Uploaded the file successfully: ${req.file.originalname}, but public access is denied!`,
-          url: publicUrl,
+        return res.status(200).json({
+          code: 200,
+          status: true,
+          message: "Uploaded the file successfully: " + req.file.originalname,
+          data: publicUrl,
         });
       }
 
-      res.status(200).send({
-        message: "Uploaded the file successfully: " + req.file.originalname,
-        url: publicUrl,
+      res.status(200).json({
+        code: 200,
+        status: true,
+        msg: "Uploaded the file successfully: " + req.file.originalname,
+        data: publicUrl,
       });
     });
 
@@ -47,13 +60,17 @@ const uploadPictures = async (req, res) => {
     console.log(err);
 
     if (err.code == "LIMIT_FILE_SIZE") {
-      return res.status(500).send({
-        message: "File size cannot be larger than 2MB!",
+      return res.status(500).json({
+        code: 500,
+        status: false,
+        msg: "File size cannot be larger than 2MB!",
       });
     }
 
     res.status(500).send({
-      message: `Could not upload the file: ${req.file.originalname}. ${err}`,
+      code: 500,
+      status: false,
+      msg: `Could not upload the file: ${req.file.originalname}. ${err}`,
     });
   }
 };
@@ -70,12 +87,13 @@ const getListFiles = async (req, res) => {
       });
     });
 
-    res.status(200).send(fileInfos);
+    res.status(200).json(fileInfos);
   } catch (err) {
     console.log(err);
 
-    res.status(500).send({
-      message: "Unable to read list of files!",
+    res.status(500).json({
+      code: 500,
+      msg: "Unable to read list of files!",
     });
   }
 };
@@ -86,7 +104,8 @@ const download = async (req, res) => {
     res.redirect(metaData.mediaLink);
   } catch (err) {
     res.status(500).send({
-      message: "Could not download the file. " + err,
+      code: 500,
+      msg: "Could not download the file. " + err,
     });
   }
 };
