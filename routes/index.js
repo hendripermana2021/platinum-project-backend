@@ -110,7 +110,7 @@ router.put(prefix + "passanger/edit/:id", updatePassanger);
 router.delete(prefix + "passanger/delete/:id", deletePassanger);
 
 //ROUTES FOR WISHLIST
-router.get(prefix + "wishlists", getWishlist);
+router.get(prefix + "wishlists", verifyToken, getWishlist);
 router.get(prefix + "wishlists/:id", getWishlistbyid);
 router.get(prefix + "wishlists/name/:search", getWishlistby);
 router.post(prefix + "wishlists/create/:id", createWishlist);
