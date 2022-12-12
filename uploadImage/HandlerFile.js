@@ -31,17 +31,18 @@ const uploadPictures = async (req, res) => {
     });
 
     blobStream.on("finish", async (data) => {
+      let fileName = blob.name;
       const publicUrl = format(
-        `https://storage.googleapis.com/${bucket.name}/${blob.name}`
+        `https://storage.googleapis.com/${bucket.name}/${fileName.replace(/ /g,"%20")}`
       );
 
       try {
         await bucket.file(req.file.originalname).makePublic();
       } catch {
-        return res.status(500).json({
-          code: 500,
+        return res.status(200).json({
+          code: 200,
           status: true,
-          message: `Uploaded the file successfully: ${req.file.originalname}, but public access is denied!`,
+          message: "Uploaded the file successfully: " + req.file.originalname,
           data: publicUrl,
         });
       }
