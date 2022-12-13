@@ -227,19 +227,30 @@ export const Login = async (req, res) => {
       accessToken,
     });
   } catch (error) {
-    res.status(404).json({ msg: "Email tidak ditemukan" });
+    res.status(404).json({ 
+      code: 404,
+      status: false,
+      msg: "Email tidak ditemukan" });
   }
 };
 
 export const Logout = async (req, res) => {
   const refreshToken = req.cookies.refreshToken;
-  if (!refreshToken) return res.sendStatus(204);
+  if (!refreshToken) return res.sendStatus(204).json({
+    code: 204,
+    status: false,
+    msg: "User Has Been Log Out or User Not Found",
+  })
   const user = await Users.findAll({
     where: {
       refresh_token: refreshToken,
     },
   });
-  if (!user[0]) return res.sendStatus(204);
+  if (!user[0]) return res.sendStatus(204).json({
+    code: 204,
+    status: false,
+    msg: "User Has Been Log Out or User Not Found",
+  })
   const userId = user[0].id;
   await Users.update(
     { refresh_token: null },
