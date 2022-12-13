@@ -2,7 +2,7 @@ import express from "express";
 import {
   getUsers,
   Register,
-  Login,
+  LoginUsers,
   Logout,
   whoAmI,
   deleteUsers,
@@ -73,7 +73,7 @@ router.get(prefix, handleGetRoot);
 router.get(prefix + "users", getUsers);
 router.get(prefix + "users/:search", getUsersBy);
 router.post(prefix + "register", Register);
-router.post(prefix + "login", Login);
+router.post(prefix + "login", LoginUsers);
 router.delete(prefix + "logout", verifyToken, Logout);
 router.delete(prefix + "users/delete/:id", verifyToken, deleteUsers);
 router.put(prefix + "users/edit/:id", verifyToken, updateUsers);

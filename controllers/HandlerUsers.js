@@ -148,7 +148,7 @@ export const Register = async (req, res) => {
   }
 };
 
-export const Login = async (req, res) => {
+export const LoginUsers = async (req, res) => {
   try {
     const user = await Users.findAll({
       where: {
