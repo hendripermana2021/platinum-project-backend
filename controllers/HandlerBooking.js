@@ -4,13 +4,15 @@ import { Op } from "sequelize";
 const Booking = db.booking;
 const Ticket = db.ticket;
 const Type = db.classtype;
+const Flight = db.flight;
 const UserBooking = db.userbooking;
-const User = db.users;
+const Users = db.users;
 const Passanger = db.passanger;
 const Payment = db.payment;
 const PassangerBooking = db.passangerbooking;
 const History = db.history;
 const Wallet = db.wallet;
+const Plane = db.plane;
 export const getBooking = async (req, res) => {
   try {
     const booking = await Booking.findAll({
@@ -19,6 +21,16 @@ export const getBooking = async (req, res) => {
           model: Ticket,
           as: "ticketDeparture",
           include: [
+            {
+              model: Flight,
+              as: "flight",
+              include: [
+                {
+                  model: Plane,
+                  as: "planename",
+                },
+              ],
+            },
             {
               model: Type,
               as: "class",
@@ -30,14 +42,24 @@ export const getBooking = async (req, res) => {
           as: "ticketReturn",
           include: [
             {
+              model: Flight,
+              as: "flight",
+              include: [
+                {
+                  model: Plane,
+                  as: "planename",
+                },
+              ],
+            },
+            {
               model: Type,
               as: "class",
             },
           ],
         },
         {
-          model: Passanger,
-          as: "passanger",
+          model: PassangerBooking,
+          as: "passangerBooking",
         },
       ],
     });
@@ -85,8 +107,8 @@ export const getBookingBy = async (req, res) => {
           ],
         },
         {
-          model: Passanger,
-          as: "passanger",
+          model: PassangerBooking,
+          as: "passangerBooking",
         },
       ],
       where: {
@@ -138,8 +160,14 @@ export const getBookingById = async (req, res) => {
           ],
         },
         {
-          model: Passanger,
-          as: "passanger",
+          model: PassangerBooking,
+          as: "passangerBooking",
+          include: [
+            {
+              model: Passanger,
+              as: "passanger",
+            },
+          ],
         },
       ],
     });
@@ -202,31 +230,17 @@ export const getUserBooking = async (req, res) => {
       attributes: ["user_id", "booking_id"],
       include: [
         {
-          model: User,
-          as: "user",
-          attributes: ["user_id", "firstname", "lastname"],
+          model: Users,
+          as: "users",
+          attributes: ["id", "firstname", "lastname"],
         },
         {
           model: Booking,
           as: "booking",
-          attributes: ["ticket_id", "passanger_id", "isBooking"],
           include: [
             {
               model: Ticket,
-              as: "ticket",
-              attributes: [
-                "flight_id",
-                "class_id",
-                "price",
-                "country",
-                "passanger_ammount",
-              ],
-              include: [
-                {
-                  model: Type,
-                  as: "class",
-                },
-              ],
+              as: "ticketDeparture",
             },
           ],
         },
@@ -288,57 +302,6 @@ export const actionBooking = async (req, res) => {
   }
 };
 
-export const isPaymentBooking = async (req, res) => {
-  const { id } = req.params;
-  const wallet = req.body.wallet;
-
-  try {
-    const payment = await Payment.findAll({
-      where: {
-        id: id,
-      },
-    });
-
-    if (Number(wallet) < Number(payment.totalPrice)) {
-      res.status(400).json({
-        code: 400,
-        status: false,
-        msg: "Wallet is not Enough please Top Up",
-      });
-    }
-
-    let paymentValidate = Number(payment.totalPrice) - Number(wallet);
-
-    await Wallet.update(
-      {
-        balance: paymentValidate,
-      },
-      {
-        where: { user_id: req.user.userId },
-      }
-    );
-
-    const history = await History.create({
-      userBooking_id: payment.userBooking_id,
-      payment_id: payment.id,
-      isHistory: true,
-    });
-
-    await Payment.destroy({
-      where: { id },
-    });
-
-    res.status(200).json({
-      code: 200,
-      status: true,
-      msg: "Payment Success",
-      data: history,
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 export const cancelBooking = async (req, res) => {
   const { id } = req.params;
   try {
@@ -346,32 +309,46 @@ export const cancelBooking = async (req, res) => {
       where: {
         id: id,
       },
+      include: [
+        {
+          model: UserBooking,
+          as: "usersPayment",
+          where: {
+            user_id: req.user.userId,
+          },
+          include: [
+            {
+              model: Users,
+              as: "users",
+            },
+            {
+              model: Booking,
+              as: "booking",
+              include: [
+                {
+                  model: PassangerBooking,
+                  as: "passangerBooking",
+                  include: [
+                    {
+                      model: Passanger,
+                      as: "passangerId",
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
     });
 
-    await Payment.destroy({
-      where: { id },
-    });
-
-    const userbooking = await UserBooking.destroy({
-      where: { id: payment.userBooking_id },
-    });
-
-    const booking = await Booking.destroy({
-      where: { id: userbooking.booking_id },
-    });
-
-    const passangerbooking = await PassangerBooking.destroy({
-      where: { id: booking.idBooking },
-    });
-
-    const passanger = await Passanger.destroy({
-      where: { id: passangerbooking.idPassanger },
-    });
+    const history = await History.create({});
 
     res.status(200).json({
       code: 200,
       status: true,
       msg: "Booking Canceled",
+      data: result,
     });
   } catch (error) {
     console.log(error);

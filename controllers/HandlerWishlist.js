@@ -10,7 +10,7 @@ export const getWishlist = async (req, res) => {
   try {
     const wishlist = await Wishlist.findAll({
       where: {
-        user_id: req.user.userId,
+        user_id: 1,
       },
       include: [
         {
@@ -213,12 +213,6 @@ export const getWishlistby = async (req, res) => {
 export const createWishlist = async (req, res) => {
   const { ticket_id_departure, ticket_id_return } = req.body;
   try {
-    let { id } = req.params;
-    let ticket = await Ticket.findAll({
-      where: {
-        id: id,
-      },
-    });
     let wishlist = Wishlist.create({
       user_id: req.user.userId,
       ticket_id_departure,
@@ -226,6 +220,7 @@ export const createWishlist = async (req, res) => {
       isWishlist: true,
     });
     res.status(200).json({
+      code: 200,
       status: true,
       msg: "Wishlist added",
     });
@@ -235,7 +230,7 @@ export const createWishlist = async (req, res) => {
 };
 
 export const deleteWishlist = async (req, res) => {
-  const wishlist = await Wishlist.findAll();
+  await Wishlist.findAll();
   const { id } = req.params;
   const dataBefore = await Wishlist.findOne({
     where: { id: id },

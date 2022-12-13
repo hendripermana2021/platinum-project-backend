@@ -98,13 +98,11 @@ export const Register = async (req, res) => {
     province,
     city,
   } = req.body;
-  if (password !== confPassword) {
+  if (password !== confPassword)
     return res.status(400).json({
-      code: 400, 
       success: false,
       msg: "Password dan Confirm Password tidak cocok",
     });
-  }
 
   const users = await Users.findAll({
     where: {
@@ -142,7 +140,7 @@ export const Register = async (req, res) => {
 
     res.status(200).json({
       code: 200,
-      status: true, 
+      status: true,
       msg: "Register Berhasil",
     });
   } catch (error) {
@@ -150,7 +148,7 @@ export const Register = async (req, res) => {
   }
 };
 
-export const Login = async (req, res) => {
+export const LoginUsers = async (req, res) => {
   try {
     const user = await Users.findAll({
       where: {
@@ -162,7 +160,8 @@ export const Login = async (req, res) => {
       return res.status(400).json({
         code: 400,
         status: false,
-        msg: "Wrong Password" });
+        msg: "Wrong Password",
+      });
     }
     const userId = user[0].id;
     const firstname = user[0].firstname;

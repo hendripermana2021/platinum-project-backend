@@ -2,7 +2,7 @@ import express from "express";
 import {
   getUsers,
   Register,
-  Login,
+  LoginUsers,
   Logout,
   whoAmI,
   deleteUsers,
@@ -36,7 +36,6 @@ import {
   getBookingById,
   softDeleteBooking,
   getUserBooking,
-  isPaymentBooking,
   cancelBooking,
 } from "../controllers/HandlerBooking.js";
 import {
@@ -60,7 +59,11 @@ import {
   getFlightById,
   updateFlight,
 } from "../controllers/HandlerFlight.js";
-import { BuyingTicket, getPayment } from "../controllers/HandlerPayment.js";
+import {
+  BuyingTicket,
+  getPayment,
+  isPaymentBooking,
+} from "../controllers/HandlerPayment.js";
 const router = express.Router();
 const prefix = "/v1/api/";
 const { uploadPictures, getListFiles } = pkg;
@@ -70,7 +73,7 @@ router.get(prefix, handleGetRoot);
 router.get(prefix + "users", getUsers);
 router.get(prefix + "users/:search", getUsersBy);
 router.post(prefix + "register", Register);
-router.post(prefix + "login", Login);
+router.post(prefix + "login", LoginUsers);
 router.delete(prefix + "logout", verifyToken, Logout);
 router.delete(prefix + "users/delete/:id", verifyToken, deleteUsers);
 router.put(prefix + "users/edit/:id", verifyToken, updateUsers);
@@ -98,7 +101,7 @@ router.post(prefix + "airports", verifyToken, createAirport);
 
 //ROUTES FOR BOOKING
 router.get(prefix + "bookings", getBooking);
-router.get(prefix + "bookings/:search", getBookingBy);
+// router.get(prefix + "bookings/:search", getBookingBy);
 router.get(prefix + "bookings/byid/:id", getBookingById);
 router.get(prefix + "userbookings", getUserBooking);
 router.delete(prefix + "bookings/delete/:id", softDeleteBooking);
@@ -112,8 +115,8 @@ router.delete(prefix + "passanger/delete/:id", deletePassanger);
 //ROUTES FOR WISHLIST
 router.get(prefix + "wishlists", verifyToken, getWishlist);
 router.get(prefix + "wishlists/:id", getWishlistbyid);
-router.get(prefix + "wishlists/name/:search", getWishlistby);
-router.post(prefix + "wishlists/create/:id", createWishlist);
+// router.get(prefix + "wishlists/name/:search", getWishlistby);
+router.post(prefix + "wishlists/create", verifyToken, createWishlist);
 router.delete(prefix + "wishlists/delete/:id", deleteWishlist);
 
 //ROUTES FOR FLIGHT
@@ -127,13 +130,12 @@ router.put(prefix + "flight/edit/:id", updateFlight);
 //API FOR ACTION BUYER
 router.post(prefix + "booking", verifyToken, actionBooking);
 router.get(prefix + "booking/payment/:id", verifyToken, isPaymentBooking);
-router.get(prefix + "cancel/booking/:id", verifyToken, cancelBooking);
+router.get(prefix + "cancel/booking/:id", cancelBooking);
 
 //API FOR TOKEN
 router.get(prefix + "token", refreshToken);
 
 //API FOR PAYMENT
 router.get(prefix + "payments", verifyToken, getPayment);
-router.put(prefix + "buytickets/:id", verifyToken, BuyingTicket);
 
 export default router;
