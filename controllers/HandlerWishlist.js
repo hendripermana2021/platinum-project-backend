@@ -59,6 +59,15 @@ export const getWishlist = async (req, res) => {
         },
       ],
     });
+
+    if (wishlist == "") {
+      return res.status(400).json({
+        code: 400,
+        status: false,
+        msg: "Wishlist Doesn't Existing",
+      });
+    }
+
     res.status(200).json({
       code: 200,
       status: true,
@@ -73,7 +82,7 @@ export const getWishlist = async (req, res) => {
 export const getWishlistbyid = async (req, res) => {
   try {
     const wishlist = await Wishlist.findAll({
-      where: { id: req.params.id },
+      where: { id: req.params.id, user_id: req.user.userId },
       include: [
         {
           model: Users,

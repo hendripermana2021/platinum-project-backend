@@ -114,7 +114,7 @@ router.delete(prefix + "passanger/delete/:id", deletePassanger);
 
 //ROUTES FOR WISHLIST
 router.get(prefix + "wishlists", verifyToken, getWishlist);
-router.get(prefix + "wishlists/:id", getWishlistbyid);
+router.get(prefix + "wishlists/:id", verifyToken, getWishlistbyid);
 // router.get(prefix + "wishlists/name/:search", getWishlistby);
 router.post(prefix + "wishlists/create", verifyToken, createWishlist);
 router.delete(prefix + "wishlists/delete/:id", deleteWishlist);
