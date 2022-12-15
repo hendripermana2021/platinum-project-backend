@@ -313,7 +313,7 @@ export const deleteUsers = async (req, res) => {
 };
 
 export const updateUsers = async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.user.userId;
   const dataBeforeDelete = await Users.findOne({
     where: { id: id },
   });
