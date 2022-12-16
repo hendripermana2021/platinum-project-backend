@@ -64,6 +64,7 @@ import {
   getPayment,
   isPaymentBooking,
 } from "../controllers/HandlerPayment.js";
+import { getBookingbyUsersId } from "../controllers/HandlerUserBooking.js";
 const router = express.Router();
 const prefix = "/v1/api/";
 const { uploadPictures, getListFiles } = pkg;
@@ -100,7 +101,8 @@ router.delete(prefix + "airports/delete/:id", verifyToken, deleteAirport);
 router.post(prefix + "airports", verifyToken, createAirport);
 
 //ROUTES FOR BOOKING
-router.get(prefix + "bookings", getBooking);
+router.get(prefix + "bookings", verifyToken, getBookingbyUsersId);
+
 // router.get(prefix + "bookings/:search", getBookingBy);
 router.get(prefix + "bookings/byid/:id", getBookingById);
 router.get(prefix + "userbookings", getUserBooking);

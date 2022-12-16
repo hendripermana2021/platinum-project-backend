@@ -94,7 +94,6 @@ export const getTicketQuery = async (req, res) => {
     let departure = req.query.departure;
     let datedeparture = req.query.datedeparture;
     let datearrival = req.query.datearrival;
-    let totalPassanger = req.query.totalPassanger;
     let ticket = await Ticket.findAll({
       include: [
         {
@@ -125,10 +124,14 @@ export const getTicketQuery = async (req, res) => {
 
     const result = [];
     const departureDate = new Date(datedeparture);
+    const arrivalDate = new Date(datearrival);
     for (let i = 0; i < ticket.length; i++) {
       if (
         ticket[i].flight !== null &&
-        ticket[i].flight.departureDate >= departureDate
+        ticket[i].flight.departureDate >= departureDate &&
+        ticket[i].flight.arrivalDate >= arrivalDate &&
+        ticket[i].flight.DepartureTerminal.code == departure &&
+        ticket[i].flight.ArrivalTerminal.code == arrival
       )
         result.push(ticket[i]);
     }
