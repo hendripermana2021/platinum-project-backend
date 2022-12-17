@@ -76,7 +76,7 @@ router.post(prefix + "register", Register);
 router.post(prefix + "login", LoginUsers);
 router.delete(prefix + "logout", verifyToken, Logout);
 router.delete(prefix + "users/delete/:id", verifyToken, deleteUsers);
-router.put(prefix + "users/edit/:id", verifyToken, updateUsers);
+router.put(prefix + "users/edit", verifyToken, updateUsers);
 router.get(prefix + "whoami", verifyToken, whoAmI);
 
 //ROUTES FOR UPLOAD FILE
