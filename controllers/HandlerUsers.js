@@ -82,6 +82,45 @@ export const getUsersBy = async (req, res) => {
   }
 };
 
+export const getUsersById = async (req, res) => {
+  const { id } = req.user.userId;
+  try {
+    const users = await Users.findAll({
+      where: {
+        id:id,
+      },
+      attributes: [
+        "id",
+        "firstname",
+        "lastname",
+        "gender",
+        "email",
+        "password",
+      ],
+      include: [
+        {
+          model: Role,
+          as: "roles",
+          attributes: ["roleName"],
+        },
+        {
+          model: Address,
+          as: "address",
+          attributes: ["homeAddress", "province", "city"],
+        },
+      ],
+    });
+    res.status(200).json({
+      code: 200,
+      status: true,
+      msg: "data you searched Found",
+      data: users,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const Register = async (req, res) => {
   const {
     email,
@@ -312,8 +351,75 @@ export const deleteUsers = async (req, res) => {
   });
 };
 
-export const updateUsers = async (req, res) => {
+export const updateProfile = async (req, res) => {
   const { id } = req.user.userId;
+  const dataBeforeDelete = await Users.findOne({
+    where: { id: id },
+  });
+  const parsedDataProfile = JSON.parse(JSON.stringify(dataBeforeDelete));
+
+  if (!parsedDataProfile) {
+    return res.status(400).json({
+      code: 400,
+      status: false,
+      msg: "Users doesn't exist or has been deleted!",
+    });
+  }
+
+  const {
+    email,
+    firstname,
+    lastname,
+    gender,
+    phone,
+    birthdate,
+    postalcode,
+    pictures,
+    homeAddress,
+    country,
+    province,
+    city,
+  } = req.body;
+  try {
+    await Users.update(
+      {
+        email,
+        firstname,
+        lastname,
+        gender,
+        phone,
+        birthdate,
+        postalcode,
+        pictures,
+      },
+      {
+        where: { id: id },
+      }
+    );
+    await Address.update(
+      {
+        id: id,
+        homeAddress,
+        country,
+        province,
+        city,
+      },
+      {
+        where: { id: id },
+      }
+    );
+    return res.status(200).json({
+      code: 200,
+      status: true,
+      msg: "Users Success Updated",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const updateUsers = async (req, res) => {
+  const { id } = req.params.id;
   const dataBeforeDelete = await Users.findOne({
     where: { id: id },
   });
