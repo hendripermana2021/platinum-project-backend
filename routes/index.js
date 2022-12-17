@@ -7,7 +7,9 @@ import {
   whoAmI,
   deleteUsers,
   updateUsers,
+  updateProfile,
   getUsersBy,
+  getUsersById,
   handleGetRoot,
 } from "../controllers/HandlerUsers.js";
 import {
@@ -73,11 +75,13 @@ const { uploadPictures, getListFiles } = pkg;
 router.get(prefix, handleGetRoot);
 router.get(prefix + "users", getUsers);
 router.get(prefix + "users/:search", getUsersBy);
+router.get(prefix + "users/:id", verifyToken, getUsersById);
 router.post(prefix + "register", Register);
 router.post(prefix + "login", LoginUsers);
 router.delete(prefix + "logout", verifyToken, Logout);
 router.delete(prefix + "users/delete/:id", verifyToken, deleteUsers);
 router.put(prefix + "users/edit/:id", verifyToken, updateUsers);
+router.put(prefix + "users/profile", verifyToken, updateProfile);
 router.get(prefix + "whoami", verifyToken, whoAmI);
 
 //ROUTES FOR UPLOAD FILE
