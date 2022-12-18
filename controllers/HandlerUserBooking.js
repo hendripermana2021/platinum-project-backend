@@ -23,3 +23,24 @@ export const getBookingbyUsersId = async (req, res) => {
     console.log(error);
   }
 };
+
+export const getAllBooking = async (req, res) => {
+  try {
+    const sql = `SELECT * FROM userbookings ub JOIN bookings b on ub.booking_id = b.id JOIN tickets t on b.ticket_id_departure = t.id OR b.ticket_id_return = t.id `;
+    const replacements = {};
+    const userbooking = await sequelize.query(sql, {
+      replacements,
+      type: QueryTypes.SELECT,
+      raw: true,
+    });
+
+    res.status(200).json({
+      code: 200,
+      status: true,
+      msg: "Users Booking Now",
+      data: userbooking,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};

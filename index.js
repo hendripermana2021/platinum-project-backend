@@ -6,6 +6,7 @@ import router from "./routes/index.js";
 dotenv.config();
 const app = express();
 import bodyParser from "body-parser";
+import { createServer } from "http";
 import { Server } from "socket.io";
 
 app.use(cors());
@@ -16,13 +17,30 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 //socket IO
-const io = new Server({
-  /* options */
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+  transports: ["polling"],
+  cors: {
+    origin: "*",
+  },
 });
-io.on("connection", (socket) => {});
+
+io.on("connection", (socket) => {
+  console.log("user connected");
+
+  socket.on("create", function (room) {
+    socket.join(room);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
+  });
+});
+
+global.io = io;
 
 const { PORT = 8000 } = process.env;
 
-app.listen(PORT, () => {
+httpServer.listen(PORT, () => {
   console.log("Listening on port", PORT);
 });

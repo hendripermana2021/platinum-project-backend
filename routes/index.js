@@ -63,7 +63,10 @@ import {
   getPayment,
   isPaymentBooking,
 } from "../controllers/HandlerPayment.js";
-import { getBookingbyUsersId } from "../controllers/HandlerUserBooking.js";
+import {
+  getAllBooking,
+  getBookingbyUsersId,
+} from "../controllers/HandlerUserBooking.js";
 const router = express.Router();
 const prefix = "/v1/api/";
 const { uploadPictures, getListFiles } = pkg;
@@ -104,9 +107,9 @@ router.post(prefix + "airports", verifyToken, createAirport);
 
 //ROUTES FOR BOOKING
 router.get(prefix + "bookings", verifyToken, getBookingbyUsersId);
-
-router.get(prefix + "bookings/byid/:id", getBookingById);
-router.get(prefix + "userbookings", getUserBooking);
+router.get(prefix + "bookings/all", verifyToken, getAllBooking);
+router.get(prefix + "bookings/byid/:id", verifyToken, getBookingById);
+router.get(prefix + "userbookings", verifyToken, getUserBooking);
 
 //ROUTER FOR PASSANGERS
 router.get(prefix + "passanger", getPassanger);

@@ -8,7 +8,7 @@ const Plane = db.plane;
 export const getFlight = async (req, res) => {
   try {
     const flight = await Flight.findAll({
-      include: { all: true },
+      include: { all: true, attributes: { exclude: [] } },
     });
     res.status(200).json({
       code: 200,
