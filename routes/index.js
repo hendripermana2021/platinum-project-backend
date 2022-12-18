@@ -60,7 +60,7 @@ import {
 } from "../controllers/HandlerFlight.js";
 import {
   BuyingTicket,
-  getPayment,
+  getPaymentBeforePay,
   isPaymentBooking,
 } from "../controllers/HandlerPayment.js";
 import {
@@ -140,6 +140,6 @@ router.delete(prefix + "cancel/booking/:id", verifyToken, cancelBooking);
 router.get(prefix + "token", refreshToken);
 
 //API FOR PAYMENT
-router.get(prefix + "payments", verifyToken, getPayment);
+router.get(prefix + "payments", verifyToken, getPaymentBeforePay);
 
 export default router;

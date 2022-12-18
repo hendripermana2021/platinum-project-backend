@@ -7,10 +7,10 @@ const Wallet = db.wallet;
 const sequelize = db.sequelize;
 import { QueryTypes } from "sequelize";
 
-export const getPayment = async (req, res) => {
+export const getPaymentBeforePay = async (req, res) => {
   try {
     const getDataByUserId = req.user.userId;
-    const sql = `SELECT * FROM userbookings ub JOIN payments p on ub.id = p.userBooking_id JOIN bookings b on ub.booking_id = b.id JOIN tickets t on b.ticket_id_departure = t.id JOIN flights f on t.flight_id = f.id WHERE p.isPayed = false AND user_id = ${getDataByUserId}`;
+    const sql = `SELECT * FROM UserBookings ub JOIN Payments p on ub.id = p.userBooking_id JOIN Bookings b on ub.booking_id = b.id JOIN Tickets t on b.ticket_id_departure = t.id JOIN Flights f on t.flight_id = f.id WHERE p.isPayed = false AND user_id = ${getDataByUserId}`;
     const replacements = {};
     const payments = await sequelize.query(sql, {
       replacements,

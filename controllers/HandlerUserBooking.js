@@ -5,7 +5,7 @@ import { QueryTypes } from "sequelize";
 export const getBookingbyUsersId = async (req, res) => {
   try {
     const getDataByUserId = req.user.userId;
-    const sql = `SELECT * FROM userbookings ub JOIN bookings b on ub.booking_id = b.id JOIN tickets t on b.ticket_id_departure = t.id OR b.ticket_id_return = t.id WHERE user_id = ${getDataByUserId}`;
+    const sql = `SELECT * FROM UserBookings ub JOIN Bookings b on ub.booking_id = b.id JOIN Tickets t on b.ticket_id_departure = t.id OR b.ticket_id_return = t.id WHERE user_id = ${getDataByUserId}`;
     const replacements = {};
     const userbooking = await sequelize.query(sql, {
       replacements,
