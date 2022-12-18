@@ -5,7 +5,7 @@ const Airport = db.airport;
 export const getAirport = async (req, res) => {
   try {
     const airport = await Airport.findAll({});
-    res.status(200).json({
+    return res.status(200).json({
       code: 200,
       status: true,
       msg: "Airports searched Found",
@@ -51,7 +51,7 @@ export const createAirport = async (req, res) => {
       status: true,
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       code: 200,
       status: true,
       msg: "Added Airport Successfully",
@@ -104,7 +104,7 @@ export const getAirportBy = async (req, res) => {
         msg: "Airports Doesn't Existing",
       });
     }
-    res.status(200).json({
+    return res.status(200).json({
       code: 200,
       status: true,
       msg: "data you searched Found",
@@ -129,7 +129,7 @@ export const getAirportById = async (req, res) => {
         data: airport,
       });
     }
-    res.status(200).json({
+    return res.status(200).json({
       code: 200,
       status: true,
       msg: "data you searched Found",

@@ -24,7 +24,7 @@ export const getWishlist = async (req, res) => {
       });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       code: 200,
       status: true,
       msg: "Ticket Added",
@@ -49,7 +49,7 @@ export const getWishlistbyid = async (req, res) => {
         msg: "Wishlist Doesn't Existing",
       });
     }
-    res.status(200).json({
+    return res.status(200).json({
       code: 200,
       status: true,
       msg: "Wishlist you searched Found",
@@ -69,7 +69,7 @@ export const createWishlist = async (req, res) => {
       ticket_id_return,
       isWishlist: true,
     });
-    res.status(200).json({
+    return res.status(200).json({
       code: 200,
       status: true,
       msg: "Wishlist added",

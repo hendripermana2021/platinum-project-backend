@@ -28,7 +28,7 @@ export const getPaymentBeforePay = async (req, res) => {
       });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       code: 200,
       status: true,
       msg: "This Payment you have ",
@@ -89,7 +89,7 @@ export const isPaymentTicket = async (req, res) => {
 
     let paymentResult = walletUsers.balance - paymentMutual.totalPrice;
 
-    const walletView = await Wallet.update(
+    await Wallet.update(
       {
         balance: paymentResult,
       },
@@ -104,11 +104,11 @@ export const isPaymentTicket = async (req, res) => {
       isHistory: true,
     });
 
-    // await Payment.destroy({
-    //   where: { id },
-    // });\
+    await Payment.destroy({
+      where: { id },
+    });
 
-    res.status(200).json({
+    return res.status(200).json({
       code: 200,
       status: true,
       msg: "Payment Success",

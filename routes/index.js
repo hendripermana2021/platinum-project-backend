@@ -66,6 +66,7 @@ import {
   getAllBooking,
   getBookingbyUsersId,
 } from "../controllers/HandlerUserBooking.js";
+import { createWallet, getSaldoWallet } from "../controllers/HandlersWallet.js";
 const router = express.Router();
 const prefix = "/v1/api/";
 const { uploadPictures, getListFiles } = pkg;
@@ -140,5 +141,9 @@ router.get(prefix + "token", refreshToken);
 
 //API FOR PAYMENT
 router.get(prefix + "payments", verifyToken, getPaymentBeforePay);
+
+//API FOR WALLET
+router.get(prefix + "wallet", verifyToken, getSaldoWallet);
+router.post(prefix + "wallet/create", verifyToken, createWallet);
 
 export default router;

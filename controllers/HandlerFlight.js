@@ -10,7 +10,7 @@ export const getFlight = async (req, res) => {
     const flight = await Flight.findAll({
       include: { all: true, attributes: { exclude: [] } },
     });
-    res.status(200).json({
+    return res.status(200).json({
       code: 200,
       status: true,
       msg: "data you searched Found",
@@ -52,7 +52,7 @@ export const getFlightBy = async (req, res) => {
       });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       code: 200,
       status: true,
       msg: "data you searched Found",
@@ -86,7 +86,7 @@ export const getFlightById = async (req, res) => {
       ],
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       code: 200,
       status: true,
       msg: "Flight Found",
@@ -128,7 +128,7 @@ export const createFlight = async (req, res) => {
       isRoundTrip: true,
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       code: 200,
       status: true,
       msg: "Added Flight Successfully",

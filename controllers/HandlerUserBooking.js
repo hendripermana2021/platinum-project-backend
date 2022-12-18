@@ -21,7 +21,7 @@ export const getBookingbyUsersId = async (req, res) => {
       });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       code: 200,
       status: true,
       msg: "Booking you have",
@@ -42,7 +42,7 @@ export const getAllBooking = async (req, res) => {
       raw: true,
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       code: 200,
       status: true,
       msg: "Users Booking Now",

@@ -56,7 +56,7 @@ export const getBookingById = async (req, res) => {
         msg: "Booking Doesn't Existing",
       });
     }
-    res.status(200).json({
+    return res.status(200).json({
       code: 200,
       status: true,
       msg: "data you searched Found",
@@ -89,7 +89,7 @@ export const getUserBooking = async (req, res) => {
         },
       ],
     });
-    res.status(200).json({
+    return res.status(200).json({
       code: 200,
       status: true,
       msg: "data you searched Found",
@@ -134,7 +134,7 @@ export const actionBooking = async (req, res) => {
       isPayed: false,
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       code: 200,
       status: true,
       msg: "data created",
@@ -177,7 +177,7 @@ export const cancelBooking = async (req, res) => {
       isHistory: false,
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       code: 200,
       status: true,
       msg: "Booking Canceled",

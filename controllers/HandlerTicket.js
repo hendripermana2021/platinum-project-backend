@@ -36,7 +36,7 @@ export const getTicket = async (req, res) => {
         },
       ],
     });
-    res.status(200).json({
+    return res.status(200).json({
       code: 200,
       status: true,
       msg: "ticket you searched Found",
@@ -77,7 +77,7 @@ export const getTicketById = async (req, res) => {
         },
       ],
     });
-    res.status(200).json({
+    return res.status(200).json({
       code: 200,
       status: true,
       msg: "Ticket You searched Found",
@@ -134,14 +134,14 @@ export const getTicketQuery = async (req, res) => {
     }
 
     if (result == "") {
-      res.status(400).json({
+      return res.status(400).json({
         code: 400,
         status: false,
         msg: "Ticket Not Found",
         data: result,
       });
     }
-    res.status(200).json({
+    return res.status(200).json({
       code: 200,
       status: true,
       msg: "Ticket Found",
@@ -155,7 +155,7 @@ export const getTicketQuery = async (req, res) => {
 export const createTicket = async (req, res) => {
   try {
     const ticket = await Ticket.bulkCreate(req.body);
-    res.status(200).json({
+    return res.status(200).json({
       code: 200,
       status: true,
       msg: "Added Ticket Successfully",

@@ -7,7 +7,7 @@ const Users = db.users;
 const Role = db.role;
 const Address = db.address;
 export const handleGetRoot = async (req, res) => {
-  res.status(200).json({
+  return res.status(200).json({
     code: 200,
     status: "OK",
     msg: "Management API For Order Ticketing is Ready",
@@ -40,7 +40,7 @@ export const getUsers = async (req, res) => {
         },
       ],
     });
-    res.status(200).json({
+    return res.status(200).json({
       code: 200,
       status: true,
       msg: "data you searched Found",
@@ -95,7 +95,7 @@ export const getUsersBy = async (req, res) => {
         msg: "Users not found",
       });
     }
-    res.status(200).json({
+    return res.status(200).json({
       code: 200,
       status: true,
       msg: "data users searched Found",
@@ -134,7 +134,7 @@ export const getUsersById = async (req, res) => {
         },
       ],
     });
-    res.status(200).json({
+    return res.status(200).json({
       code: 200,
       status: true,
       msg: "data you searched Found",
@@ -172,7 +172,7 @@ export const getUsersByJwt = async (req, res) => {
         },
       ],
     });
-    res.status(200).json({
+    return res.status(200).json({
       code: 200,
       status: true,
       msg: "data you searched Found",
@@ -241,7 +241,7 @@ export const Register = async (req, res) => {
       user_id: user.id,
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       code: 200,
       status: true,
       msg: "Register Berhasil",
@@ -323,16 +323,17 @@ export const LoginUsers = async (req, res) => {
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
     });
-    res.status(200).json({
+    return res.status(200).json({
       code: 200,
       msg: "Token Has Been Created",
       accessToken,
     });
   } catch (error) {
-    res.status(404).json({ 
+    return res.status(404).json({
       code: 404,
       status: false,
-      msg: "Email tidak ditemukan" });
+      msg: "Email tidak ditemukan",
+    });
   }
 };
 
@@ -350,7 +351,7 @@ export const Logout = async (req, res) => {
       refresh_token: refreshToken,
     },
   });
-  if (!user[0]) { 
+  if (!user[0]) {
     return res.status(200).json({
       code: 200,
       status: false,
@@ -377,7 +378,7 @@ export const Logout = async (req, res) => {
 export const whoAmI = async (req, res) => {
   try {
     const currentUser = req.user;
-    res.status(200).json({
+    return res.status(200).json({
       code: 200,
       status: true,
       msg: "This data Users Login Now",
@@ -434,7 +435,7 @@ export const updateProfile = async (req, res) => {
   }
 
   const {
-    email,    
+    email,
     firstname,
     lastname,
     gender,

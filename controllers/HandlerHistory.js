@@ -44,7 +44,7 @@ export const getHistoryById = async (req, res) => {
         },
       ],
     });
-    res.status(200).json(history);
+    return res.status(200).json(history);
   } catch (error) {
     console.log(error);
   }

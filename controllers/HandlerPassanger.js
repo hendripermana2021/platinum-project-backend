@@ -5,7 +5,7 @@ const Passanger = db.passanger;
 export const getPassanger = async (req, res) => {
   try {
     const passanger = await Passanger.findAll();
-    res.status(200).json({
+    return res.status(200).json({
       code: 200,
       status: true,
       msg: "data you searched Found",
@@ -21,7 +21,7 @@ export const getPassangerById = async (req, res) => {
     const passanger = await Passanger.findOne({
       where: { id: req.params.id },
     });
-    res.status(200).json({
+    return res.status(200).json({
       code: 200,
       status: true,
       msg: "data you searched Found",
