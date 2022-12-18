@@ -13,6 +13,14 @@ export const getBookingbyUsersId = async (req, res) => {
       raw: true,
     });
 
+    if (userbooking == "") {
+      return res.status(400).json({
+        code: 400,
+        status: true,
+        msg: "You Dont Have Booking Now, Please Booking now",
+      });
+    }
+
     res.status(200).json({
       code: 200,
       status: true,

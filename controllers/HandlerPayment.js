@@ -10,7 +10,7 @@ import { QueryTypes } from "sequelize";
 export const getPayment = async (req, res) => {
   try {
     const getDataByUserId = req.user.userId;
-    const sql = `SELECT  FROM userbookings ub JOIN payments p on ub.id = p.userBooking_id JOIN bookings b on ub.booking_id = b.id JOIN tickets t on b.ticket_id_departure = t.id JOIN flights f on t.flight_id = f.id WHERE p.isPayed = false AND user_id = ${getDataByUserId}`;
+    const sql = `SELECT * FROM userbookings ub JOIN payments p on ub.id = p.userBooking_id JOIN bookings b on ub.booking_id = b.id JOIN tickets t on b.ticket_id_departure = t.id JOIN flights f on t.flight_id = f.id WHERE p.isPayed = false AND user_id = ${getDataByUserId}`;
     const replacements = {};
     const payments = await sequelize.query(sql, {
       replacements,
@@ -19,14 +19,14 @@ export const getPayment = async (req, res) => {
     });
     console.log(payments);
 
-    let paymentParsedData = JSON.parse(JSON.stringify(payments));
+    let paymentData = JSON.parse(JSON.stringify(payments));
 
     res.status(200).json({
       code: 200,
       status: true,
       msg: "This Payment you have ",
       data: {
-        paymentParsedData,
+        paymentData,
       },
     });
   } catch (error) {
