@@ -17,9 +17,16 @@ export const getPayment = async (req, res) => {
       type: QueryTypes.SELECT,
       raw: true,
     });
-    console.log(payments);
 
     let paymentData = JSON.parse(JSON.stringify(payments));
+
+    if (payments == "") {
+      return res.status(400).json({
+        code: 400,
+        status: true,
+        msg: "You Dont Have Payments, Please Booking now",
+      });
+    }
 
     res.status(200).json({
       code: 200,
