@@ -75,14 +75,14 @@ db.users.belongsTo(db.role, {
   foreignKey: "role_id",
 });
 
-db.address.hasMany(db.users, {
+db.users.belongsTo(db.address, {
   as: "address",
   foreignKey: "id",
 });
 
-db.users.belongsTo(db.address, {
-  as: "address",
-  foreignKey: "id",
+db.address.belongsTo(db.users, {
+  as: "users",
+  foreignKey: "user_id",
 });
 
 //RELATION TICKET TABLE
