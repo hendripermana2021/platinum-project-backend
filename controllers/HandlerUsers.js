@@ -22,8 +22,10 @@ export const getUsers = async (req, res) => {
         "firstname",
         "lastname",
         "gender",
+        "phone",
         "email",
         "password",
+        "pictures",
       ],
       include: [
         {
@@ -62,6 +64,28 @@ export const getUsersBy = async (req, res) => {
           { gender: { [Op.like]: `%` + search + `%` } },
         ],
       },
+      attributes: [
+        "id",
+        "firstname",
+        "lastname",
+        "gender",
+        "phone",
+        "email",
+        "password",
+        "pictures",
+      ],
+      include: [
+        {
+          model: Role,
+          as: "roles",
+          attributes: ["roleName"],
+        },
+        {
+          model: Address,
+          as: "address",
+          attributes: ["homeAddress", "province", "city"],
+        },
+      ],
     });
 
     if (users == "") {
@@ -83,19 +107,57 @@ export const getUsersBy = async (req, res) => {
 };
 
 export const getUsersById = async (req, res) => {
-  const { id } = req.user.userId;
+  const { id } = req.params;
   try {
     const users = await Users.findAll({
-      where: {
-        id:id,
-      },
+      where: { id: id },
       attributes: [
         "id",
         "firstname",
         "lastname",
         "gender",
+        "phone",
         "email",
         "password",
+        "pictures",
+      ],
+      include: [
+        {
+          model: Role,
+          as: "roles",
+          attributes: ["roleName"],
+        },
+        {
+          model: Address,
+          as: "address",
+          attributes: ["homeAddress", "province", "city"],
+        },
+      ],
+    });
+    res.status(200).json({
+      code: 200,
+      status: true,
+      msg: "data you searched Found",
+      data: users,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getUsersByJwt = async (req, res) => {
+  try {
+    const users = await Users.findAll({
+      where: { id: req.user.userId },
+      attributes: [
+        "id",
+        "firstname",
+        "lastname",
+        "gender",
+        "phone",
+        "email",
+        "password",
+        "pictures",
       ],
       include: [
         {
@@ -139,6 +201,7 @@ export const Register = async (req, res) => {
   } = req.body;
   if (password !== confPassword)
     return res.status(400).json({
+      code: 400,
       success: false,
       msg: "Password dan Confirm Password tidak cocok",
     });
@@ -158,14 +221,7 @@ export const Register = async (req, res) => {
   const salt = await bcrypt.genSalt();
   const hashPassword = await bcrypt.hash(password, salt);
   try {
-    await Address.create({
-      homeAddress,
-      country,
-      province,
-      city,
-    });
-
-    await Users.create({
+    const user = await Users.create({
       email,
       firstname,
       lastname,
@@ -175,6 +231,14 @@ export const Register = async (req, res) => {
       role_id: 2,
       pictures,
       password: hashPassword,
+    });
+
+    await Address.create({
+      homeAddress,
+      country,
+      province,
+      city,
+      user_id: user.id,
     });
 
     res.status(200).json({
@@ -274,21 +338,25 @@ export const LoginUsers = async (req, res) => {
 
 export const Logout = async (req, res) => {
   const refreshToken = req.cookies.refreshToken;
-  if (!refreshToken) return res.sendStatus(204).json({
-    code: 204,
-    status: false,
-    msg: "User Has Been Log Out or User Not Found",
-  })
+  if (!refreshToken) {
+    return res.status(200).json({
+      code: 200,
+      status: false,
+      msg: "User Has Been Log Out",
+    });
+  }
   const user = await Users.findAll({
     where: {
       refresh_token: refreshToken,
     },
   });
-  if (!user[0]) return res.sendStatus(204).json({
-    code: 204,
-    status: false,
-    msg: "User Has Been Log Out or User Not Found",
-  })
+  if (!user[0]) { 
+    return res.status(200).json({
+      code: 200,
+      status: false,
+      msg: "User Not Found",
+    });
+  }
   const userId = user[0].id;
   await Users.update(
     { refresh_token: null },
@@ -299,7 +367,7 @@ export const Logout = async (req, res) => {
     }
   );
   res.clearCookie("refreshToken");
-  return res.sendStatus(200).json({
+  return res.status(200).json({
     code: 200,
     status: true,
     msg: "You Logout Now",
@@ -352,9 +420,8 @@ export const deleteUsers = async (req, res) => {
 };
 
 export const updateProfile = async (req, res) => {
-  const { id } = req.user.userId;
-  const dataBeforeDelete = await Users.findOne({
-    where: { id: id },
+  const dataBeforeDelete = await Users.findAll({
+    where: { id: req.user.userId },
   });
   const parsedDataProfile = JSON.parse(JSON.stringify(dataBeforeDelete));
 
@@ -367,19 +434,19 @@ export const updateProfile = async (req, res) => {
   }
 
   const {
-    email,
+    email,    
     firstname,
     lastname,
     gender,
     phone,
     birthdate,
-    postalcode,
     pictures,
     homeAddress,
     country,
     province,
     city,
   } = req.body;
+
   try {
     await Users.update(
       {
@@ -389,23 +456,21 @@ export const updateProfile = async (req, res) => {
         gender,
         phone,
         birthdate,
-        postalcode,
         pictures,
       },
       {
-        where: { id: id },
+        where: { id: req.user.userId },
       }
     );
     await Address.update(
       {
-        id: id,
         homeAddress,
         country,
         province,
         city,
       },
       {
-        where: { id: id },
+        where: { user_id: req.user.userId },
       }
     );
     return res.status(200).json({
@@ -419,7 +484,7 @@ export const updateProfile = async (req, res) => {
 };
 
 export const updateUsers = async (req, res) => {
-  const { id } = req.params.id;
+  const { id } = req.params;
   const dataBeforeDelete = await Users.findOne({
     where: { id: id },
   });
@@ -440,13 +505,13 @@ export const updateUsers = async (req, res) => {
     gender,
     phone,
     birthdate,
-    postalcode,
     pictures,
     homeAddress,
     country,
     province,
     city,
   } = req.body;
+
   try {
     await Users.update(
       {
@@ -456,7 +521,6 @@ export const updateUsers = async (req, res) => {
         gender,
         phone,
         birthdate,
-        postalcode,
         pictures,
       },
       {
@@ -465,14 +529,13 @@ export const updateUsers = async (req, res) => {
     );
     await Address.update(
       {
-        id: id,
         homeAddress,
         country,
         province,
         city,
       },
       {
-        where: { id: id },
+        where: { user_id: id },
       }
     );
     return res.status(200).json({

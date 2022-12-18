@@ -10,6 +10,7 @@ import {
   updateProfile,
   getUsersBy,
   getUsersById,
+  getUsersByJwt,
   handleGetRoot,
 } from "../controllers/HandlerUsers.js";
 import {
@@ -70,8 +71,9 @@ const { uploadPictures, getListFiles } = pkg;
 //ROUTES FOR USERS
 router.get(prefix, handleGetRoot);
 router.get(prefix + "users", getUsers);
-router.get(prefix + "users/:search", getUsersBy);
-router.get(prefix + "users/:id", verifyToken, getUsersById);
+router.get(prefix + "users/:id", getUsersById);
+router.get(prefix + "users/profile/:search", getUsersBy);
+router.get(prefix + "users/myprofile", verifyToken, getUsersByJwt);
 router.post(prefix + "register", Register);
 router.post(prefix + "login", LoginUsers);
 router.delete(prefix + "logout", verifyToken, Logout);
