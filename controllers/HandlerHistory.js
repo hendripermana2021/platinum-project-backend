@@ -3,24 +3,35 @@ import db from "../models/index.js";
 const History = db.history;
 const Users = db.users;
 const Ticket = db.ticket;
-export const getHistory = async (req, res) => {
+const UserBooking = db.userbooking;
+export const getHistoryPayment = async (req, res) => {
+  const reqUserId = req.user.userId;
+  const { condition } = req.params;
   try {
     const history = await History.findAll({
-      attributes: ["id", "id_ticket", "id_users", "createdAt"],
+      where: { isHistory: condition },
       include: [
         {
-          model: Users,
-          as: "users",
-          attributes: ["id", "firstname", "lastname"],
-        },
-        {
-          model: Ticket,
-          as: "tickets",
-          attributes: ["id", "arrival_id", "departure_date"],
+          model: UserBooking,
+          as: "userBooking",
+          where: { user_id: reqUserId },
         },
       ],
     });
-    res.json(history);
+
+    if (history == "") {
+      return res.status(400).json({
+        code: 400,
+        status: true,
+        msg: "you don't have history payment",
+      });
+    }
+    return res.status(200).json({
+      code: 200,
+      status: true,
+      msg: "you don't have history payment",
+      data: history,
+    });
   } catch (error) {
     console.log(error);
   }

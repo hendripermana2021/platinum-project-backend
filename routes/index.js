@@ -60,6 +60,7 @@ import {
 } from "../controllers/HandlerFlight.js";
 import {
   getPaymentBeforePay,
+  isCancelPayment,
   isPaymentTicket,
 } from "../controllers/HandlerPayment.js";
 import {
@@ -72,6 +73,7 @@ import {
   getSaldoWallet,
   updateWallet,
 } from "../controllers/HandlersWallet.js";
+import { getHistoryPayment } from "../controllers/HandlerHistory.js";
 const router = express.Router();
 const prefix = "/v1/api/";
 const { uploadPictures, getListFiles } = pkg;
@@ -138,8 +140,8 @@ router.put(prefix + "flight/edit/:id", updateFlight);
 
 //API FOR ACTION BUYER
 router.post(prefix + "booking", verifyToken, actionBooking);
-router.get(prefix + "booking/payment/:id", verifyToken, isPaymentTicket);
-router.delete(prefix + "cancel/booking/:id", verifyToken, cancelBooking);
+router.post(prefix + "booking/payment/:id", verifyToken, isPaymentTicket);
+router.post(prefix + "cancel/payment/:id", verifyToken, isCancelPayment);
 
 //API FOR TOKEN
 router.get(prefix + "token", refreshToken);
@@ -152,5 +154,8 @@ router.get(prefix + "wallet", verifyToken, getSaldoWallet);
 router.post(prefix + "wallet/create", verifyToken, createWallet);
 router.put(prefix + "wallet/edit/:id", verifyToken, updateWallet);
 router.delete(prefix + "wallet/delete/:id", verifyToken, deleteWallet);
+
+//API FOR HISTORY
+router.get(prefix + "history/:condition", verifyToken, getHistoryPayment);
 
 export default router;

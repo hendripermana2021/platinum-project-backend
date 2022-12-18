@@ -111,6 +111,7 @@ export const actionBooking = async (req, res) => {
     const booking = await Booking.create({
       ticket_id_departure: ticket_id_departure,
       ticket_id_return: ticket_id_return,
+      totalPassanger: passanger.length,
       isBooking: false,
     });
 
@@ -149,8 +150,8 @@ export const cancelBooking = async (req, res) => {
   const { id } = req.params;
   const idGetUsers = req.id;
   try {
-    const dataBefore = await Payment.findAll({
-      where: { userBooking_id: id },
+    const payment = await Payment.findAll({
+      where: { userBo: id },
       include: [
         {
           model: UserBooking,
@@ -162,7 +163,7 @@ export const cancelBooking = async (req, res) => {
       ],
     });
 
-    const parsedBooking = JSON.parse(JSON.stringify(dataBefore));
+    const parsedBooking = JSON.parse(JSON.stringify(payment));
 
     if (parsedBooking == "") {
       return res.status(400).json({

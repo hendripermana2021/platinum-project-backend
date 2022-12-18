@@ -134,11 +134,6 @@ db.passangerbooking.hasMany(db.passanger, {
   sourceKey: "idPassanger",
 });
 
-// db.passanger.belongsTo(db.booking, {
-//   as: "booking",
-//   foreignKey: "booking_id",
-// });
-
 // //RELATION FOR WISHLIST
 db.wishlist.belongsTo(db.users, {
   as: "users",
@@ -197,5 +192,11 @@ db.userbooking.belongsTo(db.users, {
 db.userbooking.belongsTo(db.booking, {
   as: "booking",
   foreignKey: "booking_id",
+});
+
+//RELATION HISTORY
+db.history.belongsTo(db.userbooking, {
+  as: "userBooking",
+  foreignKey: "userBooking_id",
 });
 module.exports = db;
