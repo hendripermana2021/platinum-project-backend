@@ -41,57 +41,9 @@ export const getPaymentBeforePay = async (req, res) => {
   }
 };
 
-export const BuyingTicket = async (req, res) => {
+export const isPaymentTicket = async (req, res) => {
   const { id } = req.params;
-  const dataBeforeDelete = await Payment.findOne({
-    where: { id: id },
-  });
-
-  const parsedDataProfile = JSON.parse(JSON.stringify(dataBeforeDelete));
-
-  if (!parsedDataProfile) {
-    return res.status(400).json({
-      code: 400,
-      status: false,
-      msg: "Payment doesn't exist or has been deleted!",
-    });
-  }
-  try {
-    await Payment.update(
-      {
-        isPayed: true,
-      },
-      {
-        where: { id: id },
-      }
-    );
-
-    const payment = await Payment.findAll({
-      where: {
-        id: id,
-      },
-    });
-
-    const history = await History.create({
-      userBooking_id: payment[0].id,
-      payment_id: id,
-      isHistory: true,
-    });
-
-    return res.status(200).json({
-      code: 200,
-      status: true,
-      msg: "Ticket already Booked",
-      data: { payment, history },
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const isPaymentBooking = async (req, res) => {
-  const { id } = req.params;
-  const wallet = req.body.wallet;
+  const reqIdUsers = req.user.userId;
 
   try {
     const payment = await Payment.findOne({
@@ -103,7 +55,7 @@ export const isPaymentBooking = async (req, res) => {
           model: UserBooking,
           as: "usersPayment",
           where: {
-            user_id: req.user.userId,
+            user_id: reqIdUsers,
           },
         },
       ],
@@ -111,23 +63,31 @@ export const isPaymentBooking = async (req, res) => {
 
     const paymentMutual = JSON.parse(JSON.stringify(payment));
 
-    if (paymentMutual == 0) {
-      res.status(400).json({
+    const wallet = await Wallet.findOne({
+      where: {
+        user_id: reqIdUsers,
+      },
+    });
+
+    const walletUsers = JSON.parse(JSON.stringify(wallet));
+
+    if (paymentMutual == null) {
+      return res.status(400).json({
         code: 400,
         status: false,
         msg: "You Dont have Payment Ticket",
       });
     }
 
-    if (paymentMutual.totalPrice >= wallet) {
-      res.status(400).json({
+    if (paymentMutual.totalPrice >= walletUsers.balance) {
+      return res.status(400).json({
         code: 400,
         status: false,
         msg: "Wallet is not Enough please Top Up",
       });
     }
 
-    let paymentResult = wallet - paymentMutual.totalPrice;
+    let paymentResult = walletUsers.balance - paymentMutual.totalPrice;
 
     const walletView = await Wallet.update(
       {
@@ -152,7 +112,7 @@ export const isPaymentBooking = async (req, res) => {
       code: 200,
       status: true,
       msg: "Payment Success",
-      data: { payment, history, walletView },
+      data: { paymentMutual, walletUsers },
     });
   } catch (error) {
     console.log(error);

@@ -59,9 +59,8 @@ import {
   updateFlight,
 } from "../controllers/HandlerFlight.js";
 import {
-  BuyingTicket,
   getPaymentBeforePay,
-  isPaymentBooking,
+  isPaymentTicket,
 } from "../controllers/HandlerPayment.js";
 import {
   getAllBooking,
@@ -133,7 +132,7 @@ router.put(prefix + "flight/edit/:id", updateFlight);
 
 //API FOR ACTION BUYER
 router.post(prefix + "booking", verifyToken, actionBooking);
-router.get(prefix + "booking/payment/:id", verifyToken, isPaymentBooking);
+router.get(prefix + "booking/payment/:id", verifyToken, isPaymentTicket);
 router.delete(prefix + "cancel/booking/:id", verifyToken, cancelBooking);
 
 //API FOR TOKEN
