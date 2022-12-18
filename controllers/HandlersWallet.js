@@ -30,6 +30,19 @@ export const getSaldoWallet = async (req, res) => {
 export const createWallet = async (req, res) => {
   const { user_id, balance } = req.body;
   try {
+    const findWallet = await Wallet.findOne({
+      where: {
+        user_id,
+      },
+    });
+
+    if (findWallet != null) {
+      return res.status(400).json({
+        code: 400,
+        status: false,
+        msg: `wallet has been created before to user ${user_id}`,
+      });
+    }
     const wallet = await Wallet.create({
       user_id,
       balance,
@@ -55,7 +68,7 @@ export const updateWallet = async (req, res) => {
     return res.status(400).json({
       code: 400,
       status: false,
-      msg: "Users doesn't exist or has been deleted!",
+      msg: "Wallet doesn't exist or has been deleted!",
     });
   }
 
@@ -74,6 +87,35 @@ export const updateWallet = async (req, res) => {
       code: 200,
       status: true,
       msg: "Wallet Success Updated",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deleteWallet = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const wallet = await Wallet.findOne({
+      where: { id: id },
+    });
+    const parsedDataProfile = JSON.parse(JSON.stringify(wallet));
+
+    if (!parsedDataProfile) {
+      return res.status(400).json({
+        code: 400,
+        status: false,
+        msg: "Wallet doesn't exist or has been deleted!",
+      });
+    }
+
+    await Wallet.destroy({
+      where: { id: id },
+    });
+    return res.status(200).json({
+      code: 200,
+      status: true,
+      msg: "Wallet Success Deleted",
     });
   } catch (error) {
     console.log(error);

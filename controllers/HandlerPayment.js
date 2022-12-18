@@ -44,7 +44,6 @@ export const getPaymentBeforePay = async (req, res) => {
 export const isPaymentTicket = async (req, res) => {
   const { id } = req.params;
   const reqIdUsers = req.user.userId;
-
   try {
     const payment = await Payment.findOne({
       where: {

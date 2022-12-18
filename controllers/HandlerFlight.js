@@ -154,12 +154,6 @@ export const updateFlight = async (req, res) => {
     });
   }
 
-  // const ticket = await Ticket.findOne({
-  //   where: {
-  //     flight_id: parsedDataProfile.id,
-  //   },
-  // });
-
   const {
     departureAirport,
     arrivalAirport,
@@ -211,32 +205,34 @@ export const updateFlight = async (req, res) => {
 export const deleteFlight = async (req, res) => {
   const flight = await Flight.findAll();
   const { id } = req.params;
-  const dataBefore = await Flight.findOne({
-    where: { id: id },
-  });
-  const parsedDataProfile = JSON.parse(JSON.stringify(dataBefore));
-
-  if (!parsedDataProfile) {
-    return res.status(400).json({
-      code: 400,
-      status: false,
-      msg: "Flight not found or nothing!",
+  try {
+    const dataBefore = await Flight.findOne({
+      where: { id: id },
     });
-  }
+    const parsedDataProfile = JSON.parse(JSON.stringify(dataBefore));
 
-  await Flight.destroy({
-    where: { id },
-  });
+    if (!parsedDataProfile) {
+      return res.status(400).json({
+        code: 400,
+        status: false,
+        msg: "Flight not found or nothing!",
+      });
+    }
 
-  await Ticket.destroy({
-    where: {
-      flight_id: parsedDataProfile.id,
-    },
-  });
+    await Flight.destroy({
+      where: { id },
+    });
 
-  return res.status(200).json({
-    code: 200,
-    status: true,
-    msg: "Delete Flight Successfully",
-  });
+    await Ticket.destroy({
+      where: {
+        flight_id: parsedDataProfile.id,
+      },
+    });
+
+    return res.status(200).json({
+      code: 200,
+      status: true,
+      msg: "Delete Flight Successfully",
+    });
+  } catch (error) {}
 };

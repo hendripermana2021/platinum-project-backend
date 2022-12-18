@@ -63,30 +63,31 @@ export const createAirport = async (req, res) => {
 };
 
 export const deleteAirport = async (req, res) => {
-  const airport = await Airport.findAll();
   const { id } = req.params;
-  const dataBefore = await Airport.findOne({
-    where: { id: id },
-  });
-  const parsedDataProfile = JSON.parse(JSON.stringify(dataBefore));
-
-  if (!parsedDataProfile) {
-    return res.status(400).json({
-      code: 400,
-      status: false,
-      msg: "Airports Doesn't Existing",
+  try {
+    const dataBefore = await Airport.findOne({
+      where: { id: id },
     });
-  }
+    const parsedDataProfile = JSON.parse(JSON.stringify(dataBefore));
 
-  await Airport.destroy({
-    where: { id },
-  });
+    if (!parsedDataProfile) {
+      return res.status(400).json({
+        code: 400,
+        status: false,
+        msg: "Airports Doesn't Existing",
+      });
+    }
 
-  return res.status(200).json({
-    code: 200,
-    status: true,
-    msg: "Delete Airport Successfully",
-  });
+    await Airport.destroy({
+      where: { id },
+    });
+
+    return res.status(200).json({
+      code: 200,
+      status: true,
+      msg: "Delete Airport Successfully",
+    });
+  } catch (error) {}
 };
 
 export const getAirportBy = async (req, res) => {
