@@ -22,6 +22,7 @@
     "seed:classtype": "npx sequelize-cli seed:generate --name demo-classtype",
     "seed:passanger": "npx sequelize-cli seed:generate --name demo-passanger",
     "seed:history": "npx sequelize-cli seed:generate --name demo-history",
+    "seed:roles": "npx sequelize-cli seed:generate --name demo-roles",
     "seed:plane": "npx sequelize-cli seed:generate --name demo-plane",
     "seed:": "npx sequelize-cli seed:generate --name demo-",
     "model-users": "npx sequelize-cli model:generate --name Users --attributes firstname:string,lastname:string,gender:string,email:string,phone:string,birthdate:date,password:string,role_id:integer,pictures:string,isgoogleauth:boolean,isfacebookauth:boolean,access_token:text,refresh_token:text",
@@ -74,6 +75,7 @@
   },
   "devDependencies": {
     "jest": "^29.3.1",
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.20",
+    "supertest": "^6.3.3"
   }
 }

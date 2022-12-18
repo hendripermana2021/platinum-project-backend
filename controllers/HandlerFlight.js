@@ -8,20 +8,7 @@ const Plane = db.plane;
 export const getFlight = async (req, res) => {
   try {
     const flight = await Flight.findAll({
-      include: [
-        {
-          model: Airport,
-          as: "DepartureTerminal",
-        },
-        {
-          model: Airport,
-          as: "ArrivalTerminal",
-        },
-        {
-          model: Plane,
-          as: "planename",
-        },
-      ],
+      include: { all: true },
     });
     res.status(200).json({
       code: 200,

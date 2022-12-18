@@ -33,10 +33,7 @@ import {
 import { refreshToken } from "../controllers/RefreshToken.js";
 import {
   actionBooking,
-  getBooking,
-  getBookingBy,
   getBookingById,
-  softDeleteBooking,
   getUserBooking,
   cancelBooking,
 } from "../controllers/HandlerBooking.js";
@@ -45,7 +42,6 @@ import {
   deleteWishlist,
   getWishlist,
   getWishlistbyid,
-  getWishlistby,
 } from "../controllers/HandlerWishlist.js";
 import {
   deletePassanger,
@@ -107,10 +103,8 @@ router.post(prefix + "airports", verifyToken, createAirport);
 //ROUTES FOR BOOKING
 router.get(prefix + "bookings", verifyToken, getBookingbyUsersId);
 
-// router.get(prefix + "bookings/:search", getBookingBy);
 router.get(prefix + "bookings/byid/:id", getBookingById);
 router.get(prefix + "userbookings", getUserBooking);
-router.delete(prefix + "bookings/delete/:id", softDeleteBooking);
 
 //ROUTER FOR PASSANGERS
 router.get(prefix + "passanger", getPassanger);
@@ -121,7 +115,6 @@ router.delete(prefix + "passanger/delete/:id", deletePassanger);
 //ROUTES FOR WISHLIST
 router.get(prefix + "wishlists", verifyToken, getWishlist);
 router.get(prefix + "wishlists/:id", verifyToken, getWishlistbyid);
-// router.get(prefix + "wishlists/name/:search", getWishlistby);
 router.post(prefix + "wishlists/create", verifyToken, createWishlist);
 router.delete(prefix + "wishlists/delete/:id", deleteWishlist);
 
@@ -136,7 +129,7 @@ router.put(prefix + "flight/edit/:id", updateFlight);
 //API FOR ACTION BUYER
 router.post(prefix + "booking", verifyToken, actionBooking);
 router.get(prefix + "booking/payment/:id", verifyToken, isPaymentBooking);
-router.get(prefix + "cancel/booking/:id", cancelBooking);
+router.delete(prefix + "cancel/booking/:id", verifyToken, cancelBooking);
 
 //API FOR TOKEN
 router.get(prefix + "token", refreshToken);

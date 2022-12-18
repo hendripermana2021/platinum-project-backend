@@ -2,13 +2,8 @@ import db from "../models/index.js";
 
 const Payment = db.payment;
 const UserBooking = db.userbooking;
-const Users = db.users;
 const History = db.history;
-const Booking = db.booking;
-const PassangerBooking = db.passangerbooking;
-const Passanger = db.passanger;
 const Wallet = db.wallet;
-const Ticket = db.ticket;
 const sequelize = db.sequelize;
 import { QueryTypes } from "sequelize";
 

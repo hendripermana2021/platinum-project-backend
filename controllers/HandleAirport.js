@@ -94,14 +94,7 @@ export const getAirportBy = async (req, res) => {
     const { search } = await req.params;
     let airport = await Airport.findAll({
       where: {
-        [Op.or]: [
-          { name: { [Op.like]: `%` + search + `%` } },
-          { id: { [Op.like]: `%` + search + `%` } },
-          { code: { [Op.like]: `%` + search + `%` } },
-          { city: { [Op.like]: `%` + search + `%` } },
-          { country: { [Op.like]: `%` + search + `%` } },
-          { terminal: { [Op.like]: `%` + search + `%` } },
-        ],
+        [Op.or]: [{ name: { [Op.like]: `%` + search + `%` } }],
       },
     });
     if (airport == "") {

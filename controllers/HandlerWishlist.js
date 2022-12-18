@@ -7,57 +7,13 @@ const Flight = db.flight;
 const Airport = db.airport;
 
 export const getWishlist = async (req, res) => {
+  const reqIdUser = req.user.userId;
   try {
     const wishlist = await Wishlist.findAll({
       where: {
-        user_id: 1,
+        user_id: reqIdUser,
       },
-      include: [
-        {
-          model: Users,
-          as: "users",
-        },
-        {
-          model: Ticket,
-          as: "ticketDeparture",
-          include: [
-            {
-              model: Flight,
-              as: "flight",
-              include: [
-                {
-                  model: Airport,
-                  as: "DepartureTerminal",
-                },
-                {
-                  model: Airport,
-                  as: "ArrivalTerminal",
-                },
-              ],
-            },
-          ],
-        },
-        {
-          model: Ticket,
-          as: "ticketReturn",
-          include: [
-            {
-              model: Flight,
-              as: "flight",
-              include: [
-                {
-                  model: Airport,
-                  as: "DepartureTerminal",
-                },
-                {
-                  model: Airport,
-                  as: "ArrivalTerminal",
-                },
-              ],
-            },
-          ],
-        },
-      ],
+      include: { all: true },
     });
 
     if (wishlist == "") {
@@ -83,52 +39,7 @@ export const getWishlistbyid = async (req, res) => {
   try {
     const wishlist = await Wishlist.findAll({
       where: { id: req.params.id, user_id: req.user.userId },
-      include: [
-        {
-          model: Users,
-          as: "users",
-        },
-        {
-          model: Ticket,
-          as: "ticketDeparture",
-          include: [
-            {
-              model: Flight,
-              as: "flight",
-              include: [
-                {
-                  model: Airport,
-                  as: "DepartureTerminal",
-                },
-                {
-                  model: Airport,
-                  as: "ArrivalTerminal",
-                },
-              ],
-            },
-          ],
-        },
-        {
-          model: Ticket,
-          as: "ticketReturn",
-          include: [
-            {
-              model: Flight,
-              as: "flight",
-              include: [
-                {
-                  model: Airport,
-                  as: "DepartureTerminal",
-                },
-                {
-                  model: Airport,
-                  as: "ArrivalTerminal",
-                },
-              ],
-            },
-          ],
-        },
-      ],
+      include: { all: true },
     });
 
     if (wishlist == "") {
@@ -142,76 +53,6 @@ export const getWishlistbyid = async (req, res) => {
       code: 200,
       status: true,
       msg: "Wishlist you searched Found",
-      data: wishlist,
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const getWishlistby = async (req, res) => {
-  try {
-    const { search } = req.params;
-    const wishlist = await Wishlist.findAll({
-      include: [
-        {
-          model: Users,
-          as: "users",
-        },
-        {
-          model: Ticket,
-          as: "ticketDeparture",
-          include: [
-            {
-              model: Flight,
-              as: "flight",
-              include: [
-                {
-                  model: Airport,
-                  as: "DepartureTerminal",
-                },
-                {
-                  model: Airport,
-                  as: "ArrivalTerminal",
-                },
-              ],
-            },
-          ],
-        },
-        {
-          model: Ticket,
-          as: "ticketReturn",
-          include: [
-            {
-              model: Flight,
-              as: "flight",
-              include: [
-                {
-                  model: Airport,
-                  as: "DepartureTerminal",
-                },
-                {
-                  model: Airport,
-                  as: "ArrivalTerminal",
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    });
-
-    if (wishlist == "") {
-      return res.status(400).json({
-        code: 400,
-        status: false,
-        msg: "Wishlist Doesn't Existing",
-      });
-    }
-    res.status(200).json({
-      code: 200,
-      status: true,
-      msg: "ticket you searched Found",
       data: wishlist,
     });
   } catch (error) {
@@ -239,7 +80,6 @@ export const createWishlist = async (req, res) => {
 };
 
 export const deleteWishlist = async (req, res) => {
-  await Wishlist.findAll();
   const { id } = req.params;
   const dataBefore = await Wishlist.findOne({
     where: { id: id },
