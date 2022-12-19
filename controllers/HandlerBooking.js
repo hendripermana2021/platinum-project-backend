@@ -7,6 +7,7 @@ const Users = db.users;
 const Passanger = db.passanger;
 const Payment = db.payment;
 const PassangerBooking = db.passangerbooking;
+const Notification = db.notification;
 
 export const getBookingById = async (req, res) => {
   const { id } = req.params;
@@ -78,6 +79,7 @@ export const getUserBooking = async (req, res) => {
 };
 
 export const actionBooking = async (req, res) => {
+  const getUserId = req.user_userId;
   const ticket_id_departure = req.body.ticket.ticket_id_departure;
   const ticket_id_return = req.body.ticket.ticket_id_return;
   const totalPrice = req.body.ticket.totalPrice;
@@ -112,11 +114,25 @@ export const actionBooking = async (req, res) => {
       isPayed: false,
     });
 
+    // const notif = await Notification.create({
+    //   user_id: getUserId,
+    //   message: `Success Create Booking with payment id`,
+    //   isRead: false,
+    // });
+    // global.io.sockets.in(id).emit("notify-update", getUserId);
+
     return res.status(200).json({
       code: 200,
       status: true,
       msg: "data created",
-      data: { booking, passangerBooking, passangerBulk, userbooking, payment },
+      data: {
+        booking,
+        passangerBooking,
+        passangerBulk,
+        userbooking,
+        payment,
+        // notif,
+      },
     });
   } catch (error) {
     console.log(error);

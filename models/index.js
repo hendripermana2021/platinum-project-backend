@@ -58,6 +58,7 @@ db.wishlist = require("../models/wishlist.js")(sequelize, Sequelize);
 db.plane = require("../models/plane.js")(sequelize, Sequelize);
 db.payment = require("../models/payment.js")(sequelize, Sequelize);
 db.history = require("../models/history.js")(sequelize, Sequelize);
+db.notification = require("../models/notification.js")(sequelize, Sequelize);
 db.passangerbooking = require("../models/passangerbooking.js")(
   sequelize,
   Sequelize
@@ -99,11 +100,6 @@ db.ticket.belongsTo(db.classtype, {
 db.ticket.belongsTo(db.flight, {
   as: "flight",
   foreignKey: "flight_id",
-});
-
-db.flight.hasMany(db.ticket, {
-  as: "ticket",
-  foreignKey: "id",
 });
 
 //RELATION BOOKING
@@ -156,6 +152,12 @@ db.wishlist.belongsTo(db.ticket, {
 });
 
 //RELATION FOR FLIGHT
+
+db.flight.hasMany(db.ticket, {
+  as: "ticket",
+  foreignKey: "id",
+});
+
 db.flight.belongsTo(db.airport, {
   as: "DepartureTerminal",
   foreignKey: "departureAirport",
@@ -166,9 +168,10 @@ db.flight.belongsTo(db.airport, {
   foreignKey: "arrivalAirport",
 });
 
-db.flight.belongsTo(db.plane, {
-  foreignKey: "id",
+db.flight.hasMany(db.plane, {
   as: "planeName",
+  foreignKey: "id",
+  sourceKey: "planeId",
 });
 
 //RELATION FOR PLANE

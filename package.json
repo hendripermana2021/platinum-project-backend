@@ -42,6 +42,7 @@
     "model-wallet": "npx sequelize-cli model:generate --name Wallet --attributes user_id:string,balance:float",
     "model-payment": "npx sequelize-cli model:generate --name Payment --attributes userBooking_id:integer,totalPrice:float,isPayed:boolean",
     "model-PassangerBooking": "npx sequelize-cli model:generate --name PassangerBooking --attributes idPassanger:integer,idBooking:integer",
+    "model-Notification": "npx sequelize-cli model:generate --name Notification --attributes user_id:integer,message:string,isRead:boolean",
     "db:seed": "npx sequelize-cli db:seed:all",
     "db:migrate": "npx sequelize-cli db:migrate",
     "db:undo": "npx sequelize-cli db:migrate:undo:all",
