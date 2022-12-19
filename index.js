@@ -28,9 +28,9 @@ const io = new Server(httpServer, {
 io.on("connection", (socket) => {
   console.log("user connected");
 
-  // socket.on("create", function (room) {
-  //   socket.join(room);
-  // });
+  socket.on("create", function (room) {
+    socket.join(room);
+  });
 
   socket.on("disconnect", () => {
     console.log("user disconnected");

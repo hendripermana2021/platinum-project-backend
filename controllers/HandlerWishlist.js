@@ -13,7 +13,19 @@ export const getWishlist = async (req, res) => {
       where: {
         user_id: reqIdUser,
       },
-      include: { all: true },
+
+      include: [
+        {
+          model: Ticket,
+          as: "ticketDeparture",
+          include: { all: true },
+        },
+        {
+          model: Ticket,
+          as: "ticketReturn",
+          include: { all: true },
+        },
+      ],
     });
 
     if (wishlist == "") {
@@ -39,7 +51,18 @@ export const getWishlistbyid = async (req, res) => {
   try {
     const wishlist = await Wishlist.findAll({
       where: { id: req.params.id, user_id: req.user.userId },
-      include: { all: true },
+      include: [
+        {
+          model: Ticket,
+          as: "ticketDeparture",
+          include: { all: true },
+        },
+        {
+          model: Ticket,
+          as: "ticketReturn",
+          include: { all: true },
+        },
+      ],
     });
 
     if (wishlist == "") {

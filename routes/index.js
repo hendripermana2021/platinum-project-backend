@@ -37,7 +37,6 @@ import {
   actionBooking,
   getBookingById,
   getUserBooking,
-  cancelBooking,
 } from "../controllers/HandlerBooking.js";
 import {
   createWishlist,
@@ -61,18 +60,20 @@ import {
 } from "../controllers/HandlerFlight.js";
 import {
   getPaymentBeforePay,
+  isCancelPayment,
   isPaymentTicket,
 } from "../controllers/HandlerPayment.js";
-import {
-  getAllBooking,
-  getBookingbyUsersId,
-} from "../controllers/HandlerUserBooking.js";
+
 import {
   createWallet,
   deleteWallet,
   getSaldoWallet,
   updateWallet,
 } from "../controllers/HandlersWallet.js";
+import {
+  DeleteHistoryById,
+  getHistoryPayment,
+} from "../controllers/HandlerHistory.js";
 const router = express.Router();
 const prefix = "/v1/api/";
 const { uploadPictures, getListFiles } = pkg;
@@ -113,8 +114,6 @@ router.delete(prefix + "airports/delete/:id", verifyToken, deleteAirport);
 router.post(prefix + "airports", verifyToken, createAirport);
 
 //ROUTES FOR BOOKING
-router.get(prefix + "bookings", verifyToken, getBookingbyUsersId);
-router.get(prefix + "bookings/all", verifyToken, getAllBooking);
 router.get(prefix + "bookings/byid/:id", verifyToken, getBookingById);
 router.get(prefix + "userbookings", verifyToken, getUserBooking);
 
@@ -140,8 +139,8 @@ router.put(prefix + "flight/edit/:id", updateFlight);
 
 //API FOR ACTION BUYER
 router.post(prefix + "booking", verifyToken, actionBooking);
-router.get(prefix + "booking/payment/:id", verifyToken, isPaymentTicket);
-router.delete(prefix + "cancel/booking/:id", verifyToken, cancelBooking);
+router.post(prefix + "booking/payment/:id", verifyToken, isPaymentTicket);
+router.post(prefix + "cancel/payment/:id", verifyToken, isCancelPayment);
 
 //API FOR TOKEN
 router.get(prefix + "token", refreshToken);
@@ -154,5 +153,9 @@ router.get(prefix + "wallet", verifyToken, getSaldoWallet);
 router.post(prefix + "wallet/create", verifyToken, createWallet);
 router.put(prefix + "wallet/edit/:id", verifyToken, updateWallet);
 router.delete(prefix + "wallet/delete/:id", verifyToken, deleteWallet);
+
+//API FOR HISTORY
+router.get(prefix + "history/:condition", verifyToken, getHistoryPayment);
+router.delete(prefix + "history/delete/:id", verifyToken, DeleteHistoryById);
 
 export default router;

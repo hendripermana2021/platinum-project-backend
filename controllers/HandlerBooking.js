@@ -2,54 +2,36 @@ import db from "../models/index.js";
 import { Op } from "sequelize";
 
 const Booking = db.booking;
-const Ticket = db.ticket;
-const Type = db.classtype;
 const UserBooking = db.userbooking;
 const Users = db.users;
 const Passanger = db.passanger;
 const Payment = db.payment;
 const PassangerBooking = db.passangerbooking;
-const History = db.history;
 
 export const getBookingById = async (req, res) => {
+  const { id } = req.params;
   try {
-    const booking = await Booking.findAll({
-      where: { id: req.params.id },
+    const userBooking = await UserBooking.findOne({
+      where: { id },
+      attributes: ["user_id", "booking_id"],
       include: [
         {
-          model: Ticket,
-          as: "ticketDeparture",
-          include: [
-            {
-              model: Type,
-              as: "class",
-            },
-          ],
+          model: Users,
+          as: "users",
+          attributes: ["id", "firstname", "lastname", "email"],
         },
         {
-          model: Ticket,
-          as: "ticketReturn",
-          include: [
-            {
-              model: Type,
-              as: "class",
-            },
-          ],
-        },
-        {
-          model: PassangerBooking,
-          as: "passangerBooking",
-          include: [
-            {
-              model: Passanger,
-              as: "passanger",
-            },
-          ],
+          model: Booking,
+          as: "booking",
+          include: {
+            all: true,
+            include: { all: true },
+          },
         },
       ],
     });
 
-    if (booking == "") {
+    if (userBooking == "") {
       return res.status(400).json({
         code: 400,
         status: false,
@@ -60,7 +42,7 @@ export const getBookingById = async (req, res) => {
       code: 200,
       status: true,
       msg: "data you searched Found",
-      data: booking,
+      data: userBooking,
     });
   } catch (error) {
     console.log(error);
@@ -75,17 +57,12 @@ export const getUserBooking = async (req, res) => {
         {
           model: Users,
           as: "users",
-          attributes: ["id", "firstname", "lastname"],
+          attributes: ["id", "firstname", "lastname", "email"],
         },
         {
           model: Booking,
           as: "booking",
-          include: [
-            {
-              model: Ticket,
-              as: "ticketDeparture",
-            },
-          ],
+          include: { all: true },
         },
       ],
     });
@@ -111,6 +88,7 @@ export const actionBooking = async (req, res) => {
     const booking = await Booking.create({
       ticket_id_departure: ticket_id_departure,
       ticket_id_return: ticket_id_return,
+      totalPassanger: passanger.length,
       isBooking: false,
     });
 
@@ -139,48 +117,6 @@ export const actionBooking = async (req, res) => {
       status: true,
       msg: "data created",
       data: { booking, passangerBooking, passangerBulk, userbooking, payment },
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const cancelBooking = async (req, res) => {
-  const { id } = req.params;
-  const idGetUsers = req.id;
-  try {
-    const dataBefore = await Payment.findAll({
-      where: { userBooking_id: id },
-      include: [
-        {
-          model: UserBooking,
-          as: "usersPayment",
-          where: {
-            user_id: idGetUsers,
-          },
-        },
-      ],
-    });
-
-    const parsedBooking = JSON.parse(JSON.stringify(dataBefore));
-
-    if (parsedBooking == "") {
-      return res.status(400).json({
-        code: 400,
-        status: true,
-        msg: "Data Not Found",
-      });
-    }
-    await Payment.destroy({ where: { userBooking_id: id } });
-    const history = await History.create({
-      userBooking_id: id,
-      isHistory: false,
-    });
-
-    return res.status(200).json({
-      code: 200,
-      status: true,
-      msg: "Booking Canceled",
     });
   } catch (error) {
     console.log(error);

@@ -10,7 +10,7 @@ export const getSaldoWallet = async (req, res) => {
       },
     });
 
-    if (wallet == 0) {
+    if (wallet == null) {
       return res.status(400).json({
         code: 400,
         status: false,
