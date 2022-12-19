@@ -1,7 +1,6 @@
 import db from "../models/index.js";
 
 const History = db.history;
-const Users = db.users;
 const UserBooking = db.userbooking;
 
 export const getHistoryPayment = async (req, res) => {
