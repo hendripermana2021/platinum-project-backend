@@ -8,6 +8,7 @@ import {
   deleteUsers,
   updateUsers,
   updateProfile,
+  updatePassword,
   getUsersBy,
   getUsersById,
   getUsersByJwt,
@@ -88,6 +89,7 @@ router.delete(prefix + "logout", verifyToken, Logout);
 router.delete(prefix + "users/delete/:id", verifyToken, deleteUsers);
 router.put(prefix + "users/edit/:id", verifyToken, updateUsers);
 router.put(prefix + "users/profile", verifyToken, updateProfile);
+router.put(prefix + "users/profile/password", verifyToken, updatePassword);
 router.get(prefix + "whoami", verifyToken, whoAmI);
 
 //ROUTES FOR UPLOAD FILE
