@@ -281,6 +281,7 @@ export const LoginUsers = async (req, res) => {
     const birthdate = user[0].birthdate;
     const postalcode = user[0].postalcode;
     const pictures = user[0].pictures;
+    const role_id = user[0].role_id;
     const email = user[0].email;
     const accessToken = jwt.sign(
       {
@@ -293,6 +294,7 @@ export const LoginUsers = async (req, res) => {
         birthdate,
         postalcode,
         pictures,
+        role_id,
       },
       process.env.ACCESS_TOKEN_SECRET,
       {
@@ -311,6 +313,7 @@ export const LoginUsers = async (req, res) => {
         birthdate,
         postalcode,
         pictures,
+        role_id,
       },
       process.env.REFRESH_TOKEN_SECRET,
       {
