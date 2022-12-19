@@ -166,7 +166,7 @@ db.flight.belongsTo(db.airport, {
   foreignKey: "arrivalAirport",
 });
 
-db.flight.hasOne(db.plane, {
+db.flight.belongsTo(db.plane, {
   foreignKey: "id",
   as: "planeName",
 });

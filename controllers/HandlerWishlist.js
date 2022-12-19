@@ -2,6 +2,9 @@ import db from "../models/index.js";
 
 const Ticket = db.ticket;
 const Wishlist = db.wishlist;
+const Flight = db.flight;
+const Plane = db.plane;
+const Airport = db.airport;
 
 export const getWishlist = async (req, res) => {
   const reqIdUser = req.user.userId;
@@ -10,17 +13,32 @@ export const getWishlist = async (req, res) => {
       where: {
         user_id: reqIdUser,
       },
-
       include: [
         {
           model: Ticket,
           as: "ticketDeparture",
-          include: { all: true },
+          include: {
+            model: Flight,
+            as: "flight",
+            include: [
+              { model: Plane, as: "planeName" },
+              { model: Airport, as: "DepartureTerminal" },
+              { model: Airport, as: "ArrivalTerminal" },
+            ],
+          },
         },
         {
           model: Ticket,
           as: "ticketReturn",
-          include: { all: true },
+          include: {
+            model: Flight,
+            as: "flight",
+            include: [
+              { model: Plane, as: "planeName" },
+              { model: Airport, as: "DepartureTerminal" },
+              { model: Airport, as: "ArrivalTerminal" },
+            ],
+          },
         },
       ],
     });
@@ -45,22 +63,36 @@ export const getWishlist = async (req, res) => {
 };
 
 export const getWishlistbyid = async (req, res) => {
+  const { id } = req.params;
   try {
     const wishlist = await Wishlist.findAll({
-      where: { id: req.params.id, user_id: req.user.userId },
+      where: { id, user_id: req.user.userId },
       include: [
         {
           model: Ticket,
           as: "ticketDeparture",
           include: {
-            all: true,
-            include: { all: true },
+            model: Flight,
+            as: "flight",
+            include: [
+              { model: Plane, as: "planeName" },
+              { model: Airport, as: "DepartureTerminal" },
+              { model: Airport, as: "ArrivalTerminal" },
+            ],
           },
         },
         {
           model: Ticket,
           as: "ticketReturn",
-          include: { all: true, include: { all: true } },
+          include: {
+            model: Flight,
+            as: "flight",
+            include: [
+              { model: Plane, as: "planeName" },
+              { model: Airport, as: "DepartureTerminal" },
+              { model: Airport, as: "ArrivalTerminal" },
+            ],
+          },
         },
       ],
     });
