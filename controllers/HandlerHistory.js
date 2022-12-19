@@ -2,7 +2,6 @@ import db from "../models/index.js";
 
 const History = db.history;
 const Users = db.users;
-const Ticket = db.ticket;
 const UserBooking = db.userbooking;
 
 export const getHistoryPayment = async (req, res) => {
@@ -16,6 +15,7 @@ export const getHistoryPayment = async (req, res) => {
           model: UserBooking,
           as: "userBooking",
           where: { user_id: reqUserId },
+          include: { all: true, include: { all: true } },
         },
       ],
     });
@@ -44,12 +44,6 @@ export const getHistoryById = async (req, res) => {
   try {
     const history = await History.findOne({
       where: { id: req.params.id },
-      include: [
-        {
-          model: Users,
-          as: "users",
-        },
-      ],
     });
     return res.status(200).json({
       code: 200,

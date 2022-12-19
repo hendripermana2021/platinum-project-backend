@@ -19,6 +19,7 @@ export const getPaymentBeforePay = async (req, res) => {
         where: {
           user_id: getDataByUserId,
         },
+        include: { all: true, include: { all: true } },
       },
     });
     let paymentData = JSON.parse(JSON.stringify(payment));
@@ -57,6 +58,7 @@ export const isPaymentTicket = async (req, res) => {
           where: {
             user_id: reqIdUsers,
           },
+          include: { all: true, include: { all: true } },
         },
       ],
     });
