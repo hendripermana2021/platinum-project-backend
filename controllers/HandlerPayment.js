@@ -10,17 +10,20 @@ import { QueryTypes } from "sequelize";
 export const getPaymentBeforePay = async (req, res) => {
   try {
     const getDataByUserId = req.user.userId;
-    const sql = `SELECT * FROM UserBookings ub JOIN Payments p on ub.id = p.userBooking_id JOIN Bookings b on ub.booking_id = b.id JOIN Tickets t on b.ticket_id_departure = t.id JOIN Flights f on t.flight_id = f.id WHERE p.isPayed = false AND user_id = ${getDataByUserId}`;
-    const replacements = {};
-    const payments = await sequelize.query(sql, {
-      replacements,
-      type: QueryTypes.SELECT,
-      raw: true,
+    const payment = await Payment.findAll({
+      where: {
+        isPayed: false,
+      },
+      include: {
+        all: true,
+        where: {
+          user_id: getDataByUserId,
+        },
+      },
     });
+    let paymentData = JSON.parse(JSON.stringify(payment));
 
-    let paymentData = JSON.parse(JSON.stringify(payments));
-
-    if (payments == "") {
+    if (payment == "") {
       return res.status(400).json({
         code: 400,
         status: true,
@@ -32,9 +35,7 @@ export const getPaymentBeforePay = async (req, res) => {
       code: 200,
       status: true,
       msg: "This Payment you have ",
-      data: {
-        paymentData,
-      },
+      data: paymentData,
     });
   } catch (error) {
     console.log(error);

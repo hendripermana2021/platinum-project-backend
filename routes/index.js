@@ -36,7 +36,6 @@ import {
   actionBooking,
   getBookingById,
   getUserBooking,
-  cancelBooking,
 } from "../controllers/HandlerBooking.js";
 import {
   createWishlist,
@@ -63,17 +62,17 @@ import {
   isCancelPayment,
   isPaymentTicket,
 } from "../controllers/HandlerPayment.js";
-import {
-  getAllBooking,
-  getBookingbyUsersId,
-} from "../controllers/HandlerUserBooking.js";
+
 import {
   createWallet,
   deleteWallet,
   getSaldoWallet,
   updateWallet,
 } from "../controllers/HandlersWallet.js";
-import { getHistoryPayment } from "../controllers/HandlerHistory.js";
+import {
+  DeleteHistoryById,
+  getHistoryPayment,
+} from "../controllers/HandlerHistory.js";
 const router = express.Router();
 const prefix = "/v1/api/";
 const { uploadPictures, getListFiles } = pkg;
@@ -113,8 +112,6 @@ router.delete(prefix + "airports/delete/:id", verifyToken, deleteAirport);
 router.post(prefix + "airports", verifyToken, createAirport);
 
 //ROUTES FOR BOOKING
-router.get(prefix + "bookings", verifyToken, getBookingbyUsersId);
-router.get(prefix + "bookings/all", verifyToken, getAllBooking);
 router.get(prefix + "bookings/byid/:id", verifyToken, getBookingById);
 router.get(prefix + "userbookings", verifyToken, getUserBooking);
 
@@ -157,5 +154,6 @@ router.delete(prefix + "wallet/delete/:id", verifyToken, deleteWallet);
 
 //API FOR HISTORY
 router.get(prefix + "history/:condition", verifyToken, getHistoryPayment);
+router.delete(prefix + "history/delete/:id", verifyToken, DeleteHistoryById);
 
 export default router;
