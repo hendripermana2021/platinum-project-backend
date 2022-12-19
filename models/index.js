@@ -166,13 +166,13 @@ db.flight.belongsTo(db.airport, {
   foreignKey: "arrivalAirport",
 });
 
-db.flight.belongsTo(db.plane, {
-  as: "planename",
-  foreignKey: "planeId",
+db.flight.hasOne(db.plane, {
+  foreignKey: "id",
+  as: "planeName",
 });
 
 //RELATION FOR PLANE
-db.plane.belongsTo(db.flight, {
+db.plane.hasMany(db.flight, {
   as: "flightList",
   foreignKey: "id",
 });

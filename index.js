@@ -17,6 +17,45 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 //socket IO
+
+// io.on("connection", (socket) => {
+//   securityContext.verifySocketToken(socket, socketUtils.socketUtility);
+// });
+
+// verifySocketToken = (socket, callback) => {
+//   let token = socket.request.headers.bearertoken;
+//   if (token === null || typeof token === "undefined") {
+//     return new Error("Unauthorized (token not valid)");
+//   }
+//   try {
+//     var payload = jwt.verify(token, this.config.secretKey, {
+//       algorithms: ["RS256"],
+//     });
+//     socket.request.tenantId = payload.tenantId;
+//     socket.request.userId = payload._id;
+//     callback(socket);
+//   } catch (ex) {
+//     return new Error("Unauthorized (token not valid)");
+//   }
+// };
+
+// socketUtility = (socket) => {
+//   socket.on("subscribe", (filter) => {
+//     let filterSerialized = JSON.stringify(filter);
+//     socket.join(filterSerialized);
+//     socket
+//       .to(filterSerialized)
+//       .emit(
+//         "response",
+//         JSON.stringify({ status: "Subscribed", id: socket.id })
+//       );
+//   });
+
+// Runs when client disconnects
+// socket.on("disconnect", () => {
+//   console.log("Disconnected!!");
+// });
+
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   transports: ["polling"],

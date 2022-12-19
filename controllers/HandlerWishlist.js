@@ -1,10 +1,7 @@
 import db from "../models/index.js";
 
-const Users = db.users;
 const Ticket = db.ticket;
 const Wishlist = db.wishlist;
-const Flight = db.flight;
-const Airport = db.airport;
 
 export const getWishlist = async (req, res) => {
   const reqIdUser = req.user.userId;
@@ -55,12 +52,15 @@ export const getWishlistbyid = async (req, res) => {
         {
           model: Ticket,
           as: "ticketDeparture",
-          include: { all: true },
+          include: {
+            all: true,
+            include: { all: true },
+          },
         },
         {
           model: Ticket,
           as: "ticketReturn",
-          include: { all: true },
+          include: { all: true, include: { all: true } },
         },
       ],
     });
