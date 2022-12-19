@@ -6,8 +6,9 @@ import { Op } from "sequelize";
 const Users = db.users;
 const Role = db.role;
 const Address = db.address;
+const Wallet = db.wallet;
 export const handleGetRoot = async (req, res) => {
-  return res.status(200).json({
+  res.status(200).json({
     code: 200,
     status: "OK",
     msg: "Management API For Order Ticketing is Ready",
@@ -40,7 +41,7 @@ export const getUsers = async (req, res) => {
         },
       ],
     });
-    return res.status(200).json({
+    res.status(200).json({
       code: 200,
       status: true,
       msg: "data you searched Found",
@@ -95,7 +96,7 @@ export const getUsersBy = async (req, res) => {
         msg: "Users not found",
       });
     }
-    return res.status(200).json({
+    res.status(200).json({
       code: 200,
       status: true,
       msg: "data users searched Found",
@@ -134,7 +135,7 @@ export const getUsersById = async (req, res) => {
         },
       ],
     });
-    return res.status(200).json({
+    res.status(200).json({
       code: 200,
       status: true,
       msg: "data you searched Found",
@@ -149,6 +150,7 @@ export const getUsersByJwt = async (req, res) => {
   try {
     const users = await Users.findAll({
       where: { id: req.user.userId },
+
       attributes: [
         "id",
         "firstname",
@@ -172,7 +174,7 @@ export const getUsersByJwt = async (req, res) => {
         },
       ],
     });
-    return res.status(200).json({
+    res.status(200).json({
       code: 200,
       status: true,
       msg: "data you searched Found",
@@ -241,7 +243,12 @@ export const Register = async (req, res) => {
       user_id: user.id,
     });
 
-    return res.status(200).json({
+    await Wallet.create({
+      balance: 0,
+      user_id: user.id,
+    });
+
+    res.status(200).json({
       code: 200,
       status: true,
       msg: "Register Berhasil",
@@ -323,17 +330,16 @@ export const LoginUsers = async (req, res) => {
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
     });
-    return res.status(200).json({
+    res.status(200).json({
       code: 200,
       msg: "Token Has Been Created",
       accessToken,
     });
   } catch (error) {
-    return res.status(404).json({
+    res.status(404).json({ 
       code: 404,
       status: false,
-      msg: "Email tidak ditemukan",
-    });
+      msg: "Email tidak ditemukan" });
   }
 };
 
@@ -351,7 +357,7 @@ export const Logout = async (req, res) => {
       refresh_token: refreshToken,
     },
   });
-  if (!user[0]) {
+  if (!user[0]) { 
     return res.status(200).json({
       code: 200,
       status: false,
@@ -378,7 +384,7 @@ export const Logout = async (req, res) => {
 export const whoAmI = async (req, res) => {
   try {
     const currentUser = req.user;
-    return res.status(200).json({
+    res.status(200).json({
       code: 200,
       status: true,
       msg: "This data Users Login Now",
@@ -435,7 +441,7 @@ export const updateProfile = async (req, res) => {
   }
 
   const {
-    email,
+    email,    
     firstname,
     lastname,
     gender,
@@ -543,6 +549,74 @@ export const updateUsers = async (req, res) => {
       code: 200,
       status: true,
       msg: "Users Success Updated",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+export const updatePassword = async (req, res) => {
+  const dataBeforeDelete = await Users.findAll({
+    where: { id: req.user.userId },
+  });
+  const parsedDataProfile = JSON.parse(JSON.stringify(dataBeforeDelete));
+
+  if (!parsedDataProfile) {
+    return res.status(400).json({
+      code: 400,
+      status: false,
+      msg: "Users doesn't exist or has been deleted!",
+    });
+  }
+
+  const user = await Users.findAll({
+    where: { id: req.user.userId },
+  });
+
+  const {
+    oldPassword,
+    newPassword,
+    confPassword,
+  } = req.body;
+
+  if (!oldPassword)
+    return res.status(400).json({
+      code: 400,
+      success: false,
+      msg: "Masukkan password baru!",
+    });
+
+  if (oldPassword == newPassword)
+    return res.status(400).json({
+      code: 400,
+      success: false,
+      msg: "Password baru dan lama tidak boleh sama!",
+    });
+
+  if (newPassword !== confPassword)
+    return res.status(400).json({
+      code: 400,
+      success: false,
+      msg: "Password dan Confirm Password tidak cocok",
+    });
+  
+  const salt = await bcrypt.genSalt();
+  const hashPassword = await bcrypt.hash(newPassword, salt);
+
+  try {
+    await Users.update(
+      {
+       password: hashPassword,
+      },
+      {
+        where: { id: req.user.userId },
+      }
+    );
+    return res.status(200).json({
+      code: 200,
+      status: true,
+      msg: "Password Success Updated",
     });
   } catch (error) {
     console.log(error);
