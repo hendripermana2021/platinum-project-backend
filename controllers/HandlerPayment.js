@@ -7,8 +7,10 @@ const Booking = db.booking;
 const History = db.history;
 const Wallet = db.wallet;
 const Passanger = db.passanger;
-const sequelize = db.sequelize;
-import { QueryTypes } from "sequelize";
+const Ticket = db.ticket;
+const Flight = db.flight;
+const Plane = db.plane;
+const Airport = db.airport;
 
 export const getPaymentBeforePay = async (req, res) => {
   try {
@@ -17,26 +19,48 @@ export const getPaymentBeforePay = async (req, res) => {
       where: {
         isPayed: false,
       },
-      include: [
-        {
-          model: UserBooking,
-          as: "usersPayment",
-          where: { user_id: getDataByUserId },
+      include: {
+        model: UserBooking,
+        as: "usersPayment",
+        where: { user_id: getDataByUserId },
+        include: {
+          model: Booking,
+          as: "booking",
           include: [
             {
-              model: Booking,
-              as: "booking",
-              include: [
-                {
-                  model: PassangerBooking,
-                  as: "passangerBooking",
-                  include: [{ model: Passanger, as: "passanger" }],
-                },
-              ],
+              model: Ticket,
+              as: "ticketDeparture",
+              include: {
+                model: Flight,
+                as: "flight",
+                include: [
+                  { model: Plane, as: "planeName" },
+                  { model: Airport, as: "DepartureTerminal" },
+                  { model: Airport, as: "ArrivalTerminal" },
+                ],
+              },
+            },
+            {
+              model: Ticket,
+              as: "ticketReturn",
+              include: {
+                model: Flight,
+                as: "flight",
+                include: [
+                  { model: Plane, as: "planeName" },
+                  { model: Airport, as: "DepartureTerminal" },
+                  { model: Airport, as: "ArrivalTerminal" },
+                ],
+              },
+            },
+            {
+              model: PassangerBooking,
+              as: "passangerBooking",
+              include: { model: Passanger, as: "passanger" },
             },
           ],
         },
-      ],
+      },
     });
     let paymentData = JSON.parse(JSON.stringify(payment));
 
@@ -67,26 +91,48 @@ export const isPaymentTicket = async (req, res) => {
       where: {
         id,
       },
-      include: [
-        {
-          model: UserBooking,
-          as: "usersPayment",
-          where: { user_id: reqIdUsers },
+      include: {
+        model: UserBooking,
+        as: "usersPayment",
+        where: { user_id: getDataByUserId },
+        include: {
+          model: Booking,
+          as: "booking",
           include: [
             {
-              model: Booking,
-              as: "booking",
-              include: [
-                {
-                  model: PassangerBooking,
-                  as: "passangerBooking",
-                  include: [{ model: Passanger, as: "passanger" }],
-                },
-              ],
+              model: Ticket,
+              as: "ticketDeparture",
+              include: {
+                model: Flight,
+                as: "flight",
+                include: [
+                  { model: Plane, as: "planeName" },
+                  { model: Airport, as: "DepartureTerminal" },
+                  { model: Airport, as: "ArrivalTerminal" },
+                ],
+              },
+            },
+            {
+              model: Ticket,
+              as: "ticketReturn",
+              include: {
+                model: Flight,
+                as: "flight",
+                include: [
+                  { model: Plane, as: "planeName" },
+                  { model: Airport, as: "DepartureTerminal" },
+                  { model: Airport, as: "ArrivalTerminal" },
+                ],
+              },
+            },
+            {
+              model: PassangerBooking,
+              as: "passangerBooking",
+              include: { model: Passanger, as: "passanger" },
             },
           ],
         },
-      ],
+      },
     });
 
     const paymentMutual = JSON.parse(JSON.stringify(payment));
@@ -228,25 +274,47 @@ export const getPaymentFromCondition = async (req, res) => {
     //CEK CONDITION IF ID null
     if (!id) {
       const payment = await Payment.findAll({
-        include: [
-          {
-            model: UserBooking,
-            as: "usersPayment",
+        include: {
+          model: UserBooking,
+          as: "usersPayment",
+          include: {
+            model: Booking,
+            as: "booking",
             include: [
               {
-                model: Booking,
-                as: "booking",
-                include: [
-                  {
-                    model: PassangerBooking,
-                    as: "passangerBooking",
-                    include: [{ model: Passanger, as: "passanger" }],
-                  },
-                ],
+                model: Ticket,
+                as: "ticketDeparture",
+                include: {
+                  model: Flight,
+                  as: "flight",
+                  include: [
+                    { model: Plane, as: "planeName" },
+                    { model: Airport, as: "DepartureTerminal" },
+                    { model: Airport, as: "ArrivalTerminal" },
+                  ],
+                },
+              },
+              {
+                model: Ticket,
+                as: "ticketReturn",
+                include: {
+                  model: Flight,
+                  as: "flight",
+                  include: [
+                    { model: Plane, as: "planeName" },
+                    { model: Airport, as: "DepartureTerminal" },
+                    { model: Airport, as: "ArrivalTerminal" },
+                  ],
+                },
+              },
+              {
+                model: PassangerBooking,
+                as: "passangerBooking",
+                include: { model: Passanger, as: "passanger" },
               },
             ],
           },
-        ],
+        },
       });
 
       return res.status(200).json({
@@ -261,25 +329,47 @@ export const getPaymentFromCondition = async (req, res) => {
       where: {
         isPayed: id,
       },
-      include: [
-        {
-          model: UserBooking,
-          as: "usersPayment",
+      include: {
+        model: UserBooking,
+        as: "usersPayment",
+        include: {
+          model: Booking,
+          as: "booking",
           include: [
             {
-              model: Booking,
-              as: "booking",
-              include: [
-                {
-                  model: PassangerBooking,
-                  as: "passangerBooking",
-                  include: [{ model: Passanger, as: "passanger" }],
-                },
-              ],
+              model: Ticket,
+              as: "ticketDeparture",
+              include: {
+                model: Flight,
+                as: "flight",
+                include: [
+                  { model: Plane, as: "planeName" },
+                  { model: Airport, as: "DepartureTerminal" },
+                  { model: Airport, as: "ArrivalTerminal" },
+                ],
+              },
+            },
+            {
+              model: Ticket,
+              as: "ticketReturn",
+              include: {
+                model: Flight,
+                as: "flight",
+                include: [
+                  { model: Plane, as: "planeName" },
+                  { model: Airport, as: "DepartureTerminal" },
+                  { model: Airport, as: "ArrivalTerminal" },
+                ],
+              },
+            },
+            {
+              model: PassangerBooking,
+              as: "passangerBooking",
+              include: { model: Passanger, as: "passanger" },
             },
           ],
         },
-      ],
+      },
     });
 
     if (payment == "") {
