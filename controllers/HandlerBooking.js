@@ -114,13 +114,6 @@ export const actionBooking = async (req, res) => {
       isPayed: false,
     });
 
-    // const notif = await Notification.create({
-    //   user_id: getUserId,
-    //   message: `Success Create Booking with payment id`,
-    //   isRead: false,
-    // });
-    // global.io.sockets.in(id).emit("notify-update", getUserId);
-
     return res.status(200).json({
       code: 200,
       status: true,

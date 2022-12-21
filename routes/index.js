@@ -60,6 +60,7 @@ import {
 } from "../controllers/HandlerFlight.js";
 import {
   getPaymentBeforePay,
+  getPaymentById,
   getPaymentFromCondition,
   isCancelPayment,
   isPaymentTicket,
@@ -150,6 +151,7 @@ router.get(prefix + "token", refreshToken);
 router.get(prefix + "payments", verifyToken, getPaymentBeforePay);
 router.get(prefix + "payments/all/:id", verifyToken, getPaymentFromCondition);
 router.get(prefix + "payments/all", verifyToken, getPaymentFromCondition);
+router.get(prefix + "payments/:id", verifyToken, getPaymentById);
 
 //API FOR WALLET
 router.get(prefix + "wallet", verifyToken, getSaldoWallet);

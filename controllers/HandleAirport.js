@@ -1,7 +1,9 @@
 import db from "../models/index.js";
 import { Op } from "sequelize";
+const Notification = db.notification;
 
 const Airport = db.airport;
+const Users = db.users;
 export const getAirport = async (req, res) => {
   try {
     const airport = await Airport.findAll({});
@@ -17,7 +19,8 @@ export const getAirport = async (req, res) => {
 };
 
 export const createAirport = async (req, res) => {
-  const { name, code, city, country, terminal, status } = req.body;
+  const { name, code, city, country, terminal } = req.body;
+  const reqUserId = req.user.userId;
   const airportName = await Airport.findAll({
     where: {
       name: name,
@@ -41,6 +44,17 @@ export const createAirport = async (req, res) => {
       status: false,
       msg: "code is already exists",
     });
+
+  const getUsers = await Users.findOne({
+    where: { id: reqUserId },
+  });
+
+  const notif = await Notification.create({
+    user_id: reqUserId,
+    message: `${getUsers.firstname} Success Create Airport ${Date.now()}`,
+    isRead: false,
+  });
+
   try {
     const airport = await Airport.create({
       name,
@@ -64,6 +78,7 @@ export const createAirport = async (req, res) => {
 
 export const deleteAirport = async (req, res) => {
   const { id } = req.params;
+  const reqUserId = req.user.userId;
   try {
     const dataBefore = await Airport.findOne({
       where: { id: id },
@@ -80,6 +95,20 @@ export const deleteAirport = async (req, res) => {
 
     await Airport.destroy({
       where: { id },
+    });
+
+    const getUsers = await Users.findOne({
+      where: { id: reqUserId },
+    });
+
+    const notif = await Notification.create({
+      user_id: reqUserId,
+      message: `${getUsers.firstname} Success Delete Airport ID ${
+        parsedDataProfile.id
+      } with Name : ${parsedDataProfile.name}, Code : ${
+        parsedDataProfile.code
+      } ${Date.now()}`,
+      isRead: false,
     });
 
     return res.status(200).json({
@@ -143,6 +172,7 @@ export const getAirportById = async (req, res) => {
 
 export const updateAirport = async (req, res) => {
   const { id } = req.params;
+  const reqUserId = req.user.userId;
   const dataBeforeDelete = await Airport.findOne({
     where: { id: id },
   });
@@ -171,6 +201,21 @@ export const updateAirport = async (req, res) => {
         where: { id: id },
       }
     );
+
+    const getUsers = await Users.findOne({
+      where: { id: reqUserId },
+    });
+
+    const notif = await Notification.create({
+      user_id: reqUserId,
+      message: `${getUsers.firstname} Success Update Airport ID ${
+        parsedDataProfile.id
+      } with Name : ${parsedDataProfile.name}, Code : ${
+        parsedDataProfile.code
+      } ${Date.now()}`,
+      isRead: false,
+    });
+
     return res.status(200).json({
       code: 200,
       status: true,

@@ -27,12 +27,6 @@ const io = new Server(httpServer, {
   },
 });
 
-// const io = new Server(http{
-//   cors: {
-//     origin: "*",
-//   },
-// });
-
 let onlineUsers = [];
 
 const addNewUser = (username, socketId) => {
@@ -50,35 +44,20 @@ const getUser = (username) => {
 
 io.on("connection", (socket) => {
   socket.on("newUser", (username) => {
+    //FUNCTION FOR SAVE DATA ONLINE USERS
     addNewUser(username, socket.id);
+    console.log("user connected");
   });
 
-  socket.on("sendNotification", ({ senderName, receiverName, type }) => {
+  socket.on("sendNotification", ({ senderName, receiverName }) => {
     const receiver = getUser(receiverName);
     io.to(receiver.socketId).emit("getNotification", {
       senderName,
-      type,
     });
   });
 
-  // socket.on("sendText", ({ senderName, receiverName, text }) => {
-  //   const receiver = getUser(receiverName);
-  //   io.to(receiver.socketId).emit("getText", {
-  //     senderName,
-  //     text,
-  //   });
-  // });
-
   socket.on("disconnect", () => {
     removeUser(socket.id);
-  });
-});
-
-io.on("connection", (socket) => {
-  console.log("user connected");
-
-  socket.on("disconnect", () => {
-    console.log("user disconnected");
   });
 });
 
