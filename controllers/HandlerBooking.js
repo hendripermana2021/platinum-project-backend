@@ -79,7 +79,7 @@ export const getUserBooking = async (req, res) => {
 };
 
 export const actionBooking = async (req, res) => {
-  const getUserId = req.user_userId;
+  const reqUserId = req.user.userId;
   const ticket_id_departure = req.body.ticket.ticket_id_departure;
   const ticket_id_return = req.body.ticket.ticket_id_return;
   const totalPrice = req.body.ticket.totalPrice;
@@ -104,7 +104,7 @@ export const actionBooking = async (req, res) => {
     );
 
     const userbooking = await UserBooking.create({
-      user_id: req.user.userId,
+      user_id: reqUserId,
       booking_id: booking.id,
     });
 
@@ -112,6 +112,20 @@ export const actionBooking = async (req, res) => {
       userBooking_id: userbooking.id,
       totalPrice: totalPrice,
       isPayed: false,
+    });
+
+    const getUsers = await Users.findOne({
+      where: { id: reqUserId },
+    });
+
+    const notif = await Notification.create({
+      user_id: reqUserId,
+      message: `${
+        getUsers.firstname
+      } Success Booking and your Payment id is : ${
+        payment.id
+      } at ${Date.now()}`,
+      isRead: false,
     });
 
     return res.status(200).json({
@@ -124,7 +138,6 @@ export const actionBooking = async (req, res) => {
         passangerBulk,
         userbooking,
         payment,
-        // notif,
       },
     });
   } catch (error) {

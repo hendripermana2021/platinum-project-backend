@@ -195,6 +195,18 @@ export const isPaymentTicket = async (req, res) => {
       }
     );
 
+    const getUsers = await Users.findOne({
+      where: { id: reqUserId },
+    });
+
+    const notif = await Notification.create({
+      user_id: reqUserId,
+      message: `${getUsers.firstname} Payment Success with Payment ID ${
+        paymentMutual.id
+      } at ${Date.now()}`,
+      isRead: false,
+    });
+
     return res.status(200).json({
       code: 200,
       status: true,
@@ -258,6 +270,18 @@ export const isCancelPayment = async (req, res) => {
       }
     );
 
+    const getUsers = await Users.findOne({
+      where: { id: reqUserId },
+    });
+
+    const notif = await Notification.create({
+      user_id: reqUserId,
+      message: `${getUsers.firstname} Payment Cancel with Payment ID ${
+        payment.id
+      } at ${Date.now()}`,
+      isRead: false,
+    });
+
     return res.status(200).json({
       code: 200,
       status: true,
@@ -270,6 +294,7 @@ export const isCancelPayment = async (req, res) => {
 
 export const getPaymentFromCondition = async (req, res) => {
   const { id } = req.params;
+  const reqUserId = req.user.userId;
   try {
     //CEK CONDITION IF ID null
     if (!id) {
@@ -277,6 +302,7 @@ export const getPaymentFromCondition = async (req, res) => {
         include: {
           model: UserBooking,
           as: "usersPayment",
+          where: { user_id: reqUserId },
           include: {
             model: Booking,
             as: "booking",
@@ -332,6 +358,7 @@ export const getPaymentFromCondition = async (req, res) => {
       include: {
         model: UserBooking,
         as: "usersPayment",
+        where: { user_id: reqUserId },
         include: {
           model: Booking,
           as: "booking",

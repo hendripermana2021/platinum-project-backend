@@ -98,6 +98,7 @@ export const getFlightById = async (req, res) => {
 };
 
 export const createFlight = async (req, res) => {
+  const reqUserId = req.user.userId;
   const {
     departureAirport,
     arrivalAirport,
@@ -127,6 +128,18 @@ export const createFlight = async (req, res) => {
       country,
     });
 
+    const getUsers = await Users.findOne({
+      where: { id: reqUserId },
+    });
+
+    const notif = await Notification.create({
+      user_id: reqUserId,
+      message: `${getUsers.firstname} Success Create Flight with id ${
+        flight.id
+      } with ticket id ${ticket.id} at ${Date.now()}`,
+      isRead: false,
+    });
+
     return res.status(200).json({
       code: 200,
       status: true,
@@ -140,6 +153,7 @@ export const createFlight = async (req, res) => {
 
 export const updateFlight = async (req, res) => {
   const { id } = req.params;
+  const reqUserId = req.user.userId;
   const dataBeforeDelete = await Flight.findOne({
     where: { id: id },
   });
@@ -191,6 +205,18 @@ export const updateFlight = async (req, res) => {
         where: { flight_id: parsedDataProfile.id },
       }
     );
+
+    const getUsers = await Users.findOne({
+      where: { id: reqUserId },
+    });
+
+    const notif = await Notification.create({
+      user_id: reqUserId,
+      message: `${
+        getUsers.firstname
+      } Success Update Flight with ID ${id} at ${Date.now()}`,
+      isRead: false,
+    });
     return res.status(200).json({
       code: 200,
       status: true,
@@ -209,6 +235,18 @@ export const deleteFlight = async (req, res) => {
       where: { id: id },
     });
     const parsedDataProfile = JSON.parse(JSON.stringify(dataBefore));
+
+    const getUsers = await Users.findOne({
+      where: { id: reqUserId },
+    });
+
+    const notif = await Notification.create({
+      user_id: reqUserId,
+      message: `${getUsers.firstname} Success Delete Flight ID ${
+        parsedDataProfile.id
+      } at ${Date.now()}`,
+      isRead: false,
+    });
 
     if (!parsedDataProfile) {
       return res.status(400).json({

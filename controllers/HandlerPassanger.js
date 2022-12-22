@@ -21,6 +21,14 @@ export const getPassangerById = async (req, res) => {
     const passanger = await Passanger.findOne({
       where: { id: req.params.id },
     });
+
+    if (!passanger) {
+      return res.status(400).json({
+        code: 400,
+        status: false,
+        msg: "Passanger not found or nothing!",
+      });
+    }
     return res.status(200).json({
       code: 200,
       status: true,
@@ -74,7 +82,6 @@ export const updatePassanger = async (req, res) => {
 };
 
 export const deletePassanger = async (req, res) => {
-  const passanger = await Passanger.findAll();
   const { id } = req.params;
   const dataBefore = await Passanger.findOne({
     where: { id: id },

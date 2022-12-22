@@ -339,10 +339,11 @@ export const LoginUsers = async (req, res) => {
       accessToken,
     });
   } catch (error) {
-    res.status(404).json({ 
+    res.status(404).json({
       code: 404,
       status: false,
-      msg: "Email tidak ditemukan" });
+      msg: "Email tidak ditemukan",
+    });
   }
 };
 
@@ -360,7 +361,7 @@ export const Logout = async (req, res) => {
       refresh_token: refreshToken,
     },
   });
-  if (!user[0]) { 
+  if (!user[0]) {
     return res.status(200).json({
       code: 200,
       status: false,
@@ -444,7 +445,7 @@ export const updateProfile = async (req, res) => {
   }
 
   const {
-    email,    
+    email,
     firstname,
     lastname,
     gender,
@@ -558,7 +559,6 @@ export const updateUsers = async (req, res) => {
   }
 };
 
-
 export const updatePassword = async (req, res) => {
   const dataBeforeDelete = await Users.findAll({
     where: { id: req.user.userId },
@@ -577,11 +577,7 @@ export const updatePassword = async (req, res) => {
     where: { id: req.user.userId },
   });
 
-  const {
-    oldPassword,
-    newPassword,
-    confPassword,
-  } = req.body;
+  const { oldPassword, newPassword, confPassword } = req.body;
 
   if (!oldPassword)
     return res.status(400).json({
@@ -603,14 +599,14 @@ export const updatePassword = async (req, res) => {
       success: false,
       msg: "Password dan Confirm Password tidak cocok",
     });
-  
+
   const salt = await bcrypt.genSalt();
   const hashPassword = await bcrypt.hash(newPassword, salt);
 
   try {
     await Users.update(
       {
-       password: hashPassword,
+        password: hashPassword,
       },
       {
         where: { id: req.user.userId },
