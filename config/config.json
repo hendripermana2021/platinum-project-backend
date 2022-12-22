@@ -26,7 +26,7 @@
     "database": "railway",
     "port": "5887",
     "host": "containers-us-west-179.railway.app",
-    "url": "mysql://root:RBvZYwqLxztuyS3xzdMO@containers-us-west-179.railway.app:5872/railway",
+    "url": "mysql://root:Wosd2eusudTejVLCDyec@containers-us-west-179.railway.app:5887/railway",
     "dialect": "mysql"
   }
 }
