@@ -1,5 +1,7 @@
 import db from "../models/index.js";
 const Wallet = db.wallet;
+const Notification = db.notification;
+const Users = db.users;
 
 export const getSaldoWallet = async (req, res) => {
   const getIdUsers = req.user.userId;
@@ -31,6 +33,14 @@ export const getSaldoWalletAll = async (req, res) => {
   try {
     const wallet = await Wallet.findAll({});
 
+    if (wallet == "") {
+      return res.status(400).json({
+        code: 400,
+        status: true,
+        msg: "Doesn Have list Wallet found",
+      });
+    }
+
     return res.status(200).json({
       code: 200,
       status: true,
@@ -42,6 +52,7 @@ export const getSaldoWalletAll = async (req, res) => {
 
 export const createWallet = async (req, res) => {
   const { user_id, balance } = req.body;
+  const reqUserId = req.user.userId;
   try {
     const findWallet = await Wallet.findOne({
       where: {
@@ -61,6 +72,18 @@ export const createWallet = async (req, res) => {
       balance,
     });
 
+    const getUsers = await Users.findOne({
+      where: { id: reqUserId },
+    });
+
+    await Notification.create({
+      user_id: reqUserId,
+      message: `${getUsers.firstname} Success Create Wallet with ID ${
+        wallet.id
+      } at ${Date.now()}`,
+      isRead: false,
+    });
+
     return res.status(200).json({
       code: 200,
       status: true,
@@ -72,8 +95,9 @@ export const createWallet = async (req, res) => {
 
 export const updateWallet = async (req, res) => {
   const { id } = req.params;
+  const reqUserId = req.user.userId;
   const wallet = await Wallet.findOne({
-    where: { id: id },
+    where: { user_id: id },
   });
   const parsedDataProfile = JSON.parse(JSON.stringify(wallet));
 
@@ -85,17 +109,32 @@ export const updateWallet = async (req, res) => {
     });
   }
 
-  const { user_id, balance } = req.body;
+  const { balance } = req.body;
+
+  //Sum Wallet
+  const totalWallet = balance + wallet.balance;
   try {
     await Wallet.update(
       {
-        user_id,
-        balance,
+        balance: totalWallet,
       },
       {
-        where: { id: id },
+        where: { user_id: id },
       }
     );
+
+    const getUsers = await Users.findOne({
+      where: { id: reqUserId },
+    });
+
+    await Notification.create({
+      user_id: reqUserId,
+      message: `${getUsers.firstname} Success Top Up Wallet with ID Users ${
+        wallet.id
+      } Total Balance : ${totalWallet} at ${Date.now()}`,
+      isRead: false,
+    });
+
     return res.status(200).json({
       code: 200,
       status: true,
@@ -108,9 +147,10 @@ export const updateWallet = async (req, res) => {
 
 export const deleteWallet = async (req, res) => {
   const { id } = req.params;
+  const reqUserId = req.user.userId;
   try {
     const wallet = await Wallet.findOne({
-      where: { id: id },
+      where: { user_id: id },
     });
     const parsedDataProfile = JSON.parse(JSON.stringify(wallet));
 
@@ -123,8 +163,21 @@ export const deleteWallet = async (req, res) => {
     }
 
     await Wallet.destroy({
-      where: { id: id },
+      where: { user_id: id },
     });
+
+    const getUsers = await Users.findOne({
+      where: { id: reqUserId },
+    });
+
+    await Notification.create({
+      user_id: reqUserId,
+      message: `${getUsers.firstname} Success Delete Wallet with ID Users ${
+        parsedDataProfile.user_id
+      } at ${Date.now()}`,
+      isRead: false,
+    });
+
     return res.status(200).json({
       code: 200,
       status: true,

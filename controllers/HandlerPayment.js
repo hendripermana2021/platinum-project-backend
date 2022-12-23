@@ -11,6 +11,8 @@ const Ticket = db.ticket;
 const Flight = db.flight;
 const Plane = db.plane;
 const Airport = db.airport;
+const Users = db.users;
+const Notification = db.notification;
 
 export const getPaymentBeforePay = async (req, res) => {
   try {
@@ -85,7 +87,7 @@ export const getPaymentBeforePay = async (req, res) => {
 
 export const isPaymentTicket = async (req, res) => {
   const { id } = req.params;
-  const reqIdUsers = req.user.userId;
+  const reqUserId = req.user.userId;
   try {
     const payment = await Payment.findOne({
       where: {
@@ -94,7 +96,7 @@ export const isPaymentTicket = async (req, res) => {
       include: {
         model: UserBooking,
         as: "usersPayment",
-        where: { user_id: getDataByUserId },
+        where: { user_id: reqUserId },
         include: {
           model: Booking,
           as: "booking",
@@ -139,7 +141,7 @@ export const isPaymentTicket = async (req, res) => {
 
     const wallet = await Wallet.findOne({
       where: {
-        user_id: reqIdUsers,
+        user_id: reqUserId,
       },
     });
 
@@ -176,7 +178,7 @@ export const isPaymentTicket = async (req, res) => {
         balance: paymentResult,
       },
       {
-        where: { user_id: req.user.userId },
+        where: { user_id: reqUserId },
       }
     );
 
@@ -220,7 +222,7 @@ export const isPaymentTicket = async (req, res) => {
 
 export const isCancelPayment = async (req, res) => {
   const { id } = req.params;
-  const idGetUsers = req.id;
+  const reqUserId = req.user.userId;
   try {
     const payment = await Payment.findOne({
       where: { id },
@@ -228,7 +230,7 @@ export const isCancelPayment = async (req, res) => {
         {
           model: UserBooking,
           as: "usersPayment",
-          where: { user_id: idGetUsers },
+          where: { user_id: reqUserId },
           include: [
             {
               model: Booking,
@@ -256,8 +258,8 @@ export const isCancelPayment = async (req, res) => {
       });
     }
     const history = await History.create({
-      userBooking_id: parsedBooking.userBooking_id,
-      payment_id: parsedBooking.id,
+      userBooking_id: payment.userBooking_id,
+      payment_id: payment.id,
       isHistory: false,
     });
 

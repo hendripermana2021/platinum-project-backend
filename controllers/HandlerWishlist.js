@@ -7,11 +7,11 @@ const Plane = db.plane;
 const Airport = db.airport;
 
 export const getWishlist = async (req, res) => {
-  const reqIdUser = req.user.userId;
+  const reqUserId = req.user.userId;
   try {
     const wishlist = await Wishlist.findAll({
       where: {
-        user_id: reqIdUser,
+        user_id: reqUserId,
       },
       include: [
         {
