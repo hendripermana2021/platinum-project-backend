@@ -27,6 +27,19 @@ export const getSaldoWallet = async (req, res) => {
   } catch (error) {}
 };
 
+export const getSaldoWalletAll = async (req, res) => {
+  try {
+    const wallet = await Wallet.findAll({});
+
+    return res.status(200).json({
+      code: 200,
+      status: true,
+      msg: "wallet found",
+      data: wallet,
+    });
+  } catch (error) {}
+};
+
 export const createWallet = async (req, res) => {
   const { user_id, balance } = req.body;
   try {

@@ -70,12 +70,18 @@ import {
   createWallet,
   deleteWallet,
   getSaldoWallet,
+  getSaldoWalletAll,
   updateWallet,
 } from "../controllers/HandlersWallet.js";
 import {
   DeleteHistoryById,
   getHistoryPayment,
 } from "../controllers/HandlerHistory.js";
+import {
+  deleteNotificationById,
+  getAllNotifyCondition,
+  readNotify,
+} from "../controllers/HandlerNotif.js";
 const router = express.Router();
 const prefix = "/v1/api/";
 const { uploadPictures, getListFiles } = pkg;
@@ -155,6 +161,7 @@ router.get(prefix + "payments/:id", verifyToken, getPaymentById);
 
 //API FOR WALLET
 router.get(prefix + "wallet", verifyToken, getSaldoWallet);
+router.get(prefix + "wallet/all", verifyToken, getSaldoWalletAll);
 router.post(prefix + "wallet/create", verifyToken, createWallet);
 router.put(prefix + "wallet/edit/:id", verifyToken, updateWallet);
 router.delete(prefix + "wallet/delete/:id", verifyToken, deleteWallet);
@@ -162,5 +169,11 @@ router.delete(prefix + "wallet/delete/:id", verifyToken, deleteWallet);
 //API FOR HISTORY
 router.get(prefix + "history/:condition", verifyToken, getHistoryPayment);
 router.delete(prefix + "history/delete/:id", verifyToken, DeleteHistoryById);
+
+//API FOR NOTIFICATION
+router.get(prefix + "notif/all", verifyToken, getAllNotifyCondition);
+router.get(prefix + "notif/all/:id", verifyToken, getAllNotifyCondition);
+router.put(prefix + "notif/read", verifyToken, readNotify);
+router.delete(prefix + "notif/delete/:id", verifyToken, deleteNotificationById);
 
 export default router;
