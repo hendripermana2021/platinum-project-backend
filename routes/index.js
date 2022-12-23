@@ -126,10 +126,10 @@ router.get(prefix + "bookings/byid/:id", verifyToken, getBookingById);
 router.get(prefix + "userbookings", verifyToken, getUserBooking);
 
 //ROUTER FOR PASSANGERS
-router.get(prefix + "passanger", getPassanger);
-router.get(prefix + "passanger/:id", getPassangerById);
-router.put(prefix + "passanger/edit/:id", updatePassanger);
-router.delete(prefix + "passanger/delete/:id", deletePassanger);
+router.get(prefix + "passanger", verifyToken, getPassanger);
+router.get(prefix + "passanger/:id", verifyToken, getPassangerById);
+router.put(prefix + "passanger/edit/:id", verifyToken, updatePassanger);
+router.delete(prefix + "passanger/delete/:id", verifyToken, deletePassanger);
 
 //ROUTES FOR WISHLIST
 router.get(prefix + "wishlists", verifyToken, getWishlist);
@@ -138,12 +138,12 @@ router.post(prefix + "wishlists/create", verifyToken, createWishlist);
 router.delete(prefix + "wishlists/delete/:id", deleteWishlist);
 
 //ROUTES FOR FLIGHT
-router.get(prefix + "flight", getFlight);
-router.get(prefix + "flight/:search", getFlightBy);
-router.get(prefix + "flight/byid/:id", getFlightById);
-router.post(prefix + "flight/create", createFlight);
-router.delete(prefix + "flight/delete/:id", deleteFlight);
-router.put(prefix + "flight/edit/:id", updateFlight);
+router.get(prefix + "flight", verifyToken, getFlight);
+router.get(prefix + "flight/:search", verifyToken, getFlightBy);
+router.get(prefix + "flight/byid/:id", verifyToken, getFlightById);
+router.post(prefix + "flight/create", verifyToken, createFlight);
+router.delete(prefix + "flight/delete/:id", verifyToken, deleteFlight);
+router.put(prefix + "flight/edit/:id", verifyToken, updateFlight);
 
 //API FOR ACTION BUYER
 router.post(prefix + "booking", verifyToken, actionBooking);
