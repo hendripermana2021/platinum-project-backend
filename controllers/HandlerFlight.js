@@ -39,7 +39,7 @@ export const getFlightBy = async (req, res) => {
         },
         {
           model: Plane,
-          as: "planename",
+          as: "planeName",
           where: {
             [Op.or]: [{ namePlane: { [Op.like]: `%` + search + `%` } }],
           },
@@ -73,20 +73,7 @@ export const getFlightById = async (req, res) => {
       where: {
         id: id,
       },
-      include: [
-        {
-          model: Airport,
-          as: "DepartureTerminal",
-        },
-        {
-          model: Airport,
-          as: "ArrivalTerminal",
-        },
-        {
-          model: Plane,
-          as: "planename",
-        },
-      ],
+      include: { all: true },
     });
 
     return res.status(200).json({
@@ -233,23 +220,12 @@ export const updateFlight = async (req, res) => {
 export const deleteFlight = async (req, res) => {
   const flight = await Flight.findAll();
   const { id } = req.params;
+  const reqUserId = req.user.userId;
   try {
     const dataBefore = await Flight.findOne({
       where: { id: id },
     });
     const parsedDataProfile = JSON.parse(JSON.stringify(dataBefore));
-
-    const getUsers = await Users.findOne({
-      where: { id: reqUserId },
-    });
-
-    const notif = await Notification.create({
-      user_id: reqUserId,
-      message: `${getUsers.firstname} Success Delete Flight ID ${
-        parsedDataProfile.id
-      } at ${Date.now()}`,
-      isRead: false,
-    });
 
     if (!parsedDataProfile) {
       return res.status(400).json({
@@ -267,6 +243,18 @@ export const deleteFlight = async (req, res) => {
       where: {
         flight_id: parsedDataProfile.id,
       },
+    });
+
+    const getUsers = await Users.findOne({
+      where: { id: reqUserId },
+    });
+
+    const notif = await Notification.create({
+      user_id: reqUserId,
+      message: `${getUsers.firstname} Success Delete Flight ID ${
+        parsedDataProfile.id
+      } at ${Date.now()}`,
+      isRead: false,
     });
 
     return res.status(200).json({
