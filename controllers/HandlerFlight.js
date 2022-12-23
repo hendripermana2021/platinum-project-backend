@@ -5,6 +5,7 @@ const Flight = db.flight;
 const Airport = db.airport;
 const Ticket = db.ticket;
 const Plane = db.plane;
+const Users = db.users;
 export const getFlight = async (req, res) => {
   try {
     const flight = await Flight.findAll({
