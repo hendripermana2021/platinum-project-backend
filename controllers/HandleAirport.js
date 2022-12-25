@@ -146,9 +146,10 @@ export const getAirportBy = async (req, res) => {
 };
 
 export const getAirportById = async (req, res) => {
+  const { id } = req.params;
   try {
-    const airport = await Airport.findAll({
-      where: { id: req.params.id },
+    const airport = await Airport.findOne({
+      where: { id },
     });
 
     if (airport == "") {
