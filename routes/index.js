@@ -174,6 +174,7 @@ router.delete(prefix + "history/delete/:id", verifyToken, DeleteHistoryById);
 router.get(prefix + "notif/all", verifyToken, getAllNotifyCondition);
 router.get(prefix + "notif/all/:id", verifyToken, getAllNotifyCondition);
 router.put(prefix + "notif/read", verifyToken, readNotify);
+router.post(prefix + "notif/read", verifyToken, readNotify);
 router.delete(prefix + "notif/delete/:id", verifyToken, deleteNotificationById);
 
 export default router;
