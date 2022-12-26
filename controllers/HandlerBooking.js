@@ -7,6 +7,7 @@ const Users = db.users;
 const Passanger = db.passanger;
 const Payment = db.payment;
 const PassangerBooking = db.passangerbooking;
+const Notification = db.notification;
 
 export const getBookingById = async (req, res) => {
   const { id } = req.params;
@@ -78,6 +79,7 @@ export const getUserBooking = async (req, res) => {
 };
 
 export const actionBooking = async (req, res) => {
+  const reqUserId = req.user.userId;
   const ticket_id_departure = req.body.ticket.ticket_id_departure;
   const ticket_id_return = req.body.ticket.ticket_id_return;
   const totalPrice = req.body.ticket.totalPrice;
@@ -102,7 +104,7 @@ export const actionBooking = async (req, res) => {
     );
 
     const userbooking = await UserBooking.create({
-      user_id: req.user.userId,
+      user_id: reqUserId,
       booking_id: booking.id,
     });
 
@@ -112,11 +114,31 @@ export const actionBooking = async (req, res) => {
       isPayed: false,
     });
 
+    const getUsers = await Users.findOne({
+      where: { id: reqUserId },
+    });
+
+    const notif = await Notification.create({
+      user_id: reqUserId,
+      message: `${
+        getUsers.firstname
+      } Success Booking and your Payment id is : ${
+        payment.id
+      } at ${Date.now()}`,
+      isRead: false,
+    });
+
     return res.status(200).json({
       code: 200,
       status: true,
       msg: "data created",
-      data: { booking, passangerBooking, passangerBulk, userbooking, payment },
+      data: {
+        booking,
+        passangerBooking,
+        passangerBulk,
+        userbooking,
+        payment,
+      },
     });
   } catch (error) {
     console.log(error);

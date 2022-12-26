@@ -5,6 +5,9 @@ const Flight = db.flight;
 const Airport = db.airport;
 const Ticket = db.ticket;
 const Plane = db.plane;
+const Users = db.users;
+const Notification = db.notification;
+
 export const getFlight = async (req, res) => {
   try {
     const flight = await Flight.findAll({
@@ -36,7 +39,7 @@ export const getFlightBy = async (req, res) => {
         },
         {
           model: Plane,
-          as: "planename",
+          as: "planeName",
           where: {
             [Op.or]: [{ namePlane: { [Op.like]: `%` + search + `%` } }],
           },
@@ -70,20 +73,7 @@ export const getFlightById = async (req, res) => {
       where: {
         id: id,
       },
-      include: [
-        {
-          model: Airport,
-          as: "DepartureTerminal",
-        },
-        {
-          model: Airport,
-          as: "ArrivalTerminal",
-        },
-        {
-          model: Plane,
-          as: "planename",
-        },
-      ],
+      include: { all: true },
     });
 
     return res.status(200).json({
@@ -98,6 +88,7 @@ export const getFlightById = async (req, res) => {
 };
 
 export const createFlight = async (req, res) => {
+  const reqUserId = req.user.userId;
   const {
     departureAirport,
     arrivalAirport,
@@ -127,6 +118,18 @@ export const createFlight = async (req, res) => {
       country,
     });
 
+    const getUsers = await Users.findOne({
+      where: { id: reqUserId },
+    });
+
+    const notif = await Notification.create({
+      user_id: reqUserId,
+      message: `${getUsers.firstname} Success Create Flight with id ${
+        flight.id
+      } with ticket id ${ticket.id} at ${Date.now()}`,
+      isRead: false,
+    });
+
     return res.status(200).json({
       code: 200,
       status: true,
@@ -140,6 +143,7 @@ export const createFlight = async (req, res) => {
 
 export const updateFlight = async (req, res) => {
   const { id } = req.params;
+  const reqUserId = req.user.userId;
   const dataBeforeDelete = await Flight.findOne({
     where: { id: id },
   });
@@ -191,6 +195,18 @@ export const updateFlight = async (req, res) => {
         where: { flight_id: parsedDataProfile.id },
       }
     );
+
+    const getUsers = await Users.findOne({
+      where: { id: reqUserId },
+    });
+
+    const notif = await Notification.create({
+      user_id: reqUserId,
+      message: `${
+        getUsers.firstname
+      } Success Update Flight with ID ${id} at ${Date.now()}`,
+      isRead: false,
+    });
     return res.status(200).json({
       code: 200,
       status: true,
@@ -204,6 +220,7 @@ export const updateFlight = async (req, res) => {
 export const deleteFlight = async (req, res) => {
   const flight = await Flight.findAll();
   const { id } = req.params;
+  const reqUserId = req.user.userId;
   try {
     const dataBefore = await Flight.findOne({
       where: { id: id },
@@ -226,6 +243,18 @@ export const deleteFlight = async (req, res) => {
       where: {
         flight_id: parsedDataProfile.id,
       },
+    });
+
+    const getUsers = await Users.findOne({
+      where: { id: reqUserId },
+    });
+
+    const notif = await Notification.create({
+      user_id: reqUserId,
+      message: `${getUsers.firstname} Success Delete Flight ID ${
+        parsedDataProfile.id
+      } at ${Date.now()}`,
+      isRead: false,
     });
 
     return res.status(200).json({

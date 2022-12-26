@@ -60,6 +60,8 @@ import {
 } from "../controllers/HandlerFlight.js";
 import {
   getPaymentBeforePay,
+  getPaymentById,
+  getPaymentFromCondition,
   isCancelPayment,
   isPaymentTicket,
 } from "../controllers/HandlerPayment.js";
@@ -68,12 +70,18 @@ import {
   createWallet,
   deleteWallet,
   getSaldoWallet,
+  getSaldoWalletAll,
   updateWallet,
 } from "../controllers/HandlersWallet.js";
 import {
   DeleteHistoryById,
   getHistoryPayment,
 } from "../controllers/HandlerHistory.js";
+import {
+  deleteNotificationById,
+  getAllNotifyCondition,
+  readNotify,
+} from "../controllers/HandlerNotif.js";
 const router = express.Router();
 const prefix = "/v1/api/";
 const { uploadPictures, getListFiles } = pkg;
@@ -118,10 +126,10 @@ router.get(prefix + "bookings/byid/:id", verifyToken, getBookingById);
 router.get(prefix + "userbookings", verifyToken, getUserBooking);
 
 //ROUTER FOR PASSANGERS
-router.get(prefix + "passanger", getPassanger);
-router.get(prefix + "passanger/:id", getPassangerById);
-router.put(prefix + "passanger/edit/:id", updatePassanger);
-router.delete(prefix + "passanger/delete/:id", deletePassanger);
+router.get(prefix + "passanger", verifyToken, getPassanger);
+router.get(prefix + "passanger/:id", verifyToken, getPassangerById);
+router.put(prefix + "passanger/edit/:id", verifyToken, updatePassanger);
+router.delete(prefix + "passanger/delete/:id", verifyToken, deletePassanger);
 
 //ROUTES FOR WISHLIST
 router.get(prefix + "wishlists", verifyToken, getWishlist);
@@ -130,12 +138,12 @@ router.post(prefix + "wishlists/create", verifyToken, createWishlist);
 router.delete(prefix + "wishlists/delete/:id", deleteWishlist);
 
 //ROUTES FOR FLIGHT
-router.get(prefix + "flight", getFlight);
-router.get(prefix + "flight/:search", getFlightBy);
-router.get(prefix + "flight/byid/:id", getFlightById);
-router.post(prefix + "flight/create", createFlight);
-router.delete(prefix + "flight/delete/:id", deleteFlight);
-router.put(prefix + "flight/edit/:id", updateFlight);
+router.get(prefix + "flight", verifyToken, getFlight);
+router.get(prefix + "flight/:search", verifyToken, getFlightBy);
+router.get(prefix + "flight/byid/:id", verifyToken, getFlightById);
+router.post(prefix + "flight/create", verifyToken, createFlight);
+router.delete(prefix + "flight/delete/:id", verifyToken, deleteFlight);
+router.put(prefix + "flight/edit/:id", verifyToken, updateFlight);
 
 //API FOR ACTION BUYER
 router.post(prefix + "booking", verifyToken, actionBooking);
@@ -147,9 +155,13 @@ router.get(prefix + "token", refreshToken);
 
 //API FOR PAYMENT
 router.get(prefix + "payments", verifyToken, getPaymentBeforePay);
+router.get(prefix + "payments/all/:id", verifyToken, getPaymentFromCondition);
+router.get(prefix + "payments/all", verifyToken, getPaymentFromCondition);
+router.get(prefix + "payments/:id", verifyToken, getPaymentById);
 
 //API FOR WALLET
 router.get(prefix + "wallet", verifyToken, getSaldoWallet);
+router.get(prefix + "wallet/all", verifyToken, getSaldoWalletAll);
 router.post(prefix + "wallet/create", verifyToken, createWallet);
 router.put(prefix + "wallet/edit/:id", verifyToken, updateWallet);
 router.delete(prefix + "wallet/delete/:id", verifyToken, deleteWallet);
@@ -157,5 +169,12 @@ router.delete(prefix + "wallet/delete/:id", verifyToken, deleteWallet);
 //API FOR HISTORY
 router.get(prefix + "history/:condition", verifyToken, getHistoryPayment);
 router.delete(prefix + "history/delete/:id", verifyToken, DeleteHistoryById);
+
+//API FOR NOTIFICATION
+router.get(prefix + "notif/all", verifyToken, getAllNotifyCondition);
+router.get(prefix + "notif/all/:id", verifyToken, getAllNotifyCondition);
+router.put(prefix + "notif/read", verifyToken, readNotify);
+router.post(prefix + "notif/read", verifyToken, readNotify);
+router.delete(prefix + "notif/delete/:id", verifyToken, deleteNotificationById);
 
 export default router;

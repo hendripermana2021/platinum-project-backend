@@ -30,7 +30,7 @@ export const getTicket = async (req, res) => {
             },
             {
               model: Plane,
-              as: "planename",
+              as: "planeName",
             },
           ],
         },
@@ -71,7 +71,7 @@ export const getTicketById = async (req, res) => {
             },
             {
               model: Plane,
-              as: "planename",
+              as: "planeName",
             },
           ],
         },
@@ -114,7 +114,7 @@ export const getTicketQuery = async (req, res) => {
             },
             {
               model: Plane,
-              as: "planename",
+              as: "planeName",
             },
           ],
         },

@@ -1,8 +1,8 @@
 {
   "development": {
     "username": "root",
-    "password": null,
-    "database": "BEProject",
+    "password": "",
+    "database": "BEProject1",
     "host": "127.0.0.1",
     "dialect": "mysql",
     "port": 3306,
@@ -16,17 +16,17 @@
   "test": {
     "username": "root",
     "password": null,
-    "database": "BEProject",
+    "database": "BEProject1",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "production": {
     "username": "root",
-    "password": "RBvZYwqLxztuyS3xzdMO",
+    "password": "Wosd2eusudTejVLCDyec",
     "database": "railway",
-    "port": "5872",
-    "host": "containers-us-west-109.railway.app",
-    "url": "mysql://root:RBvZYwqLxztuyS3xzdMO@containers-us-west-109.railway.app:5872/railway",
+    "port": "5887",
+    "host": "containers-us-west-179.railway.app",
+    "url": "mysql://root:Wosd2eusudTejVLCDyec@containers-us-west-179.railway.app:5887/railway",
     "dialect": "mysql"
   }
 }

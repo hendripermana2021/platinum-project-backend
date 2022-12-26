@@ -2,10 +2,17 @@ import db from "../models/index.js";
 
 const Payment = db.payment;
 const UserBooking = db.userbooking;
+const PassangerBooking = db.passangerbooking;
+const Booking = db.booking;
 const History = db.history;
 const Wallet = db.wallet;
-const sequelize = db.sequelize;
-import { QueryTypes } from "sequelize";
+const Passanger = db.passanger;
+const Ticket = db.ticket;
+const Flight = db.flight;
+const Plane = db.plane;
+const Airport = db.airport;
+const Users = db.users;
+const Notification = db.notification;
 
 export const getPaymentBeforePay = async (req, res) => {
   try {
@@ -15,11 +22,46 @@ export const getPaymentBeforePay = async (req, res) => {
         isPayed: false,
       },
       include: {
-        all: true,
-        where: {
-          user_id: getDataByUserId,
+        model: UserBooking,
+        as: "usersPayment",
+        where: { user_id: getDataByUserId },
+        include: {
+          model: Booking,
+          as: "booking",
+          include: [
+            {
+              model: Ticket,
+              as: "ticketDeparture",
+              include: {
+                model: Flight,
+                as: "flight",
+                include: [
+                  { model: Plane, as: "planeName" },
+                  { model: Airport, as: "DepartureTerminal" },
+                  { model: Airport, as: "ArrivalTerminal" },
+                ],
+              },
+            },
+            {
+              model: Ticket,
+              as: "ticketReturn",
+              include: {
+                model: Flight,
+                as: "flight",
+                include: [
+                  { model: Plane, as: "planeName" },
+                  { model: Airport, as: "DepartureTerminal" },
+                  { model: Airport, as: "ArrivalTerminal" },
+                ],
+              },
+            },
+            {
+              model: PassangerBooking,
+              as: "passangerBooking",
+              include: { model: Passanger, as: "passanger" },
+            },
+          ],
         },
-        include: { all: true, include: { all: true } },
       },
     });
     let paymentData = JSON.parse(JSON.stringify(payment));
@@ -45,29 +87,61 @@ export const getPaymentBeforePay = async (req, res) => {
 
 export const isPaymentTicket = async (req, res) => {
   const { id } = req.params;
-  const reqIdUsers = req.user.userId;
+  const reqUserId = req.user.userId;
   try {
     const payment = await Payment.findOne({
       where: {
         id,
       },
-      include: [
-        {
-          model: UserBooking,
-          as: "usersPayment",
-          where: {
-            user_id: reqIdUsers,
-          },
-          include: { all: true, include: { all: true } },
+      include: {
+        model: UserBooking,
+        as: "usersPayment",
+        where: { user_id: reqUserId },
+        include: {
+          model: Booking,
+          as: "booking",
+          include: [
+            {
+              model: Ticket,
+              as: "ticketDeparture",
+              include: {
+                model: Flight,
+                as: "flight",
+                include: [
+                  { model: Plane, as: "planeName" },
+                  { model: Airport, as: "DepartureTerminal" },
+                  { model: Airport, as: "ArrivalTerminal" },
+                ],
+              },
+            },
+            {
+              model: Ticket,
+              as: "ticketReturn",
+              include: {
+                model: Flight,
+                as: "flight",
+                include: [
+                  { model: Plane, as: "planeName" },
+                  { model: Airport, as: "DepartureTerminal" },
+                  { model: Airport, as: "ArrivalTerminal" },
+                ],
+              },
+            },
+            {
+              model: PassangerBooking,
+              as: "passangerBooking",
+              include: { model: Passanger, as: "passanger" },
+            },
+          ],
         },
-      ],
+      },
     });
 
     const paymentMutual = JSON.parse(JSON.stringify(payment));
 
     const wallet = await Wallet.findOne({
       where: {
-        user_id: reqIdUsers,
+        user_id: reqUserId,
       },
     });
 
@@ -104,7 +178,7 @@ export const isPaymentTicket = async (req, res) => {
         balance: paymentResult,
       },
       {
-        where: { user_id: req.user.userId },
+        where: { user_id: reqUserId },
       }
     );
 
@@ -114,8 +188,25 @@ export const isPaymentTicket = async (req, res) => {
       isHistory: true,
     });
 
-    await Payment.destroy({
-      where: { id },
+    await Payment.update(
+      {
+        isPayed: true,
+      },
+      {
+        where: { id: id },
+      }
+    );
+
+    const getUsers = await Users.findOne({
+      where: { id: reqUserId },
+    });
+
+    const notif = await Notification.create({
+      user_id: reqUserId,
+      message: `${getUsers.firstname} Payment Success with Payment ID ${
+        paymentMutual.id
+      } at ${Date.now()}`,
+      isRead: false,
     });
 
     return res.status(200).json({
@@ -131,7 +222,7 @@ export const isPaymentTicket = async (req, res) => {
 
 export const isCancelPayment = async (req, res) => {
   const { id } = req.params;
-  const idGetUsers = req.id;
+  const reqUserId = req.user.userId;
   try {
     const payment = await Payment.findOne({
       where: { id },
@@ -139,9 +230,20 @@ export const isCancelPayment = async (req, res) => {
         {
           model: UserBooking,
           as: "usersPayment",
-          where: {
-            user_id: idGetUsers,
-          },
+          where: { user_id: reqUserId },
+          include: [
+            {
+              model: Booking,
+              as: "booking",
+              include: [
+                {
+                  model: PassangerBooking,
+                  as: "passangerBooking",
+                  include: [{ model: Passanger, as: "passanger" }],
+                },
+              ],
+            },
+          ],
         },
       ],
     });
@@ -156,13 +258,30 @@ export const isCancelPayment = async (req, res) => {
       });
     }
     const history = await History.create({
-      userBooking_id: parsedBooking.userBooking_id,
-      payment_id: parsedBooking.id,
+      userBooking_id: payment.userBooking_id,
+      payment_id: payment.id,
       isHistory: false,
     });
 
-    await Payment.destroy({
-      where: { id },
+    await Payment.update(
+      {
+        isPayed: false,
+      },
+      {
+        where: { id: id },
+      }
+    );
+
+    const getUsers = await Users.findOne({
+      where: { id: reqUserId },
+    });
+
+    const notif = await Notification.create({
+      user_id: reqUserId,
+      message: `${getUsers.firstname} Payment Cancel with Payment ID ${
+        payment.id
+      } at ${Date.now()}`,
+      isRead: false,
     });
 
     return res.status(200).json({
@@ -173,4 +292,201 @@ export const isCancelPayment = async (req, res) => {
   } catch (error) {
     console.log(error);
   }
+};
+
+export const getPaymentFromCondition = async (req, res) => {
+  const { id } = req.params;
+  const reqUserId = req.user.userId;
+  try {
+    //CEK CONDITION IF ID null
+    if (!id) {
+      const payment = await Payment.findAll({
+        include: {
+          model: UserBooking,
+          as: "usersPayment",
+          where: { user_id: reqUserId },
+          include: {
+            model: Booking,
+            as: "booking",
+            include: [
+              {
+                model: Ticket,
+                as: "ticketDeparture",
+                include: {
+                  model: Flight,
+                  as: "flight",
+                  include: [
+                    { model: Plane, as: "planeName" },
+                    { model: Airport, as: "DepartureTerminal" },
+                    { model: Airport, as: "ArrivalTerminal" },
+                  ],
+                },
+              },
+              {
+                model: Ticket,
+                as: "ticketReturn",
+                include: {
+                  model: Flight,
+                  as: "flight",
+                  include: [
+                    { model: Plane, as: "planeName" },
+                    { model: Airport, as: "DepartureTerminal" },
+                    { model: Airport, as: "ArrivalTerminal" },
+                  ],
+                },
+              },
+              {
+                model: PassangerBooking,
+                as: "passangerBooking",
+                include: { model: Passanger, as: "passanger" },
+              },
+            ],
+          },
+        },
+      });
+
+      return res.status(200).json({
+        code: 200,
+        status: true,
+        msg: "This Payment you have ",
+        data: payment,
+      });
+    }
+
+    const payment = await Payment.findAll({
+      where: {
+        isPayed: id,
+      },
+      include: {
+        model: UserBooking,
+        as: "usersPayment",
+        where: { user_id: reqUserId },
+        include: {
+          model: Booking,
+          as: "booking",
+          include: [
+            {
+              model: Ticket,
+              as: "ticketDeparture",
+              include: {
+                model: Flight,
+                as: "flight",
+                include: [
+                  { model: Plane, as: "planeName" },
+                  { model: Airport, as: "DepartureTerminal" },
+                  { model: Airport, as: "ArrivalTerminal" },
+                ],
+              },
+            },
+            {
+              model: Ticket,
+              as: "ticketReturn",
+              include: {
+                model: Flight,
+                as: "flight",
+                include: [
+                  { model: Plane, as: "planeName" },
+                  { model: Airport, as: "DepartureTerminal" },
+                  { model: Airport, as: "ArrivalTerminal" },
+                ],
+              },
+            },
+            {
+              model: PassangerBooking,
+              as: "passangerBooking",
+              include: { model: Passanger, as: "passanger" },
+            },
+          ],
+        },
+      },
+    });
+
+    if (payment == "") {
+      return res.status(400).json({
+        code: 400,
+        status: true,
+        msg: "You Dont Have Payments, Please Booking now",
+      });
+    }
+
+    return res.status(200).json({
+      code: 200,
+      status: true,
+      msg: "This Payment you have ",
+      data: payment,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getPaymentById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const getDataByUserId = req.user.userId;
+    const payment = await Payment.findAll({
+      where: {
+        id,
+        isPayed: false,
+      },
+      include: {
+        model: UserBooking,
+        as: "usersPayment",
+        where: { user_id: getDataByUserId },
+        include: {
+          model: Booking,
+          as: "booking",
+          include: [
+            {
+              model: Ticket,
+              as: "ticketDeparture",
+              include: {
+                model: Flight,
+                as: "flight",
+                include: [
+                  { model: Plane, as: "planeName" },
+                  { model: Airport, as: "DepartureTerminal" },
+                  { model: Airport, as: "ArrivalTerminal" },
+                ],
+              },
+            },
+            {
+              model: Ticket,
+              as: "ticketReturn",
+              include: {
+                model: Flight,
+                as: "flight",
+                include: [
+                  { model: Plane, as: "planeName" },
+                  { model: Airport, as: "DepartureTerminal" },
+                  { model: Airport, as: "ArrivalTerminal" },
+                ],
+              },
+            },
+            {
+              model: PassangerBooking,
+              as: "passangerBooking",
+              include: { model: Passanger, as: "passanger" },
+            },
+          ],
+        },
+      },
+    });
+    let paymentData = JSON.parse(JSON.stringify(payment));
+
+    if (payment == "") {
+      return res.status(400).json({
+        code: 400,
+        status: true,
+        msg: "You Dont Have Payments, Please Booking now",
+      });
+    }
+
+    return res.status(200).json({
+      code: 200,
+      status: true,
+      msg: "This Payment you have ",
+      data: paymentData,
+    });
+  } catch (error) {}
 };
