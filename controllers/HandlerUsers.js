@@ -459,7 +459,7 @@ export const updateProfile = async (req, res) => {
   } = req.body;
 
   try {
-    await Users.update(
+    const user = await Users.update(
       {
         email,
         firstname,
@@ -484,11 +484,64 @@ export const updateProfile = async (req, res) => {
         where: { user_id: req.user.userId },
       }
     );
+
+    const accessToken = jwt.sign(
+      {
+        userId: req.user.userId,
+        email,
+        firstname,
+        lastname,
+        gender,
+        phone,
+        birthdate,
+        pictures,
+        role_id: req.user.role_id,
+      },
+      process.env.ACCESS_TOKEN_SECRET,
+      {
+        expiresIn: "1d",
+      }
+    );
+
+    const refreshToken = jwt.sign(
+      {
+        userId: req.user.userId,
+        email,
+        firstname,
+        lastname,
+        gender,
+        phone,
+        birthdate,
+        pictures,
+        role_id: req.user.role_id,
+      },
+      process.env.REFRESH_TOKEN_SECRET,
+      {
+        expiresIn: "1d",
+      }
+    );
+
+    await Users.update(
+      { refresh_token: refreshToken, access_token: accessToken },
+      {
+        where: {
+          id: req.user.userId,
+        },
+      }
+    );
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+    
     return res.status(200).json({
       code: 200,
       status: true,
       msg: "Users Success Updated",
+      accessToken,
+      refreshToken,
     });
+
   } catch (error) {
     console.log(error);
   }
@@ -524,7 +577,7 @@ export const updateUsers = async (req, res) => {
   } = req.body;
 
   try {
-    await Users.update(
+    const user = await Users.update(
       {
         email,
         firstname,
