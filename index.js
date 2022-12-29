@@ -12,9 +12,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(router);
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-
-export const application = app;
+app.use(bodyParser.json({}));
 
 const { PORT = 8000 } = process.env;
 

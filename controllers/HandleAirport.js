@@ -107,7 +107,7 @@ export const deleteAirport = async (req, res) => {
         parsedDataProfile.id
       } with Name : ${parsedDataProfile.name}, Code : ${
         parsedDataProfile.code
-      } ${Date.now()}`,
+      } at ${new Date()}`,
       isRead: false,
     });
 

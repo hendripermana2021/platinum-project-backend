@@ -138,9 +138,9 @@ router.post(prefix + "wishlists/create", verifyToken, createWishlist);
 router.delete(prefix + "wishlists/delete/:id", deleteWishlist);
 
 //ROUTES FOR FLIGHT
-router.get(prefix + "flight", verifyToken, getFlight);
-router.get(prefix + "flight/:search", verifyToken, getFlightBy);
-router.get(prefix + "flight/byid/:id", verifyToken, getFlightById);
+router.get(prefix + "flight", getFlight);
+router.get(prefix + "flight/:search", getFlightBy);
+router.get(prefix + "flight/byid/:id", getFlightById);
 router.post(prefix + "flight/create", verifyToken, createFlight);
 router.delete(prefix + "flight/delete/:id", verifyToken, deleteFlight);
 router.put(prefix + "flight/edit/:id", verifyToken, updateFlight);

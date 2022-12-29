@@ -533,7 +533,7 @@ export const updateProfile = async (req, res) => {
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
     });
-    
+
     return res.status(200).json({
       code: 200,
       status: true,
@@ -541,7 +541,6 @@ export const updateProfile = async (req, res) => {
       accessToken,
       refreshToken,
     });
-
   } catch (error) {
     console.log(error);
   }
