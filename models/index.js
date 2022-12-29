@@ -124,7 +124,7 @@ db.booking.hasMany(db.passangerbooking, {
   sourceKey: "id",
 });
 
-db.passangerbooking.hasMany(db.passanger, {
+db.passangerbooking.belongsTo(db.passanger, {
   foreignKey: "id",
   as: "passanger",
   sourceKey: "idPassanger",
@@ -168,7 +168,7 @@ db.flight.belongsTo(db.airport, {
   foreignKey: "arrivalAirport",
 });
 
-db.flight.hasMany(db.plane, {
+db.flight.belongsTo(db.plane, {
   as: "planeName",
   foreignKey: "id",
   sourceKey: "planeId",
