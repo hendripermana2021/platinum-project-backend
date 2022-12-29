@@ -124,7 +124,7 @@ export const actionBooking = async (req, res) => {
         getUsers.firstname
       } Success Booking and your Payment id is : ${
         payment.id
-      } at ${Date.now()}`,
+      } at ${Date().toLocaleString()}`,
       isRead: false,
     });
 

@@ -205,7 +205,7 @@ export const isPaymentTicket = async (req, res) => {
       user_id: reqUserId,
       message: `${getUsers.firstname} Payment Success with Payment ID ${
         paymentMutual.id
-      } at ${Date.now()}`,
+      } at ${Date().toLocaleString()}`,
       isRead: false,
     });
 
@@ -280,7 +280,7 @@ export const isCancelPayment = async (req, res) => {
       user_id: reqUserId,
       message: `${getUsers.firstname} Payment Cancel with Payment ID ${
         payment.id
-      } at ${Date.now()}`,
+      } at ${Date().toLocaleString()}`,
       isRead: false,
     });
 

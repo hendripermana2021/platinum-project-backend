@@ -126,7 +126,7 @@ export const createFlight = async (req, res) => {
       user_id: reqUserId,
       message: `${getUsers.firstname} Success Create Flight with id ${
         flight.id
-      } with ticket id ${ticket.id} at ${Date.now()}`,
+      } with ticket id ${ticket.id} at ${Date().toLocaleString()}`,
       isRead: false,
     });
 
@@ -204,7 +204,7 @@ export const updateFlight = async (req, res) => {
       user_id: reqUserId,
       message: `${
         getUsers.firstname
-      } Success Update Flight with ID ${id} at ${Date.now()}`,
+      } Success Update Flight with ID ${id} at ${Date().toLocaleString()}`,
       isRead: false,
     });
     return res.status(200).json({
@@ -253,7 +253,7 @@ export const deleteFlight = async (req, res) => {
       user_id: reqUserId,
       message: `${getUsers.firstname} Success Delete Flight ID ${
         parsedDataProfile.id
-      } at ${Date.now()}`,
+      } at ${Date().toLocaleString()}`,
       isRead: false,
     });
 

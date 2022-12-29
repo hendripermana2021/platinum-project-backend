@@ -80,7 +80,7 @@ export const createWallet = async (req, res) => {
       user_id: reqUserId,
       message: `${getUsers.firstname} Success Create Wallet with ID ${
         wallet.id
-      } at ${Date.now()}`,
+      } at ${Date().toLocaleString()}`,
       isRead: false,
     });
 
@@ -131,7 +131,7 @@ export const updateWallet = async (req, res) => {
       user_id: reqUserId,
       message: `${getUsers.firstname} Success Top Up Wallet with ID Users ${
         wallet.id
-      } Total Balance : ${totalWallet} at ${Date.now()}`,
+      } Total Balance : ${totalWallet} at ${Date().toLocaleString()}`,
       isRead: false,
     });
 
@@ -174,7 +174,7 @@ export const deleteWallet = async (req, res) => {
       user_id: reqUserId,
       message: `${getUsers.firstname} Success Delete Wallet with ID Users ${
         parsedDataProfile.user_id
-      } at ${Date.now()}`,
+      } at ${Date().toLocaleString()}`,
       isRead: false,
     });
 

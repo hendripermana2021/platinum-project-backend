@@ -51,7 +51,9 @@ export const createAirport = async (req, res) => {
 
   const notif = await Notification.create({
     user_id: reqUserId,
-    message: `${getUsers.firstname} Success Create Airport ${Date.now()}`,
+    message: `${
+      getUsers.firstname
+    } Success Create Airport ${Date().toLocaleString()}`,
     isRead: false,
   });
 
@@ -107,7 +109,7 @@ export const deleteAirport = async (req, res) => {
         parsedDataProfile.id
       } with Name : ${parsedDataProfile.name}, Code : ${
         parsedDataProfile.code
-      } at ${new Date()}`,
+      } at ${Date().toLocaleString()}`,
       isRead: false,
     });
 
@@ -213,7 +215,7 @@ export const updateAirport = async (req, res) => {
         parsedDataProfile.id
       } with Name : ${parsedDataProfile.name}, Code : ${
         parsedDataProfile.code
-      } ${Date.now()}`,
+      } ${Date().toLocaleString()}`,
       isRead: false,
     });
 
