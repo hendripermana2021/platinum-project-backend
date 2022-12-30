@@ -153,7 +153,7 @@ db.wishlist.belongsTo(db.ticket, {
 
 //RELATION FOR FLIGHT
 
-db.flight.hasMany(db.ticket, {
+db.flight.belongsTo(db.ticket, {
   as: "ticket",
   foreignKey: "id",
 });
