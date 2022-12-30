@@ -7,11 +7,16 @@ const Users = db.users;
 export const getAirport = async (req, res) => {
   try {
     const airport = await Airport.findAll({});
+
+    const sortAirport = airport.sort(function (a, b) {
+      return b.createdAt - a.createdAt;
+    });
+
     return res.status(200).json({
       code: 200,
       status: true,
       msg: "Airports searched Found",
-      data: airport,
+      data: sortAirport,
     });
   } catch (error) {
     console.log(error);

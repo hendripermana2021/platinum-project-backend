@@ -19,7 +19,9 @@ export const getHistoryPayment = async (req, res) => {
       ],
     });
 
-    const parsedHistory = JSON.parse(JSON.stringify(history));
+    const historySort = history.sort(function (a, b) {
+      return b.createdAt - a.createdAt;
+    });
 
     if (history == "") {
       return res.status(400).json({
@@ -32,7 +34,7 @@ export const getHistoryPayment = async (req, res) => {
       code: 200,
       status: true,
       msg: `you don't have history payment`,
-      data: history,
+      data: historySort,
     });
   } catch (error) {
     console.log(error);

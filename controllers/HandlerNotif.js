@@ -19,12 +19,15 @@ export const getAllNotifyCondition = async (req, res) => {
         });
       }
 
+      const sortNotification = notify.sort(function (a, b) {
+        return b.createdAt - a.createdAt;
+      });
+
       return res.status(200).json({
         code: 200,
         status: true,
-
         msg: "Get Notification isRead false",
-        data: notify,
+        data: sortNotification,
       });
     }
     // END
@@ -41,12 +44,15 @@ export const getAllNotifyCondition = async (req, res) => {
         msg: "Notification isRead True is Nothing",
       });
     }
+    const sortNotification = notify.sort(function (a, b) {
+      return b.createdAt - a.createdAt;
+    });
 
     return res.status(200).json({
       code: 200,
       status: true,
       msg: "Get Notification isRead True",
-      data: notify,
+      data: sortNotification,
     });
   } catch (error) {}
 };

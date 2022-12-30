@@ -14,77 +14,6 @@ const Airport = db.airport;
 const Users = db.users;
 const Notification = db.notification;
 
-export const getPaymentBeforePay = async (req, res) => {
-  try {
-    const getDataByUserId = req.user.userId;
-    const payment = await Payment.findAll({
-      where: {
-        isPayed: false,
-      },
-      include: {
-        model: UserBooking,
-        as: "usersPayment",
-        where: { user_id: getDataByUserId },
-        include: {
-          model: Booking,
-          as: "booking",
-          include: [
-            {
-              model: Ticket,
-              as: "ticketDeparture",
-              include: {
-                model: Flight,
-                as: "flight",
-                include: [
-                  { model: Plane, as: "planeName" },
-                  { model: Airport, as: "DepartureTerminal" },
-                  { model: Airport, as: "ArrivalTerminal" },
-                ],
-              },
-            },
-            {
-              model: Ticket,
-              as: "ticketReturn",
-              include: {
-                model: Flight,
-                as: "flight",
-                include: [
-                  { model: Plane, as: "planeName" },
-                  { model: Airport, as: "DepartureTerminal" },
-                  { model: Airport, as: "ArrivalTerminal" },
-                ],
-              },
-            },
-            {
-              model: PassangerBooking,
-              as: "passangerBooking",
-              include: { model: Passanger, as: "passanger" },
-            },
-          ],
-        },
-      },
-    });
-    let paymentData = JSON.parse(JSON.stringify(payment));
-
-    if (payment == "") {
-      return res.status(400).json({
-        code: 400,
-        status: true,
-        msg: "You Dont Have Payments, Please Booking now",
-      });
-    }
-
-    return res.status(200).json({
-      code: 200,
-      status: true,
-      msg: "This Payment you have ",
-      data: paymentData,
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 export const isPaymentTicket = async (req, res) => {
   const { id } = req.params;
   const reqUserId = req.user.userId;
@@ -345,13 +274,26 @@ export const getPaymentFromCondition = async (req, res) => {
         },
       });
 
+      if (payment == "") {
+        return res.status(400).json({
+          code: 400,
+          status: true,
+          msg: "You Dont Have Payments not Paying",
+        });
+      }
+
+      const sortPayment = payment.sort(function (a, b) {
+        return b.createdAt - a.createdAt;
+      });
+
       return res.status(200).json({
         code: 200,
         status: true,
         msg: "This Payment you have ",
-        data: payment,
+        data: sortPayment,
       });
     }
+    //END
 
     const payment = await Payment.findAll({
       where: {
@@ -409,11 +351,15 @@ export const getPaymentFromCondition = async (req, res) => {
       });
     }
 
+    const sortPayment = payment.sort(function (a, b) {
+      return b.createdAt - a.createdAt;
+    });
+
     return res.status(200).json({
       code: 200,
       status: true,
       msg: "This Payment you have ",
-      data: payment,
+      data: sortPayment,
     });
   } catch (error) {
     console.log(error);

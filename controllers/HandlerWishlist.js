@@ -51,11 +51,15 @@ export const getWishlist = async (req, res) => {
       });
     }
 
+    const sortWishlist = wishlist.sort(function (a, b) {
+      return b.createdAt - a.createdAt;
+    });
+
     return res.status(200).json({
       code: 200,
       status: true,
       msg: "Ticket Added",
-      data: wishlist,
+      data: sortWishlist,
     });
   } catch (error) {
     console.log(error);

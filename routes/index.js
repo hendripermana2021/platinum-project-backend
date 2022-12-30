@@ -59,7 +59,6 @@ import {
   updateFlight,
 } from "../controllers/HandlerFlight.js";
 import {
-  getPaymentBeforePay,
   getPaymentById,
   getPaymentFromCondition,
   isCancelPayment,
@@ -154,7 +153,6 @@ router.post(prefix + "cancel/payment/:id", verifyToken, isCancelPayment);
 router.get(prefix + "token", refreshToken);
 
 //API FOR PAYMENT
-router.get(prefix + "payments", verifyToken, getPaymentBeforePay);
 router.get(prefix + "payments/all/:id", verifyToken, getPaymentFromCondition);
 router.get(prefix + "payments/all", verifyToken, getPaymentFromCondition);
 router.get(prefix + "payments/:id", verifyToken, getPaymentById);
