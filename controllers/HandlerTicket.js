@@ -105,10 +105,16 @@ export const getTicketQuery = async (req, res) => {
             {
               model: Airport,
               as: "DepartureTerminal",
+              where: {
+                code: departure,
+              },
             },
             {
               model: Airport,
               as: "ArrivalTerminal",
+              where: {
+                code: arrival,
+              },
             },
             {
               model: Plane,
@@ -124,9 +130,7 @@ export const getTicketQuery = async (req, res) => {
     for (let i = 0; i < ticket.length; i++) {
       if (
         ticket[i].flight !== null &&
-        ticket[i].flight.departureDate >= departureDate &&
-        ticket[i].flight.DepartureTerminal.code == departure &&
-        ticket[i].flight.ArrivalTerminal.code == arrival
+        ticket[i].flight.departureDate >= departureDate
       )
         result.push(ticket[i]);
     }
