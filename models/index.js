@@ -125,9 +125,9 @@ db.booking.hasMany(db.passangerbooking, {
 });
 
 db.passangerbooking.belongsTo(db.passanger, {
-  foreignKey: "id",
+  foreignKey: "idPassanger",
   as: "passanger",
-  sourceKey: "idPassanger",
+  sourceKey: "id",
 });
 
 // //RELATION FOR WISHLIST
