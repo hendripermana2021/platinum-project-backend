@@ -4,8 +4,6 @@ const Ticket = db.ticket;
 const Type = db.classtype;
 const Flight = db.flight;
 const Airport = db.airport;
-const Booking = db.booking;
-const UserBooking = db.userbooking;
 const Plane = db.plane;
 export const getTicket = async (req, res) => {
   try {

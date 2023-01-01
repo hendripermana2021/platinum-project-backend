@@ -8,6 +8,21 @@ const Plane = db.plane;
 const Users = db.users;
 const Notification = db.notification;
 
+//MAKE STRING DATE
+let tgl = new Date();
+let format_tgl =
+  tgl.getFullYear() +
+  "-" +
+  (tgl.getMonth() + 1) +
+  "-" +
+  tgl.getDate() +
+  " " +
+  tgl.getHours() +
+  ":" +
+  tgl.getMinutes() +
+  ":" +
+  tgl.getSeconds();
+
 export const getFlight = async (req, res) => {
   try {
     const flight = await Flight.findAll({
@@ -122,11 +137,9 @@ export const createFlight = async (req, res) => {
       where: { id: reqUserId },
     });
 
-    const notif = await Notification.create({
+    await Notification.create({
       user_id: reqUserId,
-      message: `${getUsers.firstname} Success Create Flight with id ${
-        flight.id
-      } with ticket id ${ticket.id} at ${Date().toLocaleString()}`,
+      message: `${getUsers.firstname} Success Create Flight with id ${flight.id} with ticket id ${ticket.id} at ${format_tgl}`,
       isRead: false,
     });
 
@@ -200,11 +213,9 @@ export const updateFlight = async (req, res) => {
       where: { id: reqUserId },
     });
 
-    const notif = await Notification.create({
+    await Notification.create({
       user_id: reqUserId,
-      message: `${
-        getUsers.firstname
-      } Success Update Flight with ID ${id} at ${Date().toLocaleString()}`,
+      message: `${getUsers.firstname} Success Update Flight with ID ${id} at ${format_tgl}`,
       isRead: false,
     });
     return res.status(200).json({
@@ -249,11 +260,9 @@ export const deleteFlight = async (req, res) => {
       where: { id: reqUserId },
     });
 
-    const notif = await Notification.create({
+    await Notification.create({
       user_id: reqUserId,
-      message: `${getUsers.firstname} Success Delete Flight ID ${
-        parsedDataProfile.id
-      } at ${Date().toLocaleString()}`,
+      message: `${getUsers.firstname} Success Delete Flight ID ${parsedDataProfile.id} at ${format_tgl}`,
       isRead: false,
     });
 

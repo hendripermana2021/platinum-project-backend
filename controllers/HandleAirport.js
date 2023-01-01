@@ -2,6 +2,21 @@ import db from "../models/index.js";
 import { Op } from "sequelize";
 const Notification = db.notification;
 
+//MAKE STRING DATE
+let tgl = new Date();
+let format_tgl =
+  tgl.getFullYear() +
+  "-" +
+  (tgl.getMonth() + 1) +
+  "-" +
+  tgl.getDate() +
+  " " +
+  tgl.getHours() +
+  ":" +
+  tgl.getMinutes() +
+  ":" +
+  tgl.getSeconds();
+
 const Airport = db.airport;
 const Users = db.users;
 export const getAirport = async (req, res) => {
@@ -54,14 +69,6 @@ export const createAirport = async (req, res) => {
     where: { id: reqUserId },
   });
 
-  const notif = await Notification.create({
-    user_id: reqUserId,
-    message: `${
-      getUsers.firstname
-    } Success Create Airport ${Date().toLocaleString()}`,
-    isRead: false,
-  });
-
   try {
     const airport = await Airport.create({
       name,
@@ -70,6 +77,12 @@ export const createAirport = async (req, res) => {
       country,
       terminal,
       status: true,
+    });
+
+    await Notification.create({
+      user_id: reqUserId,
+      message: `${getUsers.firstname} Success Create Airport ${airport.name} with Code ${airport.code} Country ${airport.country} at ${format_tgl}`,
+      isRead: false,
     });
 
     return res.status(200).json({
@@ -108,13 +121,9 @@ export const deleteAirport = async (req, res) => {
       where: { id: reqUserId },
     });
 
-    const notif = await Notification.create({
+    await Notification.create({
       user_id: reqUserId,
-      message: `${getUsers.firstname} Success Delete Airport ID ${
-        parsedDataProfile.id
-      } with Name : ${parsedDataProfile.name}, Code : ${
-        parsedDataProfile.code
-      } at ${Date().toLocaleString()}`,
+      message: `${getUsers.firstname} Success Delete Airport ID ${parsedDataProfile.id} with Name : ${parsedDataProfile.name}, Code : ${parsedDataProfile.code} at ${format_tgl}`,
       isRead: false,
     });
 
@@ -181,12 +190,11 @@ export const getAirportById = async (req, res) => {
 export const updateAirport = async (req, res) => {
   const { id } = req.params;
   const reqUserId = req.user.userId;
-  const dataBeforeDelete = await Airport.findOne({
+  const airport = await Airport.findOne({
     where: { id: id },
   });
-  const parsedDataProfile = JSON.parse(JSON.stringify(dataBeforeDelete));
 
-  if (!parsedDataProfile) {
+  if (airport == "") {
     return res.status(400).json({
       code: 400,
       status: false,
@@ -214,13 +222,9 @@ export const updateAirport = async (req, res) => {
       where: { id: reqUserId },
     });
 
-    const notif = await Notification.create({
+    await Notification.create({
       user_id: reqUserId,
-      message: `${getUsers.firstname} Success Update Airport ID ${
-        parsedDataProfile.id
-      } with Name : ${parsedDataProfile.name}, Code : ${
-        parsedDataProfile.code
-      } ${Date().toLocaleString()}`,
+      message: `${getUsers.firstname} Success Update Airport ID ${airport.id} with Name : ${airport.name}, Code : ${airport.code} at ${format_tgl}`,
       isRead: false,
     });
 

@@ -1,5 +1,4 @@
 import db from "../models/index.js";
-import { Op } from "sequelize";
 
 const Booking = db.booking;
 const UserBooking = db.userbooking;
@@ -8,6 +7,20 @@ const Passanger = db.passanger;
 const Payment = db.payment;
 const PassangerBooking = db.passangerbooking;
 const Notification = db.notification;
+//MAKE STRING DATE
+let tgl = new Date();
+let format_tgl =
+  tgl.getFullYear() +
+  "-" +
+  (tgl.getMonth() + 1) +
+  "-" +
+  tgl.getDate() +
+  " " +
+  tgl.getHours() +
+  ":" +
+  tgl.getMinutes() +
+  ":" +
+  tgl.getSeconds();
 
 export const getBookingById = async (req, res) => {
   const { id } = req.params;
@@ -123,13 +136,9 @@ export const actionBooking = async (req, res) => {
       where: { id: reqUserId },
     });
 
-    const notif = await Notification.create({
+    await Notification.create({
       user_id: reqUserId,
-      message: `${
-        getUsers.firstname
-      } Success Booking and your Payment id is : ${
-        payment.id
-      } at ${Date().toLocaleString()}`,
+      message: `${getUsers.firstname} Success Booking and your Payment id is : ${payment.id} at ${format_tgl}`,
       isRead: false,
     });
 

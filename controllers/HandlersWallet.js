@@ -3,6 +3,21 @@ const Wallet = db.wallet;
 const Notification = db.notification;
 const Users = db.users;
 
+//MAKE STRING DATE
+let tgl = new Date();
+let format_tgl =
+  tgl.getFullYear() +
+  "-" +
+  (tgl.getMonth() + 1) +
+  "-" +
+  tgl.getDate() +
+  " " +
+  tgl.getHours() +
+  ":" +
+  tgl.getMinutes() +
+  ":" +
+  tgl.getSeconds();
+
 export const getSaldoWallet = async (req, res) => {
   const getIdUsers = req.user.userId;
   try {
@@ -78,9 +93,7 @@ export const createWallet = async (req, res) => {
 
     await Notification.create({
       user_id: reqUserId,
-      message: `${getUsers.firstname} Success Create Wallet with ID ${
-        wallet.id
-      } at ${Date().toLocaleString()}`,
+      message: `${getUsers.firstname} Success Create Wallet with ID ${wallet.id} at ${format_tgl}`,
       isRead: false,
     });
 
@@ -129,9 +142,7 @@ export const updateWallet = async (req, res) => {
 
     await Notification.create({
       user_id: reqUserId,
-      message: `${getUsers.firstname} Success Top Up Wallet with ID Users ${
-        wallet.id
-      } Total Balance : ${totalWallet} at ${Date().toLocaleString()}`,
+      message: `${getUsers.firstname} Success Top Up Wallet with ID Users ${wallet.id} Total Balance : ${totalWallet} at ${format_tgl}`,
       isRead: false,
     });
 
@@ -172,9 +183,7 @@ export const deleteWallet = async (req, res) => {
 
     await Notification.create({
       user_id: reqUserId,
-      message: `${getUsers.firstname} Success Delete Wallet with ID Users ${
-        parsedDataProfile.user_id
-      } at ${Date().toLocaleString()}`,
+      message: `${getUsers.firstname} Success Delete Wallet with ID Users ${parsedDataProfile.user_id} at ${format_tgl}`,
       isRead: false,
     });
 

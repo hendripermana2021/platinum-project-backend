@@ -14,6 +14,21 @@ const Airport = db.airport;
 const Users = db.users;
 const Notification = db.notification;
 
+//MAKE STRING DATE
+let tgl = new Date();
+let format_tgl =
+  tgl.getFullYear() +
+  "-" +
+  (tgl.getMonth() + 1) +
+  "-" +
+  tgl.getDate() +
+  " " +
+  tgl.getHours() +
+  ":" +
+  tgl.getMinutes() +
+  ":" +
+  tgl.getSeconds();
+
 export const getPaymentAllCondition = async (req, res) => {
   const reqUserId = req.user.userId;
   try {
@@ -201,11 +216,9 @@ export const isPaymentTicket = async (req, res) => {
       where: { id: reqUserId },
     });
 
-    const notif = await Notification.create({
+    await Notification.create({
       user_id: reqUserId,
-      message: `${getUsers.firstname} Payment Success with Payment ID ${
-        paymentMutual.id
-      } at ${Date().toLocaleString()}`,
+      message: `${getUsers.firstname} Payment Success with Payment ID ${paymentMutual.id} at ${format_tgl}`,
       isRead: false,
     });
 
@@ -276,11 +289,9 @@ export const isCancelPayment = async (req, res) => {
       where: { id: reqUserId },
     });
 
-    const notif = await Notification.create({
+    await Notification.create({
       user_id: reqUserId,
-      message: `${getUsers.firstname} Payment Cancel with Payment ID ${
-        payment.id
-      } at ${Date().toLocaleString()}`,
+      message: `${getUsers.firstname} Payment Cancel with Payment ID ${payment.id} at ${format_tgl}`,
       isRead: false,
     });
 
