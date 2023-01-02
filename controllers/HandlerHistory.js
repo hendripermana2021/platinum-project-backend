@@ -1,10 +1,16 @@
 import db from "../models/index.js";
+import users from "../models/users.js";
 
 const History = db.history;
 const UserBooking = db.userbooking;
 const Booking = db.booking;
 const PassangerBooking = db.passangerbooking;
 const Passanger = db.passanger;
+const Users = db.users;
+const Ticket = db.ticket;
+const Flight = db.flight;
+const Plane = db.plane;
+const Airport = db.airport;
 
 export const getHistoryPayment = async (req, res) => {
   const reqUserId = req.user.userId;
@@ -18,10 +24,37 @@ export const getHistoryPayment = async (req, res) => {
           as: "userBooking",
           where: { user_id: reqUserId },
           include: [
+            { model: Users, as: "users" },
             {
               model: Booking,
               as: "booking",
               include: [
+                {
+                  model: Ticket,
+                  as: "ticketDeparture",
+                  include: {
+                    model: Flight,
+                    as: "flight",
+                    include: [
+                      { model: Plane, as: "planeName" },
+                      { model: Airport, as: "DepartureTerminal" },
+                      { model: Airport, as: "ArrivalTerminal" },
+                    ],
+                  },
+                },
+                {
+                  model: Ticket,
+                  as: "ticketReturn",
+                  include: {
+                    model: Flight,
+                    as: "flight",
+                    include: [
+                      { model: Plane, as: "planeName" },
+                      { model: Airport, as: "DepartureTerminal" },
+                      { model: Airport, as: "ArrivalTerminal" },
+                    ],
+                  },
+                },
                 {
                   model: PassangerBooking,
                   as: "passangerBooking",
@@ -73,10 +106,37 @@ export const getHistoryById = async (req, res) => {
           as: "userBooking",
           where: { user_id: reqUserId },
           include: [
+            { model: Users, as: "users" },
             {
               model: Booking,
               as: "booking",
               include: [
+                {
+                  model: Ticket,
+                  as: "ticketDeparture",
+                  include: {
+                    model: Flight,
+                    as: "flight",
+                    include: [
+                      { model: Plane, as: "planeName" },
+                      { model: Airport, as: "DepartureTerminal" },
+                      { model: Airport, as: "ArrivalTerminal" },
+                    ],
+                  },
+                },
+                {
+                  model: Ticket,
+                  as: "ticketReturn",
+                  include: {
+                    model: Flight,
+                    as: "flight",
+                    include: [
+                      { model: Plane, as: "planeName" },
+                      { model: Airport, as: "DepartureTerminal" },
+                      { model: Airport, as: "ArrivalTerminal" },
+                    ],
+                  },
+                },
                 {
                   model: PassangerBooking,
                   as: "passangerBooking",
@@ -93,6 +153,7 @@ export const getHistoryById = async (req, res) => {
         },
       ],
     });
+
     return res.status(200).json({
       code: 200,
       status: true,

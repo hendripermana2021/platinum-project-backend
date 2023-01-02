@@ -200,6 +200,7 @@ export const isPaymentTicket = async (req, res) => {
     const history = await History.create({
       userBooking_id: paymentMutual.userBooking_id,
       payment_id: paymentMutual.id,
+      paymentType: "wallet",
       isHistory: true,
     });
 
@@ -273,6 +274,7 @@ export const isCancelPayment = async (req, res) => {
     const history = await History.create({
       userBooking_id: payment.userBooking_id,
       payment_id: payment.id,
+      paymentType: "Cancel",
       isHistory: false,
     });
 
