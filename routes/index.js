@@ -1,4 +1,6 @@
 import express from "express";
+import yaml from "js-yaml";
+import fs from "fs";
 import {
   getUsers,
   Register,
@@ -86,6 +88,18 @@ import {
 const router = express.Router();
 const prefix = "/v1/api/";
 const { uploadPictures, getListFiles } = pkg;
+
+const swaggerDocument = yaml.load(
+  fs.readFileSync("Final_Project-OpenAPI.yaml", "utf8")
+);
+import swaggerUI from "swagger-ui-express";
+
+//DOCS API
+router.use(
+  prefix + "api-docs",
+  swaggerUI.serve,
+  swaggerUI.setup(swaggerDocument)
+);
 
 //ROUTES FOR USERS
 router.get(prefix, handleGetRoot);
