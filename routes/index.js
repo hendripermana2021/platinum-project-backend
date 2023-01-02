@@ -75,6 +75,7 @@ import {
 } from "../controllers/HandlersWallet.js";
 import {
   DeleteHistoryById,
+  getHistoryById,
   getHistoryPayment,
 } from "../controllers/HandlerHistory.js";
 import {
@@ -168,6 +169,7 @@ router.delete(prefix + "wallet/delete/:id", verifyToken, deleteWallet);
 
 //API FOR HISTORY
 router.get(prefix + "history/:condition", verifyToken, getHistoryPayment);
+router.get(prefix + "history/byid/:id", verifyToken, getHistoryById);
 router.delete(prefix + "history/delete/:id", verifyToken, DeleteHistoryById);
 
 //API FOR NOTIFICATION

@@ -2,6 +2,9 @@ import db from "../models/index.js";
 
 const History = db.history;
 const UserBooking = db.userbooking;
+const Booking = db.booking;
+const PassangerBooking = db.passangerbooking;
+const Passanger = db.passanger;
 
 export const getHistoryPayment = async (req, res) => {
   const reqUserId = req.user.userId;
@@ -14,7 +17,24 @@ export const getHistoryPayment = async (req, res) => {
           model: UserBooking,
           as: "userBooking",
           where: { user_id: reqUserId },
-          include: { all: true, include: { all: true } },
+          include: [
+            {
+              model: Booking,
+              as: "booking",
+              include: [
+                {
+                  model: PassangerBooking,
+                  as: "passangerBooking",
+                  include: [
+                    {
+                      model: Passanger,
+                      as: "passanger",
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
         },
       ],
     });
@@ -42,9 +62,36 @@ export const getHistoryPayment = async (req, res) => {
 };
 
 export const getHistoryById = async (req, res) => {
+  const reqUserId = req.user.userId;
+  const { id } = req.params;
   try {
-    const history = await History.findOne({
-      where: { id: req.params.id },
+    const history = await History.findAll({
+      where: { id },
+      include: [
+        {
+          model: UserBooking,
+          as: "userBooking",
+          where: { user_id: reqUserId },
+          include: [
+            {
+              model: Booking,
+              as: "booking",
+              include: [
+                {
+                  model: PassangerBooking,
+                  as: "passangerBooking",
+                  include: [
+                    {
+                      model: Passanger,
+                      as: "passanger",
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
     });
     return res.status(200).json({
       code: 200,
