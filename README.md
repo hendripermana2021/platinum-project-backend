@@ -1,42 +1,45 @@
 # Back-End Binar Final Project Kelompok 2
 
-One Paragraph of the project description
-
-Initially appeared on
-[gist](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2). But the page cannot open anymore so that is why I have moved it here.
+This project was made by the backend team from group 2, and this project is part of the Binar Final Project, where our group made an application for booking airplane tickets.
 
 ## Getting Started
 
-These instructions will give you a copy of the project up and running on
-your local machine for development and testing purposes. See deployment
-for notes on deploying the project on a live system.
+Please follow the guide below to be able to run the project.
 
 ### Prerequisites
 
 Requirements for the software and other tools to build, test and push 
-- [Visual Studio Code](https://www.example.com)
-- [MySQL](https://www.example.com)
-- [Postman](https://www.example.com)
+- [Visual Studio Code](https://code.visualstudio.com/Download)
+- [MySQL](https://www.mysql.com/products/workbench/)
+- [Postman](https://www.postman.com/downloads/)
 
 ### Installing
 
 A step by step series of examples that tell you how to get a development
 environment running
 
-Say what the step will be
+Project setup
 
     npm install
 
-And repeat
+Create database
+
+    npm run db:create
+
+Migrate database
+    
+    npm run db:migrate
+
+Run
 
     npm run start
 
-End with an example of getting some data out of the system or using it
-for a little demo
 
 ## Running the tests
 
-Explain how to run the automated tests for this system
+Run test
+
+    npm run test
 
 ### Sample Tests
 
@@ -52,43 +55,31 @@ Checks if the best practices and the right coding style has been used.
 
 ## Deployment
 
-Add additional notes to deploy this on a live system
+This project deployed using railway.
 
 ## Built With
 
-  - [Contributor Covenant](https://www.contributor-covenant.org/) - Used
-    for the Code of Conduct
-  - [Creative Commons](https://creativecommons.org/) - Used to choose
-    the license
-
-## Contributing
-
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code
-of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [Semantic Versioning](http://semver.org/) for versioning. For the versions
-available, see the [tags on this
-repository](https://github.com/PurpleBooth/a-good-readme-template/tags).
+  - [Node.Js]()
+  - [Expess.Js](https://creativecommons.org/)
+  - [MySQL](https://creativecommons.org/)
 
 ## Authors
 
-  - **Billie Thompson** - *Provided README Template* -
-    [PurpleBooth](https://github.com/PurpleBooth)
+  - **Dewa Biara**
+    [LinkedIn](https://www.linkedin.com/in/i-dewa-gde-putra-anga-biara-b03529172/)
+    [GitHub](https://github.com/DewaBiara)
+
+  - **Hendri Permana**
+    [LinkedIn](https://www.linkedin.com/in/i-dewa-gde-putra-anga-biara-b03529172/)
+    [GitHub](https://github.com/DewaBiara)
 
 See also the list of
-[contributors](https://github.com/PurpleBooth/a-good-readme-template/contributors)
+[contributors](https://github.com/hendripermana2021/platinum-project-backend/graphs/contributors)
 who participated in this project.
 
-## License
-
-This project is licensed under the [CC0 1.0 Universal](LICENSE.md)
-Creative Commons License - see the [LICENSE.md](LICENSE.md) file for
-details
 
 ## Acknowledgments
 
-  - Hat tip to anyone whose code is used
+  - Learn Back-End Javascript
   - Inspiration
   - etc
